@@ -333,6 +333,28 @@
   footer .fnote b{color:var(--ink-2)}
   .verify{font-size:12.5px;color:var(--ink-3);margin-top:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;display:inline-flex;gap:9px;align-items:center}
   .verify svg{width:15px;height:15px;color:var(--warn);flex-shrink:0}
+
+  /* ---------------- FOOTNOTES / SOURCES ---------------- */
+  sup.fn{font-size:.62em;line-height:0;vertical-align:super;font-family:var(--sans);font-weight:600;letter-spacing:0}
+  sup.fn a{color:var(--brand-2);text-decoration:none;padding:0 1px}
+  sup.fn a:hover{text-decoration:underline}
+  .sources-list{list-style:none;counter-reset:src;max-width:86ch;margin-top:6px}
+  .sources-list li{
+    counter-increment:src;position:relative;
+    padding:14px 4px 14px 44px;border-bottom:1px solid var(--line);
+    font-size:13.5px;color:var(--ink-2);line-height:1.65;
+  }
+  .sources-list li::before{
+    content:counter(src);position:absolute;left:2px;top:13px;
+    font-family:var(--serif);font-size:15px;font-weight:600;color:var(--brand);
+    width:28px;height:28px;border:1px solid var(--line-2);border-radius:50%;
+    display:grid;place-items:center;background:var(--surface);
+  }
+  .sources-list li:target{background:var(--brand-ghost);border-radius:10px}
+  .sources-list b{color:var(--ink);font-weight:600}
+  .sources-list a{color:var(--brand-2);text-decoration:none;word-break:break-word}
+  .sources-list a:hover{text-decoration:underline}
+  .sources-list .acc{font-size:12px;color:var(--ink-3)}
 </style>
 </head>
 <body>
@@ -349,10 +371,11 @@
       <a href="#analysis">Analysis</a>
       <a href="#drivers">Drivers</a>
       <a href="#policy">Policy</a>
+      <a href="#sources">Sources</a>
     </nav>
     <div class="meta">
       <span class="chip hide"><span class="dot"></span>Humboldt Park</span>
-      <span class="chip">2024 data</span>
+      <span class="chip">2023–24 data</span>
     </div>
   </div>
 </header>
@@ -363,7 +386,7 @@
     <div class="hero-copy">
       <span class="eyebrow"><span class="pulse"></span>26th Ward · Cardiometabolic Focus</span>
       <h1>The ward's health gap runs through the <em>heart</em>.</h1>
-      <p class="lede">Humboldt Park residents live about <b>seven years less</b> than the average Chicagoan. High blood pressure is where it starts — driven by grocery prices, rent pressure, and skipped prescriptions, not by choices. Diabetes rides alongside it.</p>
+      <p class="lede">Humboldt Park residents live about <b>three years less</b> than the average Chicagoan — and nearly <b>twelve years less</b> than residents of the Loop.<sup class="fn"><a href="#src-1">1</a>,<a href="#src-2">2</a></sup> High blood pressure is where it starts — driven by grocery prices, rent pressure, and skipped prescriptions, not by choices. Diabetes rides alongside it.</p>
       <div class="hero-cta">
         <a href="#policy" class="btn btn-primary">See the policy levers
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -392,9 +415,9 @@
           <span class="vt-ic" style="background:linear-gradient(150deg,var(--crit-2),var(--crit))">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.3 4 2.5C10.8 6.3 12 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z"/></svg>
           </span>
-          <span class="vt-t">Hypertension</span>
+          <span class="vt-t">Hypertension<sup class="fn"><a href="#src-3">3</a></sup></span>
         </div>
-        <div class="vt-v"><span class="count" data-to="39">0</span><small>% of adults</small></div>
+        <div class="vt-v"><span class="count" data-to="35">0</span><small>% of adults</small></div>
         <div class="spark" id="spark1"></div>
       </div>
       <div class="vitals-tag b">
@@ -402,10 +425,10 @@
           <span class="vt-ic" style="background:linear-gradient(150deg,var(--warn),#c9791a)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 8l7-5 7 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
-          <span class="vt-t">Life expectancy</span>
+          <span class="vt-t">Life expectancy<sup class="fn"><a href="#src-2">2</a></sup></span>
         </div>
-        <div class="vt-v">~<span class="count" data-to="71">0</span><small>yrs</small></div>
-        <div style="font-size:12px;color:var(--crit);font-weight:600;margin-top:6px">−7.7 vs city</div>
+        <div class="vt-v"><span class="count" data-to="75">0</span><small>.4 yrs</small></div>
+        <div style="font-size:12px;color:var(--crit);font-weight:600;margin-top:6px">−3.3 vs city · −11.9 vs Loop</div>
       </div>
     </div>
   </div>
@@ -427,12 +450,12 @@
           <span class="vc-ic" style="background:linear-gradient(150deg,var(--crit-2),var(--crit))">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.3 4 2.5C10.8 6.3 12 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z"/></svg>
           </span>
-          <span class="vc-tag" style="background:var(--crit-ghost);color:var(--crit)">+11 pts</span>
+          <span class="vc-tag" style="background:var(--crit-ghost);color:var(--crit)">+3.4 pts</span>
         </div>
-        <h3>Hypertension, adults</h3>
-        <div class="vc-num"><span class="count" data-to="39">0</span><small>%</small></div>
-        <div class="vc-sub">City average <b>~28%</b></div>
-        <div class="vc-bar"><i style="background:var(--crit)" data-w="88%"></i></div>
+        <h3>Hypertension, adults<sup class="fn"><a href="#src-3">3</a></sup></h3>
+        <div class="vc-num"><span class="count" data-to="35">0</span><small>.3%</small></div>
+        <div class="vc-sub">City average <b>31.9%</b> · was 38.1% in 2022–23</div>
+        <div class="vc-bar"><i style="background:var(--crit)" data-w="80%"></i></div>
       </div>
 
       <div class="vcard rv">
@@ -440,12 +463,12 @@
           <span class="vc-ic" style="background:linear-gradient(150deg,var(--warn),#c9791a)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke-linecap="round"/></svg>
           </span>
-          <span class="vc-tag" style="background:#fdf3e3;color:var(--warn)">+3 pts</span>
+          <span class="vc-tag" style="background:#fdf3e3;color:var(--warn)">+4.5 pts</span>
         </div>
-        <h3>Diabetes, adults <span style="font-weight:500;color:var(--ink-3)">· sibling</span></h3>
-        <div class="vc-num"><span class="count" data-to="14">0</span><small>%</small></div>
-        <div class="vc-sub">City average <b>~11%</b></div>
-        <div class="vc-bar"><i style="background:var(--warn)" data-w="64%"></i></div>
+        <h3>Diabetes, adults <span style="font-weight:500;color:var(--ink-3)">· sibling</span><sup class="fn"><a href="#src-4">4</a></sup></h3>
+        <div class="vc-num"><span class="count" data-to="18">0</span><small>%</small></div>
+        <div class="vc-sub">City average <b>13.4%</b></div>
+        <div class="vc-bar"><i style="background:var(--warn)" data-w="66%"></i></div>
       </div>
 
       <div class="vcard rv">
@@ -453,12 +476,12 @@
           <span class="vc-ic" style="background:var(--brand)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M7 14l4-4 3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
-          <span class="vc-tag" style="background:var(--brand-ghost);color:var(--brand-ink)">2× nat'l</span>
+          <span class="vc-tag" style="background:var(--brand-ghost);color:var(--brand-ink)">1 in 4</span>
         </div>
-        <h3>Food insecurity</h3>
-        <div class="vc-num"><span class="count" data-to="22">0</span><small>%</small></div>
-        <div class="vc-sub">National <b>~13%</b> · ward 20–25%</div>
-        <div class="vc-bar"><i style="background:var(--brand)" data-w="60%"></i></div>
+        <h3>Food insecurity<sup class="fn"><a href="#src-5">5</a>,<a href="#src-6">6</a></sup></h3>
+        <div class="vc-num"><span class="count" data-to="24">0</span><small>.2%</small></div>
+        <div class="vc-sub">Chicago <b>21.3%</b> · U.S. households <b>13.5%</b></div>
+        <div class="vc-bar"><i style="background:var(--brand)" data-w="62%"></i></div>
       </div>
 
       <div class="vcard rv">
@@ -466,12 +489,12 @@
           <span class="vc-ic" style="background:var(--brand-ink)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M6 6h9a3 3 0 010 6H6m0 0h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
-          <span class="vc-tag" style="background:var(--crit-ghost);color:var(--crit)">−$11k</span>
+          <span class="vc-tag" style="background:var(--crit-ghost);color:var(--crit)">−$21k</span>
         </div>
-        <h3>Median income</h3>
-        <div class="vc-num">$<span class="count" data-to="60">0</span><small>k</small></div>
-        <div class="vc-sub">City average <b>~$71k</b></div>
-        <div class="vc-bar"><i style="background:var(--brand-ink)" data-w="84%"></i></div>
+        <h3>Median income<sup class="fn"><a href="#src-7">7</a></sup></h3>
+        <div class="vc-num">$<span class="count" data-to="57">0</span><small>k</small></div>
+        <div class="vc-sub">City average <b>~$77k</b></div>
+        <div class="vc-bar"><i style="background:var(--brand-ink)" data-w="73%"></i></div>
       </div>
     </div>
   </div>
@@ -492,25 +515,25 @@
         <span class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18" stroke-linecap="round"/><rect x="7" y="12" width="3" height="6" rx="1" fill="currentColor" stroke="none"/><rect x="12" y="8" width="3" height="10" rx="1" fill="currentColor" stroke="none"/><rect x="17" y="4" width="3" height="14" rx="1" fill="currentColor" stroke="none"/></svg></span>
         <h3>Humboldt Park vs. the city vs. the Loop</h3>
       </div>
-      <p class="note">A child born here can expect about 16 fewer years than one born two miles east.</p>
+      <p class="note">A child born here can expect about 12 fewer years than one born two miles east.<sup class="fn"><a href="#src-1">1</a>,<a href="#src-2">2</a></sup></p>
       <div class="grow">
-        <div class="who">Humboldt Park<small>community-area estimate</small></div>
-        <div class="track"><div class="fill hp" data-w="40.4%"></div></div>
-        <div class="val">~71</div>
+        <div class="who">Humboldt Park<small>community-area estimate, 2023<sup class="fn"><a href="#src-2">2</a></sup></small></div>
+        <div class="track"><div class="fill hp" data-w="56.4%"></div></div>
+        <div class="val">75.4</div>
       </div>
       <div class="grow">
-        <div class="who">Chicago average<small>CDPH, 2023</small></div>
-        <div class="track"><div class="fill city" data-w="68.7%"></div></div>
+        <div class="who">Chicago average<small>CDPH, 2023<sup class="fn"><a href="#src-1">1</a></sup></small></div>
+        <div class="track"><div class="fill city" data-w="68.5%"></div></div>
         <div class="val">78.7</div>
       </div>
       <div class="grow">
-        <div class="who">The Loop<small>highest in the city</small></div>
+        <div class="who">The Loop<small>highest in the city<sup class="fn"><a href="#src-1">1</a></sup></small></div>
         <div class="track"><div class="fill top" data-w="100%"></div></div>
         <div class="val">87.3</div>
       </div>
       <div class="callout">
-        <span class="big">−16</span>
-        <p><b style="color:var(--ink)">years.</b> That's the distance between a Humboldt Park birth and a Loop birth. Ward policy operates inside that arithmetic.</p>
+        <span class="big">−12</span>
+        <p><b style="color:var(--ink)">years.</b> That's the distance between a Humboldt Park birth and a Loop birth — and it ran wider still at the pandemic low, when Humboldt Park fell to 71.9 years in 2021.<sup class="fn"><a href="#src-2">2</a></sup> Ward policy operates inside that arithmetic.</p>
       </div>
     </div>
   </div>
@@ -532,25 +555,25 @@
       <div class="driver rv">
         <span class="dnum">01</span><span class="dtag">Food access</span>
         <h3>The corner store sets the menu</h3>
-        <p>About <span class="stat">one in five residents</span> here faces food insecurity, well above the national rate. Fresh produce means a bus transfer; the corner store sells cheap, sodium-heavy calories within walking distance. Residents eat what the neighborhood prices within reach, and blood pressure follows.</p>
+        <p>About <span class="stat">one in four residents</span> here faces food insecurity,<sup class="fn"><a href="#src-5">5</a></sup> well above the national rate of 13.5% of households.<sup class="fn"><a href="#src-6">6</a></sup> Fresh produce means a bus transfer; the corner store sells cheap, sodium-heavy calories within walking distance. Residents eat what the neighborhood prices within reach, and blood pressure follows.</p>
         <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: hypertension · diabetes</div>
       </div>
       <div class="driver rv">
         <span class="dnum">02</span><span class="dtag">Housing</span>
         <h3>Rent crowds out prescriptions</h3>
-        <p>Median household income sits near <span class="stat">$60k</span> while rents climb in from the Logan Square side. Families spend the margin holding the apartment, then skip the copay and the refill. A near-miss on eviction raises blood pressure by itself.</p>
+        <p>Median household income sits near <span class="stat">$57k</span> — about $21k below the city median<sup class="fn"><a href="#src-7">7</a></sup> — while rents climb in from the Logan Square side. Families spend the margin holding the apartment, then skip the copay and the refill. A near-miss on eviction raises blood pressure by itself.<sup class="fn"><a href="#src-12">12</a></sup></p>
         <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: deferred care · chronic stress</div>
       </div>
       <div class="driver rv">
         <span class="dnum">03</span><span class="dtag">Coverage</span>
         <h3>Residents skip refills to save money</h3>
-        <p>Sinai's community survey found <span class="stat">1 in 4 residents</span> went without a needed prescription because of cost. High blood pressure gives no warning before the stroke. The neighborhood then pays for dialysis and cardiac admissions that a $4 pill would have prevented.</p>
+        <p>Sinai's community health survey found <span class="stat">nearly 1 in 4 residents</span> (23%) went without a needed prescription because of cost.<sup class="fn"><a href="#src-8">8</a></sup> High blood pressure gives no warning before the stroke. The neighborhood then pays for dialysis and cardiac admissions that a $4 pill would have prevented.<sup class="fn"><a href="#src-14">14</a></sup></p>
         <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: stroke · kidney failure</div>
       </div>
       <div class="driver rv">
         <span class="dnum">04</span><span class="dtag">Public dollars</span>
         <h3>The city bought incarceration here</h3>
-        <p>Public spending on incarceration in Humboldt Park has run to <span class="stat">hundreds of millions</span>, among the highest neighborhood totals in Chicago. Those same dollars could have funded clinics, jobs, or housing. Residents pay the difference in years of life.</p>
+        <p>Public spending on incarceration in Humboldt Park ran to <span class="stat">$292 million</span> over just five years (2005–2009) — the second-highest neighborhood total in Chicago, behind only Austin.<sup class="fn"><a href="#src-9">9</a></sup> Those same dollars could have funded clinics, jobs, or housing. Residents pay the difference in years of life.</p>
         <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: compounding disinvestment</div>
       </div>
     </div>
@@ -583,7 +606,7 @@
         </summary>
         <div class="lbody">
           <p>Direct menu and participatory-budget dollars to produce refrigeration in existing corner stores and a longer farmers' market season on Division. Residents already walk to these stores every week. Stock them with what a cardiologist would want on the shelf.</p>
-          <div class="why"><b>The economic case</b>One stroke costs tens of thousands in acute care, and Humboldt Park Health absorbs much of that bill uncompensated. Produce subsidy costs a few hundred dollars per household per year. Fund the cheap end of that ledger.</div>
+          <div class="why"><b>The economic case</b>One stroke costs tens of thousands in acute care — the average U.S. stroke hospitalization runs about $20,000 before rehab or readmission<sup class="fn"><a href="#src-10">10</a></sup> — and Humboldt Park Health absorbs much of that bill uncompensated. Produce subsidy costs a few hundred dollars per household per year — the produce-prescription programs evaluated nationally provided a median of $63 a month for 4–10 months, and improved blood pressure and blood sugar.<sup class="fn"><a href="#src-15">15</a></sup> Fund the cheap end of that ledger.</div>
         </div>
       </details>
       <details class="lever rv">
@@ -594,7 +617,7 @@
         </summary>
         <div class="lbody">
           <p>Pay community health workers to run walk-in screenings and medication check-ins at libraries, churches, and the fieldhouse. Some residents will never enter a clinic, so meet them where they already spend their week. Controlling blood pressure takes a cuff, a pill, and someone who follows up.</p>
-          <div class="why"><b>The economic case</b>Community health worker programs return more than they cost in avoided ER visits. Each controlled patient means one fewer stroke, dialysis start, or cardiac admission. The wages go to hires from the neighborhood.</div>
+          <div class="why"><b>The economic case</b>Community health worker programs return more than they cost in avoided hospitalizations — a randomized trial of the IMPaCT model returned $2.47 to Medicaid for every $1 invested, within one year.<sup class="fn"><a href="#src-11">11</a></sup> Each controlled patient means one fewer stroke, dialysis start, or cardiac admission. The wages go to hires from the neighborhood.</div>
         </div>
       </details>
       <details class="lever rv">
@@ -605,21 +628,51 @@
         </summary>
         <div class="lbody">
           <p>Fund tenant legal aid, deconversion protection, and affordable set-asides near the park. A family that keeps its home keeps its clinic, its pharmacy, and its routines. A family pushed out loses all three and restarts care from zero in a neighborhood that doesn't know them.</p>
-          <div class="why"><b>The economic case</b>Housing precarity raises chronic stress, and chronic stress raises blood pressure. Stability pays out twice: families keep spending at businesses on Division and North Avenue, and the health system skips the cost of re-diagnosing them somewhere else.</div>
+          <div class="why"><b>The economic case</b>Housing precarity raises chronic stress, and chronic stress raises blood pressure — the link between housing instability and hypertension is documented across dozens of U.S. studies.<sup class="fn"><a href="#src-12">12</a>,<a href="#src-13">13</a></sup> Stability pays out twice: families keep spending at businesses on Division and North Avenue, and the health system skips the cost of re-diagnosing them somewhere else.</div>
         </div>
       </details>
     </div>
     <div class="verify">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Confirm the ~39% hypertension and ~71-year figures against chicagohealthmap.com before public citation. Life expectancy is a community-area estimate.
+      Figures verified against the Chicago Health Atlas (chicagohealthatlas.org) and the sources below, July 2026. Life expectancy and Healthy Chicago Survey rates are community-area estimates with sampling uncertainty; the 26th Ward's boundaries do not align exactly with the Humboldt Park community area.
     </div>
+  </div>
+</section>
+
+<!-- ============ SOURCES & NOTES ============ -->
+<section class="block" id="sources">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="l">
+        <div class="k">References</div>
+        <h2>Sources &amp; notes</h2>
+        <p>Every figure on this page is footnoted below. Community-area data refer to the Humboldt Park community area (CA 23) unless otherwise noted.</p>
+      </div>
+    </div>
+    <ol class="sources-list rv">
+      <li id="src-1"><b>Chicago Department of Public Health.</b> "Life Expectancy in Chicago, 2023." CDPH Data Brief, September 2025. Citywide life expectancy at birth: 78.7 years (2023); the Loop was the city's highest community area at 87.3 years. <a href="https://www.chicago.gov/content/dam/city/depts/cdph/statistics_and_reports/2025/2023-Life-Expectancy-Data-Brief_Final-for-Public-Release-09.10.2025.ax.em.pdf" target="_blank" rel="noopener">chicago.gov (PDF)</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-2"><b>Chicago Health Atlas.</b> Life expectancy (indicator VRLE), Humboldt Park community area: 75.4 years (2023); pandemic low of 71.9 years (2021). Underlying data: Illinois Department of Public Health death certificate files. Humboldt Park–Loop gap, 2023: 11.9 years; Humboldt Park–citywide gap: 3.3 years. <a href="https://chicagohealthatlas.org/indicators/VRLE" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/VRLE</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-3"><b>Chicago Health Atlas.</b> Hypertension rate (indicator HCSHYTP), CDPH Healthy Chicago Survey, 2023–2024 pooled: Humboldt Park 35.3% of adults vs. Chicago 31.9% (+3.4 pts). The 2022–2023 pooled estimate for Humboldt Park was 38.1%. <a href="https://chicagohealthatlas.org/indicators/HCSHYTP" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/HCSHYTP</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-4"><b>Chicago Health Atlas.</b> Adult diabetes rate (indicator HCSDIAP), CDPH Healthy Chicago Survey, 2023–2024 pooled: Humboldt Park 17.9% of adults vs. Chicago 13.4% (+4.5 pts). <a href="https://chicagohealthatlas.org/indicators/HCSDIAP" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/HCSDIAP</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-5"><b>Feeding America, Map the Meal Gap</b> (via Chicago Health Atlas, indicator FAI), 2020: food insecurity 24.2% of Humboldt Park residents vs. 21.3% citywide — the most recent neighborhood-level estimate available. Sinai Urban Health Institute's 2015–16 Community Health Survey 2.0 measured 46% of Humboldt Park <em>households</em> as food insecure. <a href="https://chicagohealthatlas.org/indicators/FAI" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/FAI</a> · <a href="https://www.cct.org/stories/in-humboldt-park-healthy-food-and-health-care-often-out-of-reach/" target="_blank" rel="noopener">cct.org</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-6"><b>U.S. Department of Agriculture, Economic Research Service.</b> "Household Food Security in the United States in 2023" (Report ERR-337, September 2024): 13.5% of U.S. households were food insecure at some time during 2023. Note the unit difference — national figures count households; neighborhood figures count residents. <a href="https://www.ers.usda.gov/publications/pub-details?pubid=109895" target="_blank" rel="noopener">ers.usda.gov</a></li>
+      <li id="src-7"><b>U.S. Census Bureau, American Community Survey</b> 5-year estimates, 2019–2023 (via Chicago Health Atlas, indicator INC): median household income $56,577 in Humboldt Park vs. $77,367 citywide (−$20,790). <a href="https://chicagohealthatlas.org/indicators/INC" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/INC</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-8"><b>Shah AM, Whitman S, Silva A.</b> "Variations in the Health Conditions of 6 Chicago Community Areas: A Case for Local-Level Data." <em>American Journal of Public Health</em> 96(8), 2006. Sinai Urban Health Institute's Improving Community Health Survey (2002–03): 23% of Humboldt Park adults did not obtain needed prescription medicines in the past year because they could not afford them. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1522111/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov/articles/PMC1522111</a></li>
+      <li id="src-9"><b>DataMade &amp; Chicago Justice Project.</b> "Chicago's Million Dollar Blocks." Cook County Circuit Court sentencing data, 2005–2009: $292.5M committed to incarcerating Humboldt Park residents over five years — second only to Austin ($550.2M) among Chicago's 77 community areas. <a href="https://chicagosmilliondollarblocks.com/" target="_blank" rel="noopener">chicagosmilliondollarblocks.com</a></li>
+      <li id="src-10"><b>Wang G, Zhang Z, Ayala C, et al.</b> "Costs of Hospitalization for Stroke Patients Aged 18–64 Years in the United States." <em>Journal of Stroke and Cerebrovascular Diseases</em> 23(5), 2014: mean cost per stroke hospitalization $20,396 (ischemic $18,963; hemorrhagic $32,035), before rehabilitation or readmission. <a href="https://pubmed.ncbi.nlm.nih.gov/23954598/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/23954598</a></li>
+      <li id="src-11"><b>Kangovi S, Mitra N, Grande D, Long JA, Asch DA.</b> "Evidence-Based Community Health Worker Program Addresses Unmet Social Needs and Generates Positive Return on Investment." <em>Health Affairs</em> 39(2), 2020: the IMPaCT community health worker model returned $2.47 to Medicaid for every $1 invested, within one fiscal year, driven by reduced hospitalizations. <a href="https://www.healthaffairs.org/doi/10.1377/hlthaff.2019.00981" target="_blank" rel="noopener">healthaffairs.org</a></li>
+      <li id="src-12"><b>Vásquez-Vera H, Palència L, Magna I, et al.</b> "The threat of home eviction and its effects on health through the equity lens: A systematic review." <em>Social Science &amp; Medicine</em> 175, 2017: across 47 studies, threat of eviction is consistently associated with worse mental and physical health, including high blood pressure. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0277953617300102" target="_blank" rel="noopener">sciencedirect.com</a></li>
+      <li id="src-13"><b>Sims KD, et al.</b> "Housing instability and cardiometabolic health in the United States: a narrative review of the literature." <em>BMC Public Health</em>, 2023: review of 42 U.S. studies linking housing instability to hypertension, diabetes, and cardiovascular disease. <a href="https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-023-15875-6" target="_blank" rel="noopener">bmcpublichealth.biomedcentral.com</a></li>
+      <li id="src-14"><b>Walmart $4 Prescriptions program.</b> Common first-line antihypertensives (e.g., lisinopril, amlodipine) are available on 30-day $4 generic lists at major retail pharmacies. <a href="https://www.walmart.com/cp/4-prescriptions/1078664" target="_blank" rel="noopener">walmart.com/cp/4-prescriptions</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-15"><b>Hager K, Du M, Li Z, et al.</b> "Impact of Produce Prescriptions on Diet, Food Security, and Cardiometabolic Health Outcomes: A Multisite Evaluation of 9 Produce Prescription Programs in the United States." <em>Circulation: Cardiovascular Quality and Outcomes</em> 16(9), 2023: programs provided a median of $63/month for 4–10 months and were associated with improved blood pressure, HbA1c, and food security. <a href="https://www.ahajournals.org/doi/10.1161/CIRCOUTCOMES.122.009520" target="_blank" rel="noopener">ahajournals.org</a></li>
+    </ol>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
     <div class="fnote">
-      <b>26th Ward Health Signal.</b> Humboldt Park, Hermosa, Logan Square, Ukrainian Village. Compiled from public data: Chicago Health Atlas, CDPH, CMAP, Sinai Urban Health Institute, U.S. Census / ACS. Prepared for the office of Ald. Jessie Fuentes.
+      <b>26th Ward Health Signal.</b> Humboldt Park, Hermosa, Logan Square, Ukrainian Village. Compiled from public data: Chicago Health Atlas, CDPH, Feeding America, USDA ERS, Sinai Urban Health Institute, U.S. Census / ACS, DataMade &amp; Chicago Justice Project. Full citations in <a href="#sources">Sources &amp; notes</a>. Prepared for the office of Ald. Jessie Fuentes.
     </div>
     <div class="heritage" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   </div>
@@ -668,7 +721,7 @@
 
   // scrollspy
   var links=[].slice.call(document.querySelectorAll('.topnav a'));
-  var secs=['vitals','analysis','drivers','policy'].map(function(id){return document.getElementById(id);});
+  var secs=['vitals','analysis','drivers','policy','sources'].map(function(id){return document.getElementById(id);});
   var sio=new IntersectionObserver(function(es){
     es.forEach(function(e){if(e.isIntersecting){
       links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id);});
