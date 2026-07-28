@@ -538,6 +538,12 @@
   .why-card p{font-size:14px;color:var(--ink-2);margin-bottom:11px;text-wrap:pretty}
   .why-card p:last-child{margin-bottom:0}
   .why-card p b{color:var(--ink);font-weight:600}
+  .why-card .why-list{list-style:none;margin:2px 0 0;padding:0}
+  .why-card .why-list li{position:relative;padding-left:18px;margin-bottom:12px;font-size:14px;color:var(--ink-2);text-wrap:pretty}
+  .why-card .why-list li:last-child{margin-bottom:0}
+  .why-card .why-list li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--crit)}
+  .why-card .why-list li b{color:var(--ink);font-weight:600}
+  .why-card .why-kick{margin-top:15px;font-size:14px;font-weight:600;color:var(--ink)}
   @media(max-width:760px){.why-grid{grid-template-columns:1fr}}
   /* plan list in policy levers */
   .lbody .plan{margin:4px 0 16px;padding:0;list-style:none}
@@ -726,9 +732,9 @@
 
     <div class="zoom rv">
       <div class="zoom-head">
-        <div class="k">Zooming in · the ward is not one place</div>
+        <div class="k">Zooming in · one ward is not one place</div>
         <h3>One ward, two realities</h3>
-        <p>On the citywide map, Ward 26 looks unremarkable. That average hides a deep divide: the ward stitches together five community areas whose health and wealth pull hard in opposite directions.</p>
+        <p>Citywide, Ward 26 looks average. Up close, it's really two wards &mdash; five community areas that split sharply by health and by wealth.</p>
       </div>
 
       <div class="comp">
@@ -746,15 +752,11 @@
           <span><i class="s-he"></i>Hermosa</span>
           <span><i class="s-bc"></i>Belmont Cragin</span>
         </div>
-        <p class="comp-note">Humboldt Park is the ward's single largest community &mdash; about a third of it &mdash; and its poorest.</p>
+        <p class="comp-note">Humboldt Park is the ward's biggest piece &mdash; about a third &mdash; and its poorest.</p>
       </div>
 
       <div class="inmap rv">
         <div class="inmap-controls">
-          <div class="gran-toggle" role="tablist" aria-label="Level of detail">
-            <button class="gtab on" data-gran="comm" role="tab" aria-selected="true">Communities</button>
-            <button class="gtab" data-gran="tract" role="tab" aria-selected="false">Neighborhood tracts</button>
-          </div>
           <div class="metric-tabs" role="tablist" aria-label="Choose a measure">
             <button class="mtab on" data-metric="le"      role="tab" aria-selected="true">Life expectancy</button>
             <button class="mtab"    data-metric="inc"     role="tab" aria-selected="false">Median income</button>
@@ -775,8 +777,8 @@
               <span class="lg-end">Worse</span>
               <span class="lg-scale" id="in-lgscale"></span>
             </div>
-            <p class="maphint">Darker = worse for residents · click or tab to any area inside Ward 26</p>
-            <p class="inmap-note"><b>Life expectancy &amp; income:</b> Chicago Health Atlas (community-area / ACS). <b>Conditions:</b> Chicago Health Map (CAPriCORN), 2024, prevalence among patients. Tract estimates are small-sample &mdash; read them as texture, not precision.</p>
+            <p class="maphint">Darker = worse for residents · click any community</p>
+            <p class="inmap-note"><b>Life expectancy &amp; income:</b> Chicago Health Atlas (community-area / ACS). <b>Conditions:</b> Chicago Health Map (CAPriCORN), 2024 &mdash; prevalence among patients seen in Chicago health systems.</p>
           </div>
           <aside class="mappanel" id="in26panel" aria-live="polite"></aside>
         </div>
@@ -784,23 +786,29 @@
       <div class="why-grid rv">
         <div class="why-card">
           <div class="wk">Why the split</div>
-          <h4>Capital moved east; families were pushed west</h4>
-          <p>The dividing line is recent and man-made. Wicker Park and the east end of West Town gentrified first; the <b>606 trail</b>, opened in 2015, pushed the frontier west. Along its western half &mdash; Logan Square and Humboldt Park &mdash; median home-sale prices rose about <b>344% between 2012 and 2018</b>, from roughly $97,000 to $462,000, and the rent spikes that followed pushed out longtime Puerto Rican and Latino renters.<sup class="fn"><a href="#src-17">17</a></sup></p>
-          <p>The west side carries an older injury too. In the 1930s, federal maps graded these blocks &ldquo;hazardous&rdquo; and starved them of mortgage credit for decades. Those same redlined grades still predict today's health: across the grading spectrum, present-day diabetes climbs from about <b>9% to 14%</b> and obesity from <b>29% to 35%</b>.<sup class="fn"><a href="#src-18">18</a></sup></p>
-          <p>Wealth in Ward 26 didn't fall randomly. It was routed &mdash; invested in the east, extracted from the west.</p>
+          <h4>The rich side and the poor side were built that way</h4>
+          <ul class="why-list">
+            <li>The <b>606 trail</b> opened in 2015 and set off a land rush on its western end. In Logan Square and Humboldt Park, home prices jumped <b>about 344%</b> from 2012 to 2018 &mdash; $97,000 to $462,000 &mdash; and the rent hikes pushed Puerto Rican and Latino families out.<sup class="fn"><a href="#src-17">17</a></sup></li>
+            <li>Redlining got there first. In the 1930s, federal maps stamped these blocks &ldquo;hazardous&rdquo; and choked off home loans for two generations.<sup class="fn"><a href="#src-18">18</a></sup></li>
+            <li>Those same 1930s grades still track disease: diabetes runs near <b>9%</b> in the top-rated areas and <b>14%</b> in the redlined ones; obesity, <b>29%</b> to <b>35%</b>.<sup class="fn"><a href="#src-18">18</a></sup></li>
+          </ul>
+          <p class="why-kick">The money didn't land here by chance. It was steered &mdash; into the east, out of the west.</p>
         </div>
         <div class="why-card">
           <div class="wk">Why it becomes disease</div>
-          <h4>The same line drawn in blood pressure</h4>
-          <p><b>Food.</b> The west side is a <b>food swamp</b> &mdash; dense fast food and corner stores heavy on cheap, salty, sugary calories and thin on fresh produce. Food-swamp severity predicts obesity better than distance to a grocery store, and tracks diabetes hospitalizations.<sup class="fn"><a href="#src-19">19</a></sup></p>
-          <p><b>Stress.</b> Economic precarity and the constant threat of displacement are biological. Cumulative stress raises &ldquo;allostatic load&rdquo; &mdash; chronically elevated stress hormones and blood pressure &mdash; so hypertension and diabetes arrive years early.<sup class="fn"><a href="#src-20">20</a></sup></p>
-          <p><b>Care.</b> Lower-income, historically redlined blocks still see fewer routine visits and more uninsurance, so high blood pressure and blood sugar go untreated until they surface as the strokes, kidney failure, and heart disease the map shows.<sup class="fn"><a href="#src-18">18</a></sup> The east side &mdash; grocery access, an income cushion, insurance &mdash; is largely spared. Same ward, opposite exposures.</p>
+          <h4>The same line, drawn in blood pressure</h4>
+          <ul class="why-list">
+            <li><b>Food.</b> The west side is a <b>food swamp</b> &mdash; fast food and corner stores on every block, fresh produce almost nowhere. That mix predicts obesity better than how far you live from a grocery store.<sup class="fn"><a href="#src-19">19</a></sup></li>
+            <li><b>Stress.</b> Living one rent hike from eviction keeps stress hormones and blood pressure high. Researchers call it <b>weathering</b>, and it brings on hypertension and diabetes years early.<sup class="fn"><a href="#src-20">20</a></sup></li>
+            <li><b>Care.</b> Redlined blocks still have fewer doctor visits and more uninsured residents, so high blood pressure goes unchecked until it lands as a stroke.<sup class="fn"><a href="#src-18">18</a></sup></li>
+          </ul>
+          <p class="why-kick">The east side &mdash; groceries, savings, insurance &mdash; mostly escapes all three.</p>
         </div>
       </div>
 
       <div class="zoom-punch">
         <span class="big">6 years. $89,000.</span>
-        <p>The distance in life expectancy and household income between <b>Humboldt Park</b>, the ward's largest community, and <b>West Town</b>, its wealthiest &mdash; inside the same aldermanic ward. Hypertension runs about <b>13 points higher</b> and diabetes <b>twice as high</b> in Humboldt Park.<sup class="fn"><a href="#src-2">2</a>,<a href="#src-7">7</a></sup> These are the gaps a ward office can level. The levers are below.</p>
+        <p>Same ward, opposite ends: that's the gap in life expectancy and median income between <b>Humboldt Park</b> and <b>West Town</b>. Hypertension runs about <b>13 points higher</b> in Humboldt Park, diabetes <b>twice as high</b>.<sup class="fn"><a href="#src-2">2</a>,<a href="#src-7">7</a></sup> A ward office can close gaps like these. Here's how.</p>
       </div>
     </div>
 
