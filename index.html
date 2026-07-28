@@ -506,6 +506,29 @@
     .gap-r{text-align:left}
   }
 
+
+  /* interactive inside-ward map */
+  .inmap{margin-top:26px}
+  .inmap-controls{display:flex;flex-wrap:wrap;gap:14px 20px;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .gran-toggle{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:3px}
+  .gtab{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink-2);background:transparent;
+    border:none;border-radius:100px;padding:8px 15px;cursor:pointer;transition:background .16s,color .16s}
+  .gtab.on{background:var(--brand);color:#fff}
+  .gtab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  .inmap-grid{display:grid;grid-template-columns:1.62fr 1fr;gap:20px;align-items:start}
+  #in26map{width:100%;height:auto;display:block;overflow:visible}
+  #in26map path{stroke:#fff;stroke-width:1.1;cursor:pointer;transition:fill .5s cubic-bezier(.2,.8,.2,1),opacity .16s}
+  #in26map path:hover{opacity:.82}
+  #in26map path.sel{stroke:var(--ink);stroke-width:2.4}
+  #in26map path.in-null{fill:#e3e6df}
+  #in26map path:focus-visible{outline:none;stroke:var(--ink);stroke-width:2.6}
+  @media(prefers-reduced-motion:reduce){#in26map path{transition:none}}
+  #in26map text{font-family:var(--sans);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:2.6px;
+    stroke-linejoin:round;pointer-events:none;font-weight:700;font-size:12px}
+  .inmap .mtab.disabled{opacity:.32;pointer-events:none}
+  .inmap-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.55;max-width:70ch}
+  @media(max-width:860px){.inmap-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -708,14 +731,38 @@
         <p class="comp-note">Humboldt Park is the ward's single largest community &mdash; about a third of it &mdash; and its poorest.</p>
       </div>
 
-      <div class="gaps">
-        <div class="gaps-legend"><span class="lg-dot hp"></span>Humboldt Park <span class="lg-dot wt"></span>West Town (wealthiest) <span class="lg-dot other"></span>other Ward&nbsp;26 communities · <span class="worse-note">right = worse for residents</span></div>
-      <div class="gap-row"><div class="gap-l"><span class="gap-metric">Life expectancy</span><span class="gap-src">Chicago Health Atlas · years</span></div><div class="gap-track"><span class="gap-line"></span><span class="dot hp" style="left:94.0%" title="Humboldt Park: 75.4"><span class="dlab up">Humboldt Park · 75.4</span></span><span class="dot wt" style="left:6.0%" title="West Town: 81.4"><span class="dlab dn">West Town · 81.4</span></span><span class="dot other" style="left:6.0%" title="Logan Square: 81.4"></span><span class="dot other" style="left:20.7%" title="Hermosa: 80.4"></span><span class="dot other" style="left:23.6%" title="Belmont Cragin: 80.2"></span></div><div class="gap-r"><b>6.0</b><small>yr gap</small></div></div>
-      <div class="gap-row"><div class="gap-l"><span class="gap-metric">Median household income</span><span class="gap-src">Chicago Health Atlas · ACS</span></div><div class="gap-track"><span class="gap-line"></span><span class="dot hp" style="left:94.0%" title="Humboldt Park: $58k"><span class="dlab up">Humboldt Park · $58k</span></span><span class="dot wt" style="left:6.0%" title="West Town: $147k"><span class="dlab dn">West Town · $147k</span></span><span class="dot other" style="left:37.8%" title="Logan Square: $115k"></span><span class="dot other" style="left:81.5%" title="Hermosa: $71k"></span><span class="dot other" style="left:80.6%" title="Belmont Cragin: $72k"></span></div><div class="gap-r"><b>$89k</b><small>gap</small></div></div>
-      <div class="gap-row"><div class="gap-l"><span class="gap-metric">Hypertension</span><span class="gap-src">Chicago Health Map · patients<sup class="fn"><a href="#src-16">16</a></sup></span></div><div class="gap-track"><span class="gap-line"></span><span class="dot hp" style="left:94.0%" title="Humboldt Park: 45.6%"><span class="dlab up">Humboldt Park · 45.6%</span></span><span class="dot wt" style="left:8.7%" title="West Town: 32.8%"><span class="dlab dn">West Town · 32.8%</span></span><span class="dot other" style="left:6.0%" title="Logan Square: 32.4%"></span><span class="dot other" style="left:70.7%" title="Hermosa: 42.1%"></span><span class="dot other" style="left:76.7%" title="Belmont Cragin: 43.0%"></span></div><div class="gap-r"><b>12.8</b><small>pt gap</small></div></div>
-      <div class="gap-row"><div class="gap-l"><span class="gap-metric">Diabetes</span><span class="gap-src">Chicago Health Map · patients<sup class="fn"><a href="#src-16">16</a></sup></span></div><div class="gap-track"><span class="gap-line"></span><span class="dot hp" style="left:77.5%" title="Humboldt Park: 38.1%"><span class="dlab up">Humboldt Park · 38.1%</span></span><span class="dot wt" style="left:6.0%" title="West Town: 19.0%"><span class="dlab dn">West Town · 19.0%</span></span><span class="dot other" style="left:15.0%" title="Logan Square: 21.4%"></span><span class="dot other" style="left:94.0%" title="Hermosa: 42.5%"></span><span class="dot other" style="left:91.0%" title="Belmont Cragin: 41.7%"></span></div><div class="gap-r"><b>19.1</b><small>pt gap</small></div></div>
+      <div class="inmap rv">
+        <div class="inmap-controls">
+          <div class="gran-toggle" role="tablist" aria-label="Level of detail">
+            <button class="gtab on" data-gran="comm" role="tab" aria-selected="true">Communities</button>
+            <button class="gtab" data-gran="tract" role="tab" aria-selected="false">Neighborhood tracts</button>
+          </div>
+          <div class="metric-tabs" role="tablist" aria-label="Choose a measure">
+            <button class="mtab on" data-metric="le"      role="tab" aria-selected="true">Life expectancy</button>
+            <button class="mtab"    data-metric="inc"     role="tab" aria-selected="false">Median income</button>
+            <button class="mtab"    data-metric="htn"     role="tab" aria-selected="false">Hypertension</button>
+            <button class="mtab"    data-metric="dia"     role="tab" aria-selected="false">Diabetes</button>
+            <button class="mtab"    data-metric="obesity" role="tab" aria-selected="false">Obesity</button>
+          </div>
+        </div>
+        <div class="inmap-grid">
+          <div class="mapstage">
+            <svg id="in26map" viewBox="0 0 880.0 477.8" role="group" aria-label="Map of Ward 26 broken into its communities">
+              <g id="in-areas"></g>
+              <g id="in-labels"></g>
+            </svg>
+            <div class="legend">
+              <span class="lg-end">Better</span>
+              <span class="lg-ramp" aria-hidden="true"></span>
+              <span class="lg-end">Worse</span>
+              <span class="lg-scale" id="in-lgscale"></span>
+            </div>
+            <p class="maphint">Darker = worse for residents · click or tab to any area inside Ward 26</p>
+            <p class="inmap-note"><b>Life expectancy &amp; income:</b> Chicago Health Atlas (community-area / ACS). <b>Conditions:</b> Chicago Health Map (CAPriCORN), 2024, prevalence among patients. Tract estimates are small-sample &mdash; read them as texture, not precision.</p>
+          </div>
+          <aside class="mappanel" id="in26panel" aria-live="polite"></aside>
+        </div>
       </div>
-
       <div class="zoom-punch">
         <span class="big">6 years. $89,000.</span>
         <p>The distance in life expectancy and household income between <b>Humboldt Park</b>, the ward's largest community, and <b>West Town</b>, its wealthiest &mdash; inside the same aldermanic ward. Hypertension runs about <b>13 points higher</b> and diabetes <b>twice as high</b> in Humboldt Park.<sup class="fn"><a href="#src-2">2</a>,<a href="#src-7">7</a></sup> These are the gaps a ward office can level. The levers are below.</p>
@@ -1018,5 +1065,135 @@ var MAP={"W":560.0,"H":681.5,"city":{"htn":44.5,"dia":29.2,"heart":10.2,"stroke"
 })();
 </script>
 
+
+<script>
+var INSIDE={"W":880.0,"H":477.8,"city":{"le":78.7,"inc":79432,"htn":44.5,"dia":29.2,"obesity":22.4},"year":"2024","communities":[{"name":"Humboldt Park","share":33,"d":"M267.2,186.9 450.1,183.5 507.6,184.1 507.7,185.6 626.0,183.7 628.1,181.9 683.8,181.1 683.7,179.4 688.0,179.4 689.4,241.3 626.8,242.3 630.3,422.6 632.1,422.5 609.0,422.9 604.0,423.0 572.5,406.0 566.3,408.4 555.1,396.9 509.0,372.3 508.1,333.9 470.8,334.4 470.0,304.6 402.8,305.4 402.8,306.7 401.4,306.5 395.3,303.4 394.9,275.9 357.1,276.5 356.8,266.4 341.7,266.7 341.5,255.2 326.4,255.4 326.2,247.2 298.8,247.6 298.6,239.3 283.6,239.6 283.1,217.8 268.0,218.1 267.2,186.9ZM639.1,422.4 647.7,422.3 638.1,422.5 639.1,422.4ZM672.5,422.0 676.8,422.0 667.9,422.1 672.5,422.0ZM681.3,421.9 679.6,422.0 678.9,422.0 681.3,421.9ZM688.4,421.8 688.4,421.9 685.8,421.9 688.4,421.8ZM688.3,426.7 688.3,425.9 688.4,422.7 688.3,426.7ZM688.6,440.6 688.6,441.5 688.6,439.4 688.6,440.6Z","cx":511.4,"cy":301.6,"le":75.4,"inc":58087,"htn":45.6,"dia":38.1,"obesity":24.6},{"name":"West Town","share":27,"d":"M688.6,441.9 688.4,421.8 630.3,422.6 626.8,242.3 689.4,241.3 688.0,179.4 744.9,178.0 748.0,178.1 748.0,179.7 808.1,178.9 810.2,300.0 870.6,299.2 872.0,374.8 862.4,374.9 862.2,367.7 750.8,369.1 751.5,406.0 781.8,405.7 782.0,420.8 751.8,421.1 752.1,441.1 707.0,441.7 707.5,469.8 699.7,465.1 699.5,441.8 688.6,441.9Z","cx":749.5,"cy":324.5,"le":81.4,"inc":146769,"htn":32.8,"dia":19.0,"obesity":21.1},{"name":"Logan Square","share":16,"d":"M808.1,178.9 805.4,179.0 805.2,179.0 805.4,179.0 808.1,178.9ZM800.6,179.0 796.7,179.1 804.4,179.0 800.6,179.0ZM790.7,179.1 790.3,179.1 792.4,179.1 790.7,179.1ZM785.9,179.2 785.7,179.2 789.8,179.1 785.9,179.2ZM781.2,179.3 781.9,179.2 782.6,179.2 781.2,179.3ZM775.8,179.3 775.2,179.3 776.8,179.3 775.8,179.3ZM770.6,179.4 770.0,179.4 774.9,179.3 770.6,179.4ZM765.5,179.4 764.3,179.5 766.2,179.4 765.5,179.4ZM759.7,179.5 760.1,179.5 760.9,179.5 759.7,179.5ZM757.8,179.6 757.3,179.6 758.5,179.5 757.8,179.6ZM746.2,178.0 748.0,178.0 748.0,178.1 746.2,178.0ZM741.7,178.1 683.7,179.4 683.8,181.1 628.1,181.9 626.0,183.7 507.7,185.6 507.6,184.1 484.2,183.6 437.7,184.1 428.0,155.2 416.7,155.4 416.1,130.7 414.8,125.3 418.6,125.3 406.7,95.3 625.9,91.8 626.7,121.9 740.4,120.6 741.7,178.1ZM397.7,95.4 393.0,95.5 403.4,95.3 397.7,95.4ZM388.3,95.6 389.6,95.6 392.5,95.5 388.3,95.6ZM387.7,95.6 387.9,95.6 388.2,95.6 387.7,95.6ZM385.3,95.7 386.4,95.6 387.0,95.6 385.3,95.7Z","cx":578.6,"cy":139.3,"le":81.4,"inc":114689,"htn":32.4,"dia":21.4,"obesity":21.1},{"name":"Hermosa","share":13,"d":"M355.3,96.1 406.7,95.3 418.6,125.3 414.8,125.3 416.1,130.7 416.7,155.4 428.0,155.2 437.7,184.1 267.2,186.9 242.7,185.1 204.8,179.7 200.7,8.0 201.4,37.2 263.9,37.2 266.0,127.8 356.0,126.4 355.3,96.1Z","cx":234.0,"cy":97.0,"le":80.4,"inc":70747,"htn":42.1,"dia":42.5,"obesity":20.9},{"name":"Belmont Cragin","share":10,"d":"M200.7,8.0 203.3,128.8 145.7,129.7 146.1,137.3 107.1,137.9 104.9,137.8 104.7,130.4 56.5,131.2 54.5,101.1 9.3,101.3 8.0,41.6 199.0,38.3 198.3,8.0 200.7,8.0Z","cx":105.4,"cy":74.7,"le":80.2,"inc":71624,"htn":43.0,"dia":41.7,"obesity":23.1}],"tracts":[{"id":"17031831200","name":"Tract 8312","d":"M203.9,128.8 414.8,125.3 416.2,131.0 416.7,155.4 429.7,155.2 440.7,183.9 417.4,184.1 414.4,181.4 402.2,181.5 387.3,181.7 387.3,184.0 267.2,186.0 243.0,185.1 204.8,179.7 203.9,128.8Z","cx":317.1,"cy":155.8,"htn":41.3,"dia":50.5,"obesity":20.2,"rel":"Limited","pop":392},{"id":"17031836600","name":"Tract 8366","d":"","cx":592.9,"cy":391.2,"htn":46.8,"dia":33.2,"obesity":24.0,"rel":"Good","pop":425},{"id":"17031200402","name":"Tract 2004.02","d":"","cx":384.2,"cy":111.3,"htn":44.4,"dia":39.8,"obesity":18.4,"rel":"Limited","pop":342},{"id":"17031200401","name":"Tract 2004.01","d":"","cx":233.6,"cy":83.0,"htn":39.2,"dia":39.5,"obesity":21.9,"rel":"Limited","pop":306},{"id":"17031221100","name":"Tract 2211","d":"M625.8,91.8 626.6,121.9 546.2,123.2 545.7,93.1 625.8,91.8Z","cx":586.1,"cy":107.2,"htn":33.7,"dia":21.9,"obesity":23.3,"rel":"Moderate","pop":484},{"id":"17031221000","name":"Tract 2210","d":"M545.7,93.1 546.2,123.2 506.2,123.9 505.6,93.7 545.7,93.1Z","cx":526.0,"cy":108.5,"htn":40.6,"dia":29.7,"obesity":24.5,"rel":"Limited","pop":229},{"id":"17031241100","name":"Tract 2411","d":"","cx":840.9,"cy":329.7,"htn":36.8,"dia":17.9,"obesity":21.2,"rel":"Moderate","pop":429},{"id":"17031220901","name":"Tract 2209.01","d":"","cx":458.9,"cy":109.3,"htn":39.9,"dia":35.1,"obesity":20.5,"rel":"Moderate","pop":268},{"id":"17031222500","name":"Tract 2225","d":"M686.9,121.2 740.4,120.6 741.7,178.1 748.0,178.0 748.1,180.1 688.0,180.0 686.9,121.2Z","cx":714.2,"cy":150.4,"htn":37.6,"dia":32.9,"obesity":21.4,"rel":"Moderate","pop":173},{"id":"17031222600","name":"Tract 2226","d":"M626.7,121.9 686.7,121.2 688.0,180.0 628.0,181.0 626.7,121.9Z","cx":657.3,"cy":150.7,"htn":30.8,"dia":21.4,"obesity":18.9,"rel":"Moderate","pop":159},{"id":"17031191200","name":"Tract 1912","d":"M23.1,41.4 24.3,101.3 9.3,101.3 8.0,41.6 23.1,41.4Z","cx":16.1,"cy":68.6,"htn":35.8,"dia":41.9,"obesity":28.3,"rel":"Limited","pop":265},{"id":"17031222700","name":"Tract 2227","d":"M546.2,123.2 626.6,121.9 628.0,182.8 547.5,184.9 546.2,123.2Z","cx":587.0,"cy":154.1,"htn":35.1,"dia":26.3,"obesity":19.9,"rel":"Limited","pop":171},{"id":"17031230100","name":"Tract 2301","d":"M627.8,241.7 629.2,232.4 628.0,181.0 688.0,180.0 689.4,241.3 627.8,241.7Z","cx":658.7,"cy":210.4,"htn":39.0,"dia":23.6,"obesity":20.2,"rel":"Moderate","pop":267},{"id":"17031230200","name":"Tract 2302","d":"M547.5,184.9 628.0,182.8 629.2,232.4 628.1,241.3 548.8,243.6 547.5,184.9Z","cx":588.4,"cy":212.8,"htn":36.4,"dia":34.2,"obesity":19.0,"rel":"Moderate","pop":184},{"id":"17031230300","name":"Tract 2303","d":"M507.1,244.2 508.7,231.6 507.7,185.6 547.5,184.9 548.8,243.6 507.1,244.2Z","cx":528.3,"cy":216.8,"htn":37.3,"dia":43.4,"obesity":25.3,"rel":"Moderate","pop":83},{"id":"17031230400","name":"Tract 2304","d":"M387.3,181.7 414.4,181.4 417.4,184.1 507.6,183.3 508.7,231.6 507.1,244.2 388.8,246.2 387.3,181.7Z","cx":448.1,"cy":212.3,"htn":44.3,"dia":36.8,"obesity":19.7,"rel":"Moderate","pop":228},{"id":"17031222900","name":"Tract 2229","d":"M415.5,125.3 506.2,123.9 507.6,183.3 440.7,183.9 429.7,155.2 416.7,155.4 416.2,131.0 414.8,126.5 415.5,125.3Z","cx":461.8,"cy":151.7,"htn":42.7,"dia":34.5,"obesity":20.0,"rel":"Limited","pop":110},{"id":"17031241000","name":"Tract 2410","d":"M749.8,315.8 748.8,240.4 809.3,239.6 810.4,315.0 749.8,315.8Z","cx":779.5,"cy":279.9,"htn":42.1,"dia":31.1,"obesity":24.2,"rel":"Moderate","pop":273},{"id":"17031230500","name":"Tract 2305","d":"","cx":328.0,"cy":214.8,"htn":38.4,"dia":46.3,"obesity":22.4,"rel":"Moderate","pop":294},{"id":"17031222800","name":"Tract 2228","d":"M506.2,123.9 546.2,123.2 547.5,184.9 507.7,185.6 506.2,123.9Z","cx":526.9,"cy":155.7,"htn":35.4,"dia":13.4,"obesity":23.2,"rel":"Limited","pop":82},{"id":"17031230700","name":"Tract 2307","d":"","cx":451.1,"cy":290.7,"htn":37.4,"dia":40.6,"obesity":24.5,"rel":"Moderate","pop":641},{"id":"17031230800","name":"Tract 2308","d":"M506.3,252.2 507.1,244.2 535.9,243.7 538.1,333.6 568.2,333.1 568.9,363.2 508.8,363.8 508.1,333.9 506.8,321.0 507.7,319.0 506.3,252.2Z","cx":522.4,"cy":303.8,"htn":35.5,"dia":34.8,"obesity":29.7,"rel":"Moderate","pop":138},{"id":"17031230900","name":"Tract 2309","d":"M535.9,243.7 627.8,241.7 626.6,244.6 626.3,251.2 628.9,362.2 568.9,363.2 568.2,333.1 538.1,333.6 535.9,243.7Z","cx":582.4,"cy":303.0,"htn":41.5,"dia":36.5,"obesity":25.1,"rel":"Moderate","pop":518},{"id":"17031191100","name":"Tract 1911","d":"M144.0,39.2 146.1,137.3 104.9,137.8 104.7,130.4 56.5,131.2 54.5,101.1 24.3,101.3 23.1,41.4 144.0,39.2Z","cx":84.5,"cy":91.4,"htn":44.5,"dia":43.6,"obesity":24.0,"rel":"Limited","pop":555},{"id":"17031242500","name":"Tract 2425","d":"M811.2,360.3 871.7,359.5 872.0,374.8 862.4,374.9 862.2,367.7 811.4,368.3 811.2,360.3Z","cx":841.6,"cy":366.0,"htn":37.1,"dia":26.6,"obesity":24.1,"rel":"Moderate","pop":399},{"id":"17031230600","name":"Tract 2306","d":"M326.3,247.4 388.8,246.2 386.8,254.8 387.1,275.9 357.1,276.5 356.8,266.4 341.7,266.7 341.5,255.2 326.4,255.4 326.3,247.4Z","cx":364.3,"cy":261.8,"htn":43.8,"dia":42.3,"obesity":27.3,"rel":"Moderate","pop":673},{"id":"17031242700","name":"Tract 2427","d":"M688.6,441.9 688.4,421.9 751.8,421.1 752.1,441.1 707.0,441.7 707.5,469.8 699.7,465.1 699.5,441.8 688.6,441.9Z","cx":703.3,"cy":447.0,"htn":33.8,"dia":30.4,"obesity":27.1,"rel":"Moderate","pop":240},{"id":"17031240800","name":"Tract 2408","d":"M688.0,180.0 748.1,180.1 748.8,240.4 689.4,241.3 688.0,180.0Z","cx":718.8,"cy":212.7,"htn":35.7,"dia":26.9,"obesity":21.4,"rel":"Moderate","pop":182},{"id":"17031231100","name":"Tract 2311","d":"M508.8,363.8 533.1,363.5 570.4,406.8 566.3,408.4 555.1,396.9 509.0,372.3 508.8,363.8Z","cx":542.3,"cy":385.3,"htn":52.0,"dia":48.0,"obesity":27.6,"rel":"Moderate","pop":152},{"id":"17031240700","name":"Tract 2407","d":"M748.0,179.7 808.1,178.9 809.3,239.6 748.8,240.4 748.0,179.7Z","cx":778.7,"cy":209.9,"htn":32.7,"dia":26.5,"obesity":19.8,"rel":"Moderate","pop":162},{"id":"17031240900","name":"Tract 2409","d":"M626.6,244.6 627.8,241.7 748.8,240.4 751.8,421.1 630.3,422.6 626.6,244.6Z","cx":689.2,"cy":331.5,"htn":44.4,"dia":24.3,"obesity":17.8,"rel":"Moderate","pop":169},{"id":"17031242600","name":"Tract 2426","d":"","cx":780.6,"cy":342.1,"htn":35.4,"dia":27.6,"obesity":19.6,"rel":"Moderate","pop":649},{"id":"17031191000","name":"Tract 1910","d":"","cx":173.3,"cy":68.9,"htn":45.0,"dia":39.3,"obesity":17.8,"rel":"Limited","pop":191}]};
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  var C=INSIDE.city;
+  var MET={
+    le:{lab:'Life expectancy',worse:'low',city:C.le,commOnly:true,full:function(v){return v.toFixed(1)+' yrs';},short:function(v){return v.toFixed(1);},dp:'yrs'},
+    inc:{lab:'Median income',worse:'low',city:C.inc,commOnly:true,full:function(v){return '$'+Math.round(v).toLocaleString();},short:function(v){return '$'+Math.round(v/1000)+'k';},dp:'$'},
+    htn:{lab:'Hypertension',worse:'high',city:C.htn,full:function(v){return v.toFixed(1)+'%';},short:function(v){return v.toFixed(1)+'%';},dp:'pts'},
+    dia:{lab:'Diabetes',worse:'high',city:C.dia,full:function(v){return v.toFixed(1)+'%';},short:function(v){return v.toFixed(1)+'%';},dp:'pts'},
+    obesity:{lab:'Obesity',worse:'high',city:C.obesity,full:function(v){return v.toFixed(1)+'%';},short:function(v){return v.toFixed(1)+'%';},dp:'pts'}
+  };
+  var ORDER=['le','inc','htn','dia','obesity'];
+  var curGran='comm', curMetric='le', curKey=null;
+
+  function feats(){return curGran==='comm'?INSIDE.communities:INSIDE.tracts;}
+  function keyOf(f){return curGran==='comm'?f.name:f.id;}
+  function metricsFor(){return ORDER.filter(function(k){return curGran==='comm'||!MET[k].commOnly;});}
+  function ext(k){
+    var vs=feats().map(function(f){return f[k];}).filter(function(v){return v!=null;});
+    return {min:Math.min.apply(null,vs),max:Math.max.apply(null,vs)};
+  }
+  function sev(k,v){if(v==null)return null;var e=ext(k);var t=(v-e.min)/((e.max-e.min)||1);return MET[k].worse==='low'?1-t:t;}
+  function ramp(t){var a=[248,238,233],b=[142,44,34];
+    return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';}
+
+  var gA=document.getElementById('in-areas'), gL=document.getElementById('in-labels');
+  var panel=document.getElementById('in26panel');
+
+  function drawGeom(){
+    gA.innerHTML='';gL.innerHTML='';
+    feats().forEach(function(f){
+      var p=document.createElementNS(NS,'path');
+      p.setAttribute('d',f.d);
+      p.setAttribute('tabindex','0');p.setAttribute('role','button');
+      p.setAttribute('aria-label',curGran==='comm'?f.name:'Census '+f.name);
+      p.addEventListener('click',function(){select(keyOf(f));});
+      p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();select(keyOf(f));}});
+      gA.appendChild(p); f._el=p;
+      if(curGran==='comm'){
+        var t=document.createElementNS(NS,'text');
+        t.setAttribute('x',f.cx);t.setAttribute('y',f.cy);t.setAttribute('text-anchor','middle');
+        t.textContent=f.name; gL.appendChild(t);
+      }
+    });
+  }
+  function paint(){
+    var k=curMetric;
+    feats().forEach(function(f){
+      var s=sev(k,f[k]);
+      if(s==null){f._el.classList.add('in-null');f._el.removeAttribute('fill');}
+      else{f._el.classList.remove('in-null');f._el.setAttribute('fill',ramp(s));}
+    });
+    var e=ext(k),lo,hi;
+    if(MET[k].worse==='high'){lo=e.min;hi=e.max;}else{lo=e.max;hi=e.min;}
+    document.getElementById('in-lgscale').textContent=MET[k].short(lo)+' – '+MET[k].short(hi);
+  }
+  function setMetricTabs(){
+    document.querySelectorAll('.inmap .mtab').forEach(function(b){
+      var k=b.dataset.metric, dis=(curGran==='tract'&&MET[k].commOnly);
+      b.classList.toggle('disabled',dis);
+      var on=(k===curMetric);b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');
+    });
+  }
+  function delta(k,v){
+    if(v==null)return '';
+    var d=v-MET[k].city, worse=MET[k].worse==='high'?d>0:d<0, sign=d>=0?'+':'−',a=Math.abs(d),txt;
+    if(k==='inc')txt=sign+'$'+Math.round(a).toLocaleString();
+    else if(k==='le')txt=sign+a.toFixed(1)+' yrs';
+    else txt=sign+a.toFixed(1)+' pts';
+    return '<span class="d '+(worse?'d-bad':'d-good')+'">'+txt+' vs city</span>';
+  }
+  function byKey(kk){var a=feats();for(var i=0;i<a.length;i++){if(keyOf(a[i])===kk)return a[i];}return a[0];}
+  function select(kk){
+    curKey=kk;
+    feats().forEach(function(f){f._el.classList.toggle('sel',keyOf(f)===kk);});
+    var f=byKey(kk); gA.appendChild(f._el);
+    buildPanel(f);
+  }
+  function buildPanel(f){
+    var h;
+    if(curGran==='comm'){
+      var isHP=f.name==='Humboldt Park';
+      h='<div class="mp-name">'+f.name+' <span class="mp-pill '+(isHP?'ward':'nb')+'">'+f.share+'% of Ward 26</span></div>';
+      h+='<div class="mp-sub">Community area · Chicago Health Atlas &amp; Chicago Health Map</div>';
+    }else{
+      h='<div class="mp-name">'+f.name+' <span class="mp-pill nb">Ward 26</span></div>';
+      h+='<div class="mp-sub">~'+(f.pop?f.pop.toLocaleString():'—')+' patients · <span class="rel-pill">'+(f.rel||'—')+' reliability</span></div>';
+    }
+    h+='<div class="mp-rows">';
+    metricsFor().forEach(function(k){
+      var v=f[k];
+      if(v==null){h+='<div class="mp-row'+(k===curMetric?' active':'')+'"><div class="mp-rowh"><span class="mp-lab">'+MET[k].lab+'</span><span class="mp-val" style="color:var(--ink-3)">n/a</span></div></div>';return;}
+      var e=ext(k),w=Math.max(2,Math.min(100,((v-e.min)/((e.max-e.min)||1))*100));
+      var tk=Math.max(0,Math.min(100,((MET[k].city-e.min)/((e.max-e.min)||1))*100));
+      h+='<div class="mp-row'+(k===curMetric?' active':'')+'">'
+        +'<div class="mp-rowh"><span class="mp-lab">'+MET[k].lab+'</span>'
+        +'<span class="mp-val">'+MET[k].full(v)+delta(k,v)+'</span></div>'
+        +'<div class="mp-bar"><i style="width:'+w.toFixed(1)+'%;background:'+ramp(sev(k,v))+'"></i>'
+        +'<span class="tick" style="left:'+tk.toFixed(1)+'%"></span></div></div>';
+    });
+    h+='</div><div class="mp-foot"><span class="tk"></span> Vertical line marks the Chicago average · bars compare areas within Ward 26</div>';
+    panel.innerHTML=h;
+  }
+  function render(){drawGeom();paint();setMetricTabs();
+    // keep selection if key still exists, else default
+    var exists=feats().some(function(f){return keyOf(f)===curKey;});
+    if(!exists) curKey=keyOf(feats()[0]);
+    select(curKey);
+  }
+
+  document.querySelectorAll('.inmap .mtab').forEach(function(b){
+    b.addEventListener('click',function(){ if(b.classList.contains('disabled'))return;
+      curMetric=b.dataset.metric; paint(); setMetricTabs(); buildPanel(byKey(curKey)); });
+  });
+  document.querySelectorAll('.gtab').forEach(function(b){
+    b.addEventListener('click',function(){
+      curGran=b.dataset.gran;
+      document.querySelectorAll('.gtab').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
+      if(curGran==='tract'&&MET[curMetric].commOnly) curMetric='htn';
+      render();
+    });
+  });
+
+  // default: communities, life expectancy, Humboldt Park selected
+  curKey='Humboldt Park';
+  render();
+})();
+</script>
 </body>
 </html>
