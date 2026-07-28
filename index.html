@@ -529,6 +529,24 @@
   .inmap-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.55;max-width:70ch}
   @media(max-width:860px){.inmap-grid{grid-template-columns:1fr}}
 
+
+  /* why-cards (analysis explainer) */
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
+  .why-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 26px}
+  .why-card .wk{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--crit)}
+  .why-card h4{font-family:var(--serif);font-size:20px;font-weight:600;margin:9px 0 12px;letter-spacing:-.01em;text-wrap:balance}
+  .why-card p{font-size:14px;color:var(--ink-2);margin-bottom:11px;text-wrap:pretty}
+  .why-card p:last-child{margin-bottom:0}
+  .why-card p b{color:var(--ink);font-weight:600}
+  @media(max-width:760px){.why-grid{grid-template-columns:1fr}}
+  /* plan list in policy levers */
+  .lbody .plan{margin:4px 0 16px;padding:0;list-style:none}
+  .lbody .plan li{position:relative;padding-left:26px;margin-bottom:11px;font-size:14.5px;color:var(--ink-2);text-wrap:pretty}
+  .lbody .plan li:last-child{margin-bottom:0}
+  .lbody .plan li::before{content:"";position:absolute;left:0;top:6px;width:12px;height:12px;border-radius:4px;
+    background:var(--brand-ghost);border:1.5px solid var(--brand)}
+  .lbody .plan li b{color:var(--ink);font-weight:600}
+
 </style>
 </head>
 <body>
@@ -763,6 +781,23 @@
           <aside class="mappanel" id="in26panel" aria-live="polite"></aside>
         </div>
       </div>
+      <div class="why-grid rv">
+        <div class="why-card">
+          <div class="wk">Why the split</div>
+          <h4>Capital moved east; families were pushed west</h4>
+          <p>The dividing line is recent and man-made. Wicker Park and the east end of West Town gentrified first; the <b>606 trail</b>, opened in 2015, pushed the frontier west. Along its western half &mdash; Logan Square and Humboldt Park &mdash; median home-sale prices rose about <b>344% between 2012 and 2018</b>, from roughly $97,000 to $462,000, and the rent spikes that followed pushed out longtime Puerto Rican and Latino renters.<sup class="fn"><a href="#src-17">17</a></sup></p>
+          <p>The west side carries an older injury too. In the 1930s, federal maps graded these blocks &ldquo;hazardous&rdquo; and starved them of mortgage credit for decades. Those same redlined grades still predict today's health: across the grading spectrum, present-day diabetes climbs from about <b>9% to 14%</b> and obesity from <b>29% to 35%</b>.<sup class="fn"><a href="#src-18">18</a></sup></p>
+          <p>Wealth in Ward 26 didn't fall randomly. It was routed &mdash; invested in the east, extracted from the west.</p>
+        </div>
+        <div class="why-card">
+          <div class="wk">Why it becomes disease</div>
+          <h4>The same line drawn in blood pressure</h4>
+          <p><b>Food.</b> The west side is a <b>food swamp</b> &mdash; dense fast food and corner stores heavy on cheap, salty, sugary calories and thin on fresh produce. Food-swamp severity predicts obesity better than distance to a grocery store, and tracks diabetes hospitalizations.<sup class="fn"><a href="#src-19">19</a></sup></p>
+          <p><b>Stress.</b> Economic precarity and the constant threat of displacement are biological. Cumulative stress raises &ldquo;allostatic load&rdquo; &mdash; chronically elevated stress hormones and blood pressure &mdash; so hypertension and diabetes arrive years early.<sup class="fn"><a href="#src-20">20</a></sup></p>
+          <p><b>Care.</b> Lower-income, historically redlined blocks still see fewer routine visits and more uninsurance, so high blood pressure and blood sugar go untreated until they surface as the strokes, kidney failure, and heart disease the map shows.<sup class="fn"><a href="#src-18">18</a></sup> The east side &mdash; grocery access, an income cushion, insurance &mdash; is largely spared. Same ward, opposite exposures.</p>
+        </div>
+      </div>
+
       <div class="zoom-punch">
         <span class="big">6 years. $89,000.</span>
         <p>The distance in life expectancy and household income between <b>Humboldt Park</b>, the ward's largest community, and <b>West Town</b>, its wealthiest &mdash; inside the same aldermanic ward. Hypertension runs about <b>13 points higher</b> and diabetes <b>twice as high</b> in Humboldt Park.<sup class="fn"><a href="#src-2">2</a>,<a href="#src-7">7</a></sup> These are the gaps a ward office can level. The levers are below.</p>
@@ -827,47 +862,62 @@
       <div class="l">
         <div class="k">Strategic Policy Levers</div>
         <h2>Three levers a ward office can pull</h2>
-        <p>Ward-scale, fundable now, each with the economic case attached.</p>
+        <p>Ward-scale and fundable now &mdash; each a concrete plan, with the peer-reviewed evidence attached.</p>
       </div>
     </div>
     <div class="levers">
       <details class="lever rv" open>
         <summary>
           <span class="lnum">1</span>
-          <span class="lt"><h3>Put produce where people already shop</h3><span class="where">Menu money · Division Street corridor</span></span>
+          <span class="lt"><h3>Make the healthy choice the cheap, close choice</h3><span class="where">Division &amp; Chicago Ave corridors · corner stores · farmers’ market</span></span>
           <span class="lchev">+</span>
         </summary>
         <div class="lbody">
-          <p>Direct menu and participatory-budget dollars to produce refrigeration in existing corner stores and a longer farmers' market season on Division. Residents already walk to these stores every week. Stock them with what a cardiologist would want on the shelf.</p>
-          <div class="why"><b>The economic case</b>One stroke costs tens of thousands in acute care — the average U.S. stroke hospitalization runs about $20,000 before rehab or readmission<sup class="fn"><a href="#src-10">10</a></sup> — and the local safety-net hospital absorbs much of that bill uncompensated. Produce subsidy costs a few hundred dollars per household per year — the produce-prescription programs evaluated nationally provided a median of $63 a month for 4–10 months, and improved blood pressure and blood sugar.<sup class="fn"><a href="#src-15">15</a></sup> Fund the cheap end of that ledger.</div>
+          <p>The west side isn't short on food &mdash; it's short on <em>fresh</em> food. Turn the stores residents already use into produce access, and put a thumb on the price of vegetables.</p>
+          <ul class="plan">
+            <li><b>Match SNAP dollars on produce.</b> Stand up a Double Up Food Bucks–style 1:1 match on fruits and vegetables at the Division Street market and enrolled corner stores. Families in these programs report eating more produce and greater food security.<sup class="fn"><a href="#src-21">21</a></sup></li>
+            <li><b>Retrofit corner stores.</b> Menu and participatory-budget dollars for refrigeration, shelving, and healthy-stocking agreements in west-side stores &mdash; converting food-swamp outlets, which track higher obesity and diabetes, into fresh-food points.<sup class="fn"><a href="#src-19">19</a></sup></li>
+            <li><b>Prescribe produce from the clinic.</b> Route produce-prescription referrals from Humboldt Park clinics; a median $63/month benefit improved blood pressure and blood sugar across nine U.S. programs.<sup class="fn"><a href="#src-15">15</a></sup></li>
+          </ul>
+          <div class="why"><b>Pay for it</b>Federal GusNIP grants match local nutrition-incentive dollars, and one avoided stroke &mdash; about $20,000 in acute care, much of it uncompensated at the safety-net hospital<sup class="fn"><a href="#src-10">10</a></sup> &mdash; funds a great many $63 produce boxes. Fund the cheap end of the ledger.</div>
         </div>
       </details>
       <details class="lever rv">
         <summary>
           <span class="lnum">2</span>
-          <span class="lt"><h3>Bring blood-pressure checks to trusted places</h3><span class="where">Libraries · churches · the fieldhouse</span></span>
+          <span class="lt"><h3>Stand up a west-side community health worker corps</h3><span class="where">Libraries · churches · the fieldhouse · corner stores</span></span>
           <span class="lchev">+</span>
         </summary>
         <div class="lbody">
-          <p>Pay community health workers to run walk-in screenings and medication check-ins at libraries, churches, and the fieldhouse. Some residents will never enter a clinic, so meet them where they already spend their week. Controlling blood pressure takes a cuff, a pill, and someone who follows up.</p>
-          <div class="why"><b>The economic case</b>Community health worker programs return more than they cost in avoided hospitalizations — a randomized trial of the IMPaCT model returned $2.47 to Medicaid for every $1 invested, within one year.<sup class="fn"><a href="#src-11">11</a></sup> Each controlled patient means one fewer stroke, dialysis start, or cardiac admission. The wages go to hires from the neighborhood.</div>
+          <p>Blood pressure is controllable with a cuff, a cheap pill, and someone who follows up. The gap isn't the medicine &mdash; it's the contact. Hire that contact from the neighborhood.</p>
+          <ul class="plan">
+            <li><b>Hire and train CHWs locally.</b> Recruit community health workers from Humboldt Park and Hermosa to run walk-in screening and monthly medication check-ins where people already spend their week.</li>
+            <li><b>Use a protocol proven in a trial.</b> A CHW-led multicomponent hypertension program cut systolic blood pressure about <b>7 mmHg</b> beyond usual care and raised control rates from <b>17% to 73%</b> in a randomized trial.<sup class="fn"><a href="#src-22">22</a></sup></li>
+            <li><b>Pair with $4 generics.</b> First-line drugs like lisinopril and amlodipine cost $4 for a month;<sup class="fn"><a href="#src-14">14</a></sup> each controlled patient is one fewer stroke, dialysis start, or cardiac admission.</li>
+          </ul>
+          <div class="why"><b>Pay for it</b>Illinois Medicaid now reimburses certified community health worker services, and the IMPaCT CHW model returned <b>$2.47 to Medicaid per $1 spent</b> within a year.<sup class="fn"><a href="#src-11">11</a></sup> The program pays for itself in avoided hospitalizations &mdash; and the wages stay in the ward.</div>
         </div>
       </details>
       <details class="lever rv">
         <summary>
           <span class="lnum">3</span>
-          <span class="lt"><h3>Treat housing stability as health infrastructure</h3><span class="where">Tenant legal aid · anti-displacement policy</span></span>
+          <span class="lt"><h3>Treat housing stability as health infrastructure</h3><span class="where">Right to counsel · anti-displacement zoning · community land trust</span></span>
           <span class="lchev">+</span>
         </summary>
         <div class="lbody">
-          <p>Fund tenant legal aid, deconversion protection, and affordable set-asides near the park. A family that keeps its home keeps its clinic, its pharmacy, and its routines. A family pushed out loses all three and restarts care from zero in a neighborhood that doesn't know them.</p>
-          <div class="why"><b>The economic case</b>Housing precarity raises chronic stress, and chronic stress raises blood pressure — the link between housing instability and hypertension is documented across dozens of U.S. studies.<sup class="fn"><a href="#src-12">12</a>,<a href="#src-13">13</a></sup> Stability pays out twice: families keep spending at businesses on Division and North Avenue, and the health system skips the cost of re-diagnosing them somewhere else.</div>
+          <p>The east–west health gap is, underneath, a housing gap. A family that keeps its home keeps its clinic, its pharmacy, and its routines; one pushed out restarts care from zero. Stop the churn.</p>
+          <ul class="plan">
+            <li><b>Fund a right to counsel.</b> Guarantee tenants a lawyer in eviction court. In New York, <b>84% of represented tenants stayed housed</b>, and right-to-counsel areas saw 45–78% fewer evictions &mdash; with measurably better infant birth outcomes.<sup class="fn"><a href="#src-23">23</a></sup></li>
+            <li><b>Zone against the teardown churn.</b> Deconversion protection and affordable set-asides along the western 606, where a 344% price run displaced Latino families.<sup class="fn"><a href="#src-17">17</a></sup></li>
+            <li><b>Seed a community land trust.</b> Move west-side parcels permanently off the speculative market; land trusts slow displacement and turnover in gentrifying neighborhoods and carried homeowners through the 2008 crash.<sup class="fn"><a href="#src-24">24</a></sup></li>
+          </ul>
+          <div class="why"><b>Why it’s health policy</b>Eviction threat and housing instability raise blood pressure and cardiometabolic risk across dozens of U.S. studies,<sup class="fn"><a href="#src-12">12</a>,<a href="#src-13">13</a></sup> and the chronic stress of precarity is biological &mdash; it weathers the body early.<sup class="fn"><a href="#src-20">20</a></sup> Keep families housed and you keep them in care.</div>
         </div>
       </details>
     </div>
     <div class="verify">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Figures verified against the Chicago Health Atlas (chicagohealthatlas.org) and the sources below, July 2026. Life expectancy and Healthy Chicago Survey rates are community-area estimates with sampling uncertainty; the 26th Ward's boundaries do not align exactly with community area 23, the ward’s core.
+      Figures verified against the Chicago Health Map (chicagohealthmap.com) and Chicago Health Atlas (chicagohealthatlas.org), plus the peer-reviewed sources below, July 2026. Life expectancy and Healthy Chicago Survey rates are community-area estimates with sampling uncertainty; the 26th Ward's boundaries do not align exactly with community area 23, the ward’s core.
     </div>
   </div>
 </section>
@@ -899,6 +949,14 @@
       <li id="src-14"><b>Walmart $4 Prescriptions program.</b> Common first-line antihypertensives (e.g., lisinopril, amlodipine) are available on 30-day $4 generic lists at major retail pharmacies. <a href="https://www.walmart.com/cp/4-prescriptions/1078664" target="_blank" rel="noopener">walmart.com/cp/4-prescriptions</a> <span class="acc">Accessed July 2026.</span></li>
       <li id="src-15"><b>Hager K, Du M, Li Z, et al.</b> "Impact of Produce Prescriptions on Diet, Food Security, and Cardiometabolic Health Outcomes: A Multisite Evaluation of 9 Produce Prescription Programs in the United States." <em>Circulation: Cardiovascular Quality and Outcomes</em> 16(9), 2023: programs provided a median of $63/month for 4–10 months and were associated with improved blood pressure, HbA1c, and food security. <a href="https://www.ahajournals.org/doi/10.1161/CIRCOUTCOMES.122.009520" target="_blank" rel="noopener">ahajournals.org</a></li>
       <li id="src-16"><b>Chicago Health Map</b> (chicagohealthmap.com), a project of CAPriCORN — the Chicago Area Patient-Centered Outcomes Research Network. Ward- and community-area-level condition prevalence, 2024. Figures are the share of patients seen at participating Chicago health systems carrying each diagnosis — a clinical population, not a general-population survey, so they run higher than survey rates and are best read as comparisons between geographies. Ward 26 (2024): hypertension 39.4%, diabetes 34.3% among ~5,772 patients; citywide patient rates 44.5% and 29.2%. Within Ward 26 — Humboldt Park: hypertension 45.6%, diabetes 38.1%; West Town: 32.8%, 19.0%. <a href="https://chicagohealthmap.com" target="_blank" rel="noopener">chicagohealthmap.com</a> <span class="acc">Accessed July 2026.</span></li>
+      <li id="src-17"><b>Institute for Housing Studies at DePaul University</b> (via Block Club Chicago, Jan 2020). Along the western half of the 606 / Bloomingdale Trail (Logan Square and Humboldt Park), median single-family home-sale prices rose roughly <b>344% between 2012 and 2018</b> &mdash; from about $97,000 to $462,000 &mdash; accelerating displacement of longtime Latino renters. <a href="https://blockclubchicago.org/2020/01/15/home-prices-along-western-portion-of-606-skyrocketing-344-increase-since-2012-new-study-finds/" target="_blank" rel="noopener">blockclubchicago.org</a> · <a href="https://www.housingstudies.org/" target="_blank" rel="noopener">housingstudies.org</a></li>
+      <li id="src-18"><b>Historical redlining &amp; cardiometabolic health.</b> Lynch EE, et al. &ldquo;Associations between 1930s HOLC grades and population burden of cardiovascular disease risk factors in 2020&rdquo; and Mujahid MS, et al., &ldquo;Historical Neighborhood Redlining and Contemporary Cardiometabolic Risk,&rdquo; <em>J Am Coll Cardiol</em> 80(2), 2022. Across HOLC grades A (&ldquo;best&rdquo;) to D (redlined), present-day diabetes rises from ~9.2% to ~13.5% and obesity from ~28.5% to ~35.3%, with higher coronary disease, stroke, and chronic kidney disease; redlined areas also show lower screening and higher uninsurance. <a href="https://www.jacc.org/doi/10.1016/j.jacc.2022.05.010" target="_blank" rel="noopener">jacc.org</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11323776/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov</a></li>
+      <li id="src-19"><b>Cooksey-Stowers K, Schwartz MB, Brownell KD.</b> &ldquo;Food Swamps Predict Obesity Rates Better Than Food Deserts in the United States.&rdquo; <em>Int. J. Environ. Res. Public Health</em> 14(11):1366, 2017: a high density of fast-food and convenience outlets relative to healthy retailers (a &ldquo;food swamp&rdquo;) predicts obesity more strongly than distance to a grocery store, and tracks diabetes hospitalization rates. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5708005/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov/PMC5708005</a></li>
+      <li id="src-20"><b>Geronimus AT, Hicken M, Keene D, Bound J.</b> &ldquo;&lsquo;Weathering&rsquo; and Age Patterns of Allostatic Load Scores Among Blacks and Whites in the United States.&rdquo; <em>American Journal of Public Health</em> 96(5):826–833, 2006: cumulative stress from socioeconomic disadvantage and discrimination raises allostatic load &mdash; chronic physiological dysregulation including elevated blood pressure &mdash; producing earlier onset of hypertension and diabetes. <a href="https://ajph.aphapublications.org/doi/10.2105/AJPH.2004.060749" target="_blank" rel="noopener">ajph.aphapublications.org</a></li>
+      <li id="src-21"><b>Double Up Food Bucks / Fair Food Network</b> and USDA GusNIP nutrition-incentive evaluations. SNAP produce-incentive programs that match benefits 1:1 on fruits and vegetables are associated with greater fruit-and-vegetable consumption and improved food security among participating families. <a href="https://fairfoodnetwork.org/what-we-do/nutrition-incentives/" target="_blank" rel="noopener">fairfoodnetwork.org</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7352438/" target="_blank" rel="noopener">scoping review (PMC7352438)</a></li>
+      <li id="src-22"><b>He J, Irazola V, Mills KT, et al.</b> &ldquo;Effect of a Community Health Worker–Led Multicomponent Intervention on Blood Pressure Control in Low-Income Patients in Argentina: A Randomized Clinical Trial.&rdquo; <em>JAMA</em> 318(11):1016–1025, 2017: systolic blood pressure fell 6.6 mmHg more than usual care and hypertension control rose from 17.0% to 72.9% (vs. 52.2% in usual care); CHW-led programs reduce systolic BP by roughly 7 mmHg on average across trials. <a href="https://pubmed.ncbi.nlm.nih.gov/28975305/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/28975305</a></li>
+      <li id="src-23"><b>Tenant Right to Counsel.</b> New York City Office of Civil Justice program data and evaluations: about <b>84% of represented tenants</b> remained in their homes, and right-to-counsel coverage is associated with a 45–78% lower likelihood that an eviction case ends in eviction; RTC has also been linked to reduced adverse birth outcomes among Medicaid-insured parents. <a href="https://www.tandfonline.com/doi/full/10.1080/10511482.2020.1825009" target="_blank" rel="noopener">Housing Policy Debate (2020)</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11581741/" target="_blank" rel="noopener">birth-outcomes study (PMC11581741)</a></li>
+      <li id="src-24"><b>Ali O, Raviola S.</b> &ldquo;The Effects of Community Land Trusts on Neighborhood Outcomes.&rdquo; <em>Real Estate Economics</em>, 2025: across 46 U.S. community land trusts, evidence that CLTs slow displacement and turnover in gentrifying neighborhoods; CLT homeowners were far less likely to lose homes during the 2008 foreclosure crisis. <a href="https://onlinelibrary.wiley.com/doi/10.1111/1540-6229.12525" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>
     </ol>
   </div>
 </section>
