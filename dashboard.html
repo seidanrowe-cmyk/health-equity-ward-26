@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chicago Ward Health Dashboard · 50 Wards, 4 Vitals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f5f2;--surface:#ffffff;--surface-2:#f8f9f6;
+    --ink:#16201c;--ink-2:#43514b;--ink-3:#7c877f;
+    --line:#e3e6df;--line-2:#d2d7cc;
+    --brand:#14453a;--brand-2:#1d5c4c;--brand-ink:#0e352c;--brand-ghost:#e8efe9;
+    --crit:#b23a2e;--crit-2:#c74f42;--crit-ghost:#f7ebe8;
+    --warn:#b07d1e;--good:#1d7a52;
+    --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:linear-gradient(180deg,#f6f7f4,var(--bg) 40%);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+  a{color:inherit}
+  h1,h2,h3,h4{letter-spacing:-.02em}
+
+  /* topbar + selector */
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(244,245,242,.9);backdrop-filter:blur(16px) saturate(1.3);border-bottom:1px solid var(--line);box-shadow:inset 0 3px 0 var(--brand)}
+  .topbar .wrap{display:flex;align-items:center;gap:16px;min-height:66px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:16px}
+  .logo .mark{width:34px;height:34px;border-radius:8px;background:var(--brand);display:grid;place-items:center;color:#fff;flex-shrink:0}
+  .logo .mark svg{width:19px;height:19px}
+  .logo small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);letter-spacing:.02em}
+  .selector{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .selector label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .selector .stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+  .selector button{border:none;background:transparent;padding:10px 13px;cursor:pointer;font-size:17px;color:var(--brand);font-weight:700;transition:background .15s}
+  .selector button:hover{background:var(--brand-ghost)}
+  .selector input{width:64px;border:none;text-align:center;font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);padding:6px 0;background:transparent;outline:none}
+  .selector select{border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:11px 12px;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
+
+  .hero{padding:34px 0 6px}
+  .hero .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink)}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.03;margin:10px 0 6px}
+  .hero h1 em{font-style:italic;color:var(--crit)}
+  .hero p{color:var(--ink-2);max-width:70ch;font-size:16px}
+  .hero .wardmeta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:100px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+  .pill b{color:var(--ink)}
+
+  section.block{padding:40px 0 4px}
+  .sec-head{margin-bottom:20px}
+  .sec-head .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink)}
+  .sec-head h2{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:600;margin-top:7px}
+  .sec-head p{color:var(--ink-2);margin-top:5px;max-width:64ch;font-size:14.5px}
+
+  /* Section A vitals grid */
+  .vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .vcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+  .vcard .vc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .vcard h3{font-size:13.5px;font-weight:600;color:var(--ink-2)}
+  .vcard .badge{font-size:11px;font-weight:700;letter-spacing:.03em;padding:4px 9px;border-radius:7px;text-transform:uppercase}
+  .vcard .num{font-family:var(--serif);font-size:38px;font-weight:600;line-height:1;letter-spacing:-.03em}
+  .vcard .num small{font-size:15px;color:var(--ink-3);font-family:var(--sans);font-weight:500}
+  .vcard .delta{font-size:12.5px;font-weight:600;margin-top:7px}
+  .vcard .rangebar{position:relative;height:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;margin-top:16px}
+  .vcard .rangebar .fillpos{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:var(--crit);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+  .vcard .rangebar .citytick{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55}
+  .vcard .rlabels{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);margin-top:6px;font-weight:600}
+  .d-bad{color:var(--crit)} .d-good{color:var(--good)}
+
+  /* Section B split map */
+  .vital-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .vtab{font-size:13px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--line-2);border-radius:100px;padding:8px 15px;cursor:pointer;transition:.15s}
+  .vtab.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .splitmap{display:grid;grid-template-columns:0.78fr 1.22fr;gap:18px;align-items:stretch}
+  .mapcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .mapcard h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .mapcard svg{width:100%;height:auto;display:block;overflow:visible}
+  .mapcard svg path{stroke:#fff;stroke-width:.8;cursor:pointer;transition:fill .5s,opacity .15s}
+  .mapcard svg path:hover{opacity:.8}
+  .mapcard.city svg path.sel{stroke:var(--brand);stroke-width:2.4}
+  .mapcard.zoom svg path.sel{stroke:var(--ink);stroke-width:2.4}
+  .mapcard svg text{font-family:var(--sans);fill:var(--ink);font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:2px;stroke-linejoin:round;pointer-events:none}
+  .mapcard.city svg text{font-size:6.6px}
+  .mapcard.zoom svg text{font-size:11px}
+  .legend{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:11px;font-weight:600;color:var(--ink-3)}
+  .legend .ramp{flex:1;height:8px;border-radius:100px;background:linear-gradient(90deg,#f7eee9,#8f2c22)}
+  .commlist{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .commchip{font-size:11.5px;font-weight:600;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:5px 11px;cursor:pointer}
+  .commchip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .commchip b{opacity:.7;font-weight:600}
+
+  /* Section C causal */
+  .causal-lead{background:var(--crit-ghost);border-radius:14px;padding:20px 24px;margin-bottom:20px}
+  .causal-lead .r{font-family:var(--serif);font-size:15px;color:var(--ink);text-wrap:pretty}
+  .causal-lead .r b{color:var(--crit)}
+  .causal-lead .chip{display:inline-block;margin-top:10px;font-size:11.5px;font-weight:700;color:var(--brand-ink);background:var(--brand-ghost);border-radius:100px;padding:4px 11px}
+  .pairgrid{display:grid;gap:10px}
+  .pairrow{display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+  .pairrow .cn{font-size:13px;font-weight:600}
+  .pairrow .cn small{display:block;color:var(--ink-3);font-weight:400;font-size:11px}
+  .minibar{position:relative}
+  .minibar .lab{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);font-weight:600;margin-bottom:4px}
+  .minibar .lab b{color:var(--ink)}
+  .minibar .track{height:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;overflow:hidden}
+  .minibar .track i{display:block;height:100%;border-radius:100px}
+
+  /* Section D drivers */
+  .drivers-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:18px;align-items:start}
+  .sdoh-bars{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+  .sdoh-bars h4,.heat h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+  .sdrow{margin-bottom:14px}
+  .sdrow:last-child{margin-bottom:0}
+  .sdrow .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px}
+  .sdrow .top .lab{font-weight:600;color:var(--ink-2)}
+  .sdrow .top .val{font-family:var(--serif);font-weight:600}
+  .sdrow .top .val .d{font-family:var(--sans);font-size:11px;font-weight:700;margin-left:6px}
+  .sdrow .bar{position:relative;height:9px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px}
+  .sdrow .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:100px;background:var(--brand)}
+  .sdrow .bar .tick{position:absolute;top:-2.5px;bottom:-2.5px;width:2px;background:var(--ink);opacity:.55}
+  .heat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;overflow-x:auto}
+  table.heatbl{border-collapse:collapse;width:100%;font-size:12px}
+  table.heatbl th{text-align:left;font-weight:600;color:var(--ink-3);padding:6px 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+  table.heatbl td{padding:5px 8px;text-align:center;font-weight:600;color:#fff;border-radius:6px;white-space:nowrap}
+  table.heatbl td.name{background:none;color:var(--ink);text-align:left;font-weight:600}
+  .scaffold{margin-top:18px;border:1px dashed var(--line-2);border-radius:12px;padding:16px 20px;background:var(--surface-2);color:var(--ink-3);font-size:12.5px}
+  .scaffold b{color:var(--ink-2)}
+
+  /* Section E levers */
+  .levers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .lever{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column}
+  .lever .lnum{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+  .lever .tag{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--crit);margin-top:12px}
+  .lever h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:6px 0 10px;text-wrap:balance}
+  .lever ul{list-style:none;margin:0 0 14px;padding:0}
+  .lever li{position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;color:var(--ink-2);text-wrap:pretty}
+  .lever li::before{content:"";position:absolute;left:0;top:6px;width:10px;height:10px;border-radius:3px;background:var(--brand-ghost);border:1.5px solid var(--brand)}
+  .lever .why{margin-top:auto;background:var(--brand-ghost);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--brand-ink)}
+  .lever .why b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--brand);margin-bottom:4px}
+  sup.fn a{color:var(--brand-ink);text-decoration:none;font-weight:700}
+
+  /* Section F sources */
+  footer{margin-top:56px;border-top:1px solid var(--line);padding:26px 0 70px}
+  .sources{columns:2;column-gap:34px;font-size:12px;color:var(--ink-3);line-height:1.6}
+  .sources li{break-inside:avoid;margin-bottom:11px;padding-left:4px}
+  .sources b{color:var(--ink-2)}
+  .sources a{color:var(--brand-ink)}
+  .fnote{font-size:12px;color:var(--ink-3);margin-top:20px;max-width:80ch}
+
+  @media(max-width:1000px){.vgrid{grid-template-columns:repeat(2,1fr)}.splitmap,.drivers-grid{grid-template-columns:1fr}.levers{grid-template-columns:1fr}.sources{columns:1}}
+  @media(max-width:560px){.vgrid{grid-template-columns:1fr}.pairrow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="logo">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.3 4 2.5C10.8 6.3 12 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z" fill="currentColor"/></svg></span>
+      <span>Chicago Ward Health Dashboard<small>50 wards · 4 vitals · Chicago Health Map</small></span>
+    </div>
+    <div class="selector">
+      <label for="wardInput">Ward</label>
+      <div class="stepper">
+        <button id="prevW" aria-label="Previous ward">&minus;</button>
+        <input id="wardInput" type="number" min="1" max="50" value="26" aria-label="Ward number">
+        <button id="nextW" aria-label="Next ward">+</button>
+      </div>
+      <select id="wardSelect" aria-label="Choose a ward"></select>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="k" id="heroKick">Ward Health Profile</div>
+    <h1>Ward <em id="heroWard">26</em> — a health profile</h1>
+    <p id="heroLede"></p>
+    <div class="wardmeta" id="wardMeta"></div>
+  </div>
+</section>
+
+<!-- ================= SECTION A: 4 VITALS ================= -->
+<section class="block" id="secA">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="k">Section A · The four vitals</div>
+      <h2>Cardiometabolic &amp; mental-health load</h2>
+      <p>Share of patients seen in Chicago health systems carrying each diagnosis, benchmarked against the citywide rate and the ward's rank among all 50.</p>
+    </div>
+    <div class="vgrid" id="vgrid"></div>
+  </div>
+</section>
+
+<!-- ================= SECTION B: SPLIT MAP ================= -->
+<section class="block" id="secB">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="k">Section B · The ward in context</div>
+      <h2>City-wide, then down to the community</h2>
+      <p>Pick a vital: the left map ranks all 50 wards; the right map zooms the selected ward into its constituent community areas. Darker is worse. Click a ward or community to explore.</p>
+    </div>
+    <div class="vital-tabs" id="mapTabs"></div>
+    <div class="splitmap">
+      <div class="mapcard city">
+        <h4>Chicago · all 50 wards</h4>
+        <svg id="cityMap" role="img" aria-label="Chicago wards choropleth"><g id="cityAreas"></g><g id="cityLabels"></g></svg>
+        <div class="legend"><span>Lower</span><span class="ramp"></span><span>Higher</span><span id="cityScale" style="margin-left:auto;color:var(--ink-2)"></span></div>
+      </div>
+      <div class="mapcard zoom">
+        <h4 id="zoomTitle">Ward — its communities</h4>
+        <svg id="zoomMap" role="img" aria-label="Ward community choropleth"><g id="zoomAreas"></g><g id="zoomLabels"></g></svg>
+        <div class="commlist" id="commList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION C: CAUSAL ================= -->
+<section class="block" id="secC">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="k">Section C · Why it clusters</div>
+      <h2>The social determinant under the spike</h2>
+      <p>Within this ward, the communities carrying the most disease are the ones carrying the most economic and food-access hardship. The pairing below sorts the ward's communities by the driver most closely tracking its worst vital.</p>
+    </div>
+    <div class="causal-lead" id="causalLead"></div>
+    <div class="pairgrid" id="pairGrid"></div>
+  </div>
+</section>
+
+<!-- ================= SECTION D: DRIVERS ================= -->
+<section class="block" id="secD">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="k">Section D · What's driving it</div>
+      <h2>The structural inputs</h2>
+      <p>Social-determinant profile for the ward (share-weighted across its communities) against the city, and a block-by-block heat grid of every community in the ward.</p>
+    </div>
+    <div class="drivers-grid">
+      <div class="sdoh-bars">
+        <h4>Ward vs. Chicago · social determinants</h4>
+        <div id="sdohBars"></div>
+      </div>
+      <div class="heat">
+        <h4>Community &times; determinant heat grid</h4>
+        <div id="heatWrap"></div>
+      </div>
+    </div>
+    <div class="scaffold">
+      <b>Wire-in slot — environmental burden.</b> Freight-corridor proximity, diesel PM2.5, and industrial-land adjacency are not in the Chicago Health Map or Health Atlas feeds. Connect the <b>Chicago Data Portal</b> (industrial corridors, truck routes) and <b>US EPA EJScreen</b> (traffic proximity, PM2.5, air-toxics respiratory index) here to add a pollution driver per community. <span style="color:var(--ink-3)">See <code>// TODO: EJScreen</code> in the source.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION E: LEVERS ================= -->
+<section class="block" id="secE">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="k">Section E · Three levers</div>
+      <h2 id="leverHead">What this ward office can pull</h2>
+      <p>Chosen to match this ward's most-elevated conditions, each a concrete plan with the peer-reviewed evidence attached.</p>
+    </div>
+    <div class="levers" id="levers"></div>
+  </div>
+</section>
+
+<!-- ================= SECTION F: SOURCES ================= -->
+<footer>
+  <div class="wrap">
+    <div class="sec-head"><div class="k">Section F · Sources &amp; notes</div></div>
+    <ol class="sources" id="sources"></ol>
+    <p class="fnote">Health conditions: <b>Chicago Health Map</b> (chicagohealthmap.com), a project of CAPriCORN, 2024 — prevalence among patients seen at participating Chicago health systems, a clinical population rather than a general-population survey, so rates run higher and are best read as comparisons between geographies. Social determinants and income: <b>Chicago Health Atlas</b> (chicagohealthatlas.org) and the U.S. Census / ACS. Ward and community-area boundaries: the Chicago Health Map and the Chicago Data Portal. Reliability labels are carried from the source. Figures accessed 2026.</p>
+  </div>
+</footer>
+
+<script src="warddash.js"></script>
+<script>
+(function(){
+  var D=window.DASH, SVGNS='http://www.w3.org/2000/svg';
+  var VM=D.vitalMeta, SM=D.sdohMeta;
+  var vitalKeys=VM.map(function(v){return v.key;});
+  var curWard=26, curVital='htn', curComm=null;
+
+  // ---------- helpers ----------
+  function ramp(t){var a=[247,238,233],b=[142,44,34];t=Math.max(0,Math.min(1,t));
+    return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';}
+  function pct(v){return v==null?'n/a':v.toFixed(1)+'%';}
+  function money(v){return v==null?'n/a':'$'+Math.round(v).toLocaleString();}
+  function moneyK(v){return v==null?'n/a':'$'+Math.round(v/1000)+'k';}
+  function fmtSdoh(k,v){var m=sm(k);return v==null?'n/a':(m.fmt==='money'?money(v):v.toFixed(1)+'%');}
+  function vm(k){for(var i=0;i<VM.length;i++)if(VM[i].key===k)return VM[i];}
+  function sm(k){for(var i=0;i<SM.length;i++)if(SM[i].key===k)return SM[i];}
+  function el(id){return document.getElementById(id);}
+
+  // vital extents across wards (for map + range bars)
+  var vext={};
+  vitalKeys.forEach(function(k){
+    var vs=Object.keys(D.wards).map(function(w){return D.wards[w].vitals[k];}).filter(function(x){return x!=null;});
+    vext[k]={min:Math.min.apply(null,vs),max:Math.max.apply(null,vs)};
+  });
+  function vsev(k,v){var e=vext[k];return (v-e.min)/((e.max-e.min)||1);} // higher=worse
+
+  // community set for current ward
+  function wardComms(w){ return (D.geo.zoom[String(w)]||{comms:[]}).comms; }
+  function caV(caId,k){var c=D.caVitals[String(caId)];return c?c[k]:null;}
+  function caS(caId,k){var c=D.caSdoh[String(caId)];return c?c[k]:null;}
+  // share-weighted ward SDOH estimate
+  function wardSdoh(w,k){
+    var comms=wardComms(w),num=0,den=0;
+    comms.forEach(function(c){var v=caS(c.caId,k);if(v!=null){num+=c.share*v;den+=c.share;}});
+    return den?num/den:null;
+  }
+
+  // ---------- populate ward <select> ----------
+  var sel=el('wardSelect');
+  for(var w=1;w<=50;w++){var o=document.createElement('option');o.value=w;o.textContent='Ward '+w;sel.appendChild(o);}
+
+  // ==================================================== RENDER
+  function render(){
+    var w=curWard, W=D.wards[String(w)];
+    el('heroWard').textContent=w;
+    el('wardInput').value=w; sel.value=w;
+    // hero lede: worst vital
+    var worst=vitalKeys.slice().sort(function(a,b){return W.rank[a]-W.rank[b];})[0];
+    var wv=W.vitals[worst], cityv=D.city.vitals[worst];
+    el('heroLede').innerHTML='Across Chicago Health Map’s four tracked conditions, Ward '+w+' ranks <b>#'+W.rank[worst]+' of 50</b> for <b>'+vm(worst).label.toLowerCase()+'</b> ('+pct(wv)+' of patients, vs '+pct(cityv)+' citywide). Every figure below is real 2024 ward-level data; the section maps show how the load is distributed inside the ward.';
+    // meta pills
+    el('wardMeta').innerHTML=
+      '<span class="pill">≈<b>&nbsp;'+(W.pop?W.pop.toLocaleString():'—')+'</b>&nbsp;patients in the Health Map</span>'+
+      '<span class="pill">'+wardComms(w).length+' community areas</span>'+
+      '<span class="pill">data reliability: <b>&nbsp;'+(W.rel||'—')+'</b></span>';
+    curComm=wardComms(w).length?wardComms(w)[0].caId:null;
+    buildVitals(); buildMap(); buildCausal(); buildDrivers(); buildLevers();
+  }
+
+  // ---------- Section A ----------
+  function buildVitals(){
+    var W=D.wards[String(curWard)], html='';
+    VM.forEach(function(m){
+      var v=W.vitals[m.key], city=D.city.vitals[m.key], e=vext[m.key];
+      var d=v-city, worse=d>0;
+      var sevr=vsev(m.key,v);
+      var badgebg = sevr>.66?'var(--crit-ghost)':sevr>.33?'#fdf3e3':'var(--brand-ghost)';
+      var badgecl = sevr>.66?'var(--crit)':sevr>.33?'var(--warn)':'var(--brand-ink)';
+      var posPct=Math.max(4,Math.min(96,sevr*100));
+      var cityPct=Math.max(0,Math.min(100,vsev(m.key,city)*100));
+      html+='<div class="vcard">'
+        +'<div class="vc-top"><h3>'+m.label+'</h3><span class="badge" style="background:'+badgebg+';color:'+badgecl+'">#'+W.rank[m.key]+' of 50</span></div>'
+        +'<div class="num">'+(v==null?'n/a':v.toFixed(1))+'<small>%</small></div>'
+        +'<div class="delta '+(worse?'d-bad':'d-good')+'">'+(d>=0?'+':'−')+Math.abs(d).toFixed(1)+' pts vs city ('+pct(city)+')</div>'
+        +'<div class="rangebar"><span class="citytick" style="left:'+cityPct+'%"></span><span class="fillpos" style="left:'+posPct+'%;background:'+ramp(sevr)+'"></span></div>'
+        +'<div class="rlabels"><span>best ward '+e.min.toFixed(0)+'%</span><span>worst '+e.max.toFixed(0)+'%</span></div>'
+        +'</div>';
+    });
+    el('vgrid').innerHTML=html;
+  }
+
+  // ---------- Section B ----------
+  function buildMapTabs(){
+    el('mapTabs').innerHTML=VM.map(function(m){return '<button class="vtab'+(m.key===curVital?' on':'')+'" data-v="'+m.key+'">'+m.label+'</button>';}).join('');
+    el('mapTabs').querySelectorAll('.vtab').forEach(function(b){b.onclick=function(){curVital=b.dataset.v;buildMap();};});
+  }
+  function buildMap(){
+    buildMapTabs();
+    // city map
+    var g=D.geo.city, ca=el('cityAreas'), cl=el('cityLabels');
+    el('cityMap').setAttribute('viewBox','0 0 '+g.W+' '+g.H);
+    ca.innerHTML='';cl.innerHTML='';
+    g.wards.forEach(function(a){
+      var v=D.wards[String(a.w)].vitals[curVital];
+      var p=document.createElementNS(SVGNS,'path');
+      p.setAttribute('d',a.d);p.setAttribute('fill',ramp(vsev(curVital,v)));
+      if(a.w===curWard)p.setAttribute('class','sel');
+      p.style.cursor='pointer';p.onclick=function(){curWard=a.w;render();};
+      ca.appendChild(p);
+      var t=document.createElementNS(SVGNS,'text');t.setAttribute('x',a.cx);t.setAttribute('y',a.cy+2);t.setAttribute('text-anchor','middle');t.textContent=a.w;cl.appendChild(t);
+    });
+    el('cityScale').textContent=vext[curVital].min.toFixed(0)+'%–'+vext[curVital].max.toFixed(0)+'%';
+    // zoom map
+    var z=D.geo.zoom[String(curWard)]; var za=el('zoomAreas'), zl=el('zoomLabels');
+    el('zoomTitle').textContent='Ward '+curWard+' · '+vm(curVital).label+' by community';
+    el('zoomMap').setAttribute('viewBox','0 0 '+z.W+' '+z.H);
+    za.innerHTML='';zl.innerHTML='';
+    // local extent across this ward's communities
+    var cvs=z.comms.map(function(c){return caV(c.caId,curVital);}).filter(function(x){return x!=null;});
+    var lmin=Math.min.apply(null,cvs),lmax=Math.max.apply(null,cvs);
+    function lsev(v){return v==null?null:(v-lmin)/((lmax-lmin)||1);}
+    z.comms.forEach(function(c){
+      var v=caV(c.caId,curVital),s=lsev(v);
+      var p=document.createElementNS(SVGNS,'path');p.setAttribute('d',c.d);
+      p.setAttribute('fill',s==null?'#e3e6df':ramp(s));
+      if(c.caId===curComm)p.setAttribute('class','sel');
+      p.style.cursor='pointer';p.onclick=function(){curComm=c.caId;buildMap();};
+      za.appendChild(p);
+      var t=document.createElementNS(SVGNS,'text');t.setAttribute('x',c.cx);t.setAttribute('y',c.cy);t.setAttribute('text-anchor','middle');t.textContent=c.name;zl.appendChild(t);
+    });
+    // community chips w/ selected value
+    el('commList').innerHTML=z.comms.map(function(c){
+      return '<span class="commchip'+(c.caId===curComm?' on':'')+'" data-ca="'+c.caId+'">'+c.name+' <b>'+pct(caV(c.caId,curVital))+'</b></span>';
+    }).join('');
+    el('commList').querySelectorAll('.commchip').forEach(function(ch){ch.onclick=function(){curComm=+ch.dataset.ca;buildMap();};});
+  }
+
+  // ---------- Section C: causal ----------
+  function corr(xs,ys){ // pearson
+    var n=xs.length;if(n<2)return 0;
+    var mx=xs.reduce(function(a,b){return a+b;},0)/n, my=ys.reduce(function(a,b){return a+b;},0)/n;
+    var num=0,dx=0,dy=0;
+    for(var i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);dx+=(xs[i]-mx)*(xs[i]-mx);dy+=(ys[i]-my)*(ys[i]-my);}
+    return (dx&&dy)?num/Math.sqrt(dx*dy):0;
+  }
+  function buildCausal(){
+    var comms=wardComms(curWard);
+    // search ALL vital x driver pairs; pick the strongest POSITIVE aligned signal
+    // (community hardship up -> community disease up), so we surface the cleanest causal story.
+    var best=null;
+    vitalKeys.forEach(function(vk){
+      SM.forEach(function(m){
+        var xs=[],ys=[];
+        comms.forEach(function(c){var x=caS(c.caId,m.key),y=caV(c.caId,vk);if(x!=null&&y!=null){xs.push(x);ys.push(y);}});
+        if(xs.length<3)return;
+        var r=corr(xs,ys), aligned=(m.worse==='high')?r:-r;
+        if(best===null||aligned>best.aligned)best={vk:vk,m:m,aligned:aligned,n:xs.length};
+      });
+    });
+    var lead=el('causalLead');
+    if(!best){lead.innerHTML='<div class="r">This ward is essentially one community area, so a within-ward causal comparison isn’t meaningful. Use the city map above to see how it ranks against the other 49 wards.</div>';el('pairGrid').innerHTML='';return;}
+    var dm=best.m, worst=best.vk;
+    var weak=best.aligned<0.25;
+    lead.innerHTML='<div class="r">In <b>Ward '+curWard+'</b>, the communities with the most <b>'+dm.label.toLowerCase()+'</b> are largely the same ones carrying the most <b>'+vm(worst).label.toLowerCase()+'</b>'+(weak?' — though the signal is faint at this scale':'')+'.</div>'
+      +'<div class="chip">'+dm.label+' ↔ '+vm(worst).label+' · r = '+best.aligned.toFixed(2)+' across '+best.n+' communities'+(weak?' · weak, small sample':' · directional')+'</div>';
+    // sort communities by driver severity
+    var rows=comms.slice().filter(function(c){return caS(c.caId,dm.key)!=null&&caV(c.caId,worst)!=null;});
+    rows.sort(function(a,b){var av=caS(a.caId,dm.key),bv=caS(b.caId,dm.key);return dm.worse==='high'?bv-av:av-bv;});
+    var dvs=rows.map(function(c){return caS(c.caId,dm.key);}), yvs=rows.map(function(c){return caV(c.caId,worst);});
+    var dmin=Math.min.apply(null,dvs),dmax=Math.max.apply(null,dvs),ymin=Math.min.apply(null,yvs),ymax=Math.max.apply(null,yvs);
+    el('pairGrid').innerHTML=rows.map(function(c){
+      var dv=caS(c.caId,dm.key),yv2=caV(c.caId,worst);
+      var dw=Math.max(6,((dm.worse==='high'?(dv-dmin):(dmax-dv))/((dmax-dmin)||1))*100);
+      var yw=Math.max(6,((yv2-ymin)/((ymax-ymin)||1))*100);
+      return '<div class="pairrow"><div class="cn">'+c.name+'<small>'+c.share+'% of ward</small></div>'
+        +'<div class="minibar"><div class="lab"><span>'+dm.label+'</span><b>'+fmtSdoh(dm.key,dv)+'</b></div><div class="track"><i style="width:'+dw.toFixed(0)+'%;background:var(--warn)"></i></div></div>'
+        +'<div class="minibar"><div class="lab"><span>'+vm(worst).label+'</span><b>'+pct(yv2)+'</b></div><div class="track"><i style="width:'+yw.toFixed(0)+'%;background:var(--crit)"></i></div></div>'
+        +'</div>';
+    }).join('');
+  }
+
+  // ---------- Section D: drivers ----------
+  function buildDrivers(){
+    // sdoh bars: ward-weighted vs city
+    var html='';
+    SM.forEach(function(m){
+      var v=wardSdoh(curWard,m.key), city=D.city.sdoh[m.key];
+      if(v==null){html+='';return;}
+      // severity scale across all CAs for tick + width
+      var vals=Object.keys(D.caSdoh).map(function(id){return D.caSdoh[id][m.key];}).filter(function(x){return x!=null;});
+      var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);
+      var sev=(m.worse==='high')?(v-mn)/((mx-mn)||1):(mx-v)/((mx-mn)||1);
+      var wpct=Math.max(3,Math.min(100,((v-mn)/((mx-mn)||1))*100));
+      var cpct=Math.max(0,Math.min(100,((city-mn)/((mx-mn)||1))*100));
+      var d=v-city, worse=(m.worse==='high')?d>0:d<0;
+      var dtxt=(m.fmt==='money')?((d>=0?'+':'−')+'$'+Math.abs(Math.round(d)).toLocaleString()):((d>=0?'+':'−')+Math.abs(d).toFixed(1)+' pts');
+      html+='<div class="sdrow"><div class="top"><span class="lab">'+m.label+'</span><span class="val">'+fmtSdoh(m.key,v)+'<span class="d '+(worse?'d-bad':'d-good')+'">'+dtxt+'</span></span></div>'
+        +'<div class="bar"><i style="width:'+wpct.toFixed(0)+'%;background:'+ramp(sev)+'"></i><span class="tick" style="left:'+cpct.toFixed(0)+'%"></span></div></div>';
+    });
+    el('sdohBars').innerHTML=html+'<div style="font-size:11px;color:var(--ink-3);margin-top:12px">Ward figure is share-weighted across its community areas. Vertical line = Chicago average.</div>';
+    // heat grid: communities x sdoh
+    var comms=wardComms(curWard);
+    var cols=SM;
+    var extents={};cols.forEach(function(m){var vals=Object.keys(D.caSdoh).map(function(id){return D.caSdoh[id][m.key];}).filter(function(x){return x!=null;});extents[m.key]={mn:Math.min.apply(null,vals),mx:Math.max.apply(null,vals)};});
+    var t='<table class="heatbl"><thead><tr><th>Community</th>'+cols.map(function(m){return '<th>'+m.label.replace('Median household ','').replace('No health ','No ')+'</th>';}).join('')+'</tr></thead><tbody>';
+    comms.forEach(function(c){
+      t+='<tr><td class="name">'+c.name+' <span style="color:var(--ink-3);font-weight:400">'+c.share+'%</span></td>';
+      cols.forEach(function(m){
+        var v=caS(c.caId,m.key),e=extents[m.key];
+        if(v==null){t+='<td style="background:#e3e6df;color:#7c877f">—</td>';return;}
+        var sev=(m.worse==='high')?(v-e.mn)/((e.mx-e.mn)||1):(e.mx-v)/((e.mx-e.mn)||1);
+        t+='<td style="background:'+ramp(sev)+'">'+(m.fmt==='money'?moneyK(v):v.toFixed(0)+'%')+'</td>';
+      });
+      t+='</tr>';
+    });
+    t+='</tbody></table>';
+    el('heatWrap').innerHTML=t;
+  }
+
+  // ---------- Section E: adaptive levers ----------
+  var LEVER_LIB={
+    cardio:{tag:'Hypertension · hyperlipidemia',h:'A neighborhood community health worker corps',
+      ul:['Hire community health workers from the ward to run walk-in blood-pressure and cholesterol checks and monthly medication follow-up at libraries, churches, and the fieldhouse.',
+          'Use a trial-proven protocol: CHW-led programs cut systolic blood pressure ~7 mmHg beyond usual care and raised control from 17% to 73%.<sup class="fn"><a href="#s5">5</a></sup>',
+          'Pair with $4 generic statins and antihypertensives so cost is never the barrier.'],
+      why:['Pays for it','Illinois Medicaid reimburses certified CHW services, and the IMPaCT model returned $2.47 per $1 within a year.<sup class="fn"><a href="#s6">6</a></sup>']},
+    food:{tag:'Obesity',h:'Make healthy food the cheap, close choice',
+      ul:['Stand up a Double Up Food Bucks 1:1 SNAP match on produce at markets and enrolled corner stores.<sup class="fn"><a href="#s7">7</a></sup>',
+          'Retrofit corner stores with refrigeration and healthy-stocking agreements — food-swamp density predicts obesity better than distance to a grocery.<sup class="fn"><a href="#s8">8</a></sup>',
+          'Route clinic produce-prescriptions; a median $63/month benefit improved blood pressure and blood sugar.<sup class="fn"><a href="#s9">9</a></sup>'],
+      why:['Pays for it','Federal GusNIP grants match local nutrition-incentive dollars; the ledger clears against a single avoided cardiac admission.']},
+    mind:{tag:'Depression',h:'Fund collaborative mental-health care where people already are',
+      ul:['Place behavioral-health staff in primary-care, school-based, and library settings using the collaborative-care model.',
+          'Collaborative care roughly doubles depression treatment response versus usual care and is cost-effective.<sup class="fn"><a href="#s10">10</a></sup>',
+          'Fund warm hand-offs and peer support so screening actually reaches treatment.'],
+      why:['Pays for it','Collaborative care returns net savings over 4 years through reduced total health-care costs.<sup class="fn"><a href="#s10">10</a></sup>']},
+    housing:{tag:'Structural — every ward',h:'Treat housing stability as health infrastructure',
+      ul:['Fund tenant right to counsel: represented tenants stayed housed ~84% of the time and eviction filings fell 45–78%.<sup class="fn"><a href="#s11">11</a></sup>',
+          'Anti-displacement zoning and affordable set-asides in fast-gentrifying corridors.',
+          'Seed a community land trust to hold parcels off the speculative market.<sup class="fn"><a href="#s12">12</a></sup>'],
+      why:['Why it’s health policy','Housing instability and eviction threat raise blood pressure and cardiometabolic risk across dozens of U.S. studies.<sup class="fn"><a href="#s13">13</a></sup>']}
+  };
+  function buildLevers(){
+    var W=D.wards[String(curWard)];
+    var leverFor={htn:'cardio',hyperlip:'cardio',obesity:'food',depression:'mind'};
+    // conditions the ward is ABOVE the city on, worst-first; then any remaining, worst-first
+    var above=vitalKeys.filter(function(k){return W.vitals[k]>D.city.vitals[k];}).sort(function(a,b){return W.rank[a]-W.rank[b];});
+    var rest =vitalKeys.filter(function(k){return above.indexOf(k)<0;}).sort(function(a,b){return W.rank[a]-W.rank[b];});
+    var cond=[];
+    above.concat(rest).forEach(function(k){var id=leverFor[k];if(cond.indexOf(id)<0)cond.push(id);});
+    // two most-relevant condition levers, then housing (structural) as the third
+    var chosen=cond.slice(0,2); chosen.push('housing');
+    el('leverHead').textContent='What Ward '+curWard+' can pull';
+    el('levers').innerHTML=chosen.map(function(id,i){
+      var L=LEVER_LIB[id];
+      return '<div class="lever"><span class="lnum">'+(i+1)+'</span><div class="tag">'+L.tag+'</div><h3>'+L.h+'</h3>'
+        +'<ul>'+L.ul.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>'
+        +'<div class="why"><b>'+L.why[0]+'</b>'+L.why[1]+'</div></div>';
+    }).join('');
+  }
+
+  // ---------- Section F sources ----------
+  el('sources').innerHTML=[
+    '<li id="s1"><b>Chicago Health Map</b> (chicagohealthmap.com) — CAPriCORN. Ward- and community-area-level condition prevalence, 2024, among patients seen at participating Chicago health systems. <a href="https://chicagohealthmap.com" target="_blank" rel="noopener">chicagohealthmap.com</a></li>',
+    '<li id="s2"><b>Chicago Health Atlas</b> (chicagohealthatlas.org). Median household income (INC), poverty (POV), food insecurity (FAI), low food access (LFA), no health insurance (NHI), unemployment (UMP), by community area. <a href="https://chicagohealthatlas.org" target="_blank" rel="noopener">chicagohealthatlas.org</a></li>',
+    '<li id="s3"><b>Chicago Data Portal.</b> Ward boundaries (2023–) and community-area boundaries. <a href="https://data.cityofchicago.org" target="_blank" rel="noopener">data.cityofchicago.org</a></li>',
+    '<li id="s4"><b>U.S. Census Bureau, American Community Survey</b> 5-year estimates (via Chicago Health Atlas) for income and social-determinant measures.</li>',
+    '<li id="s5"><b>He J, Irazola V, Mills KT, et al.</b> “Community Health Worker–Led Multicomponent Intervention on Blood Pressure Control…” <em>JAMA</em> 318(11), 2017: systolic BP −6.6 mmHg vs usual care; control 17.0%→72.9%. <a href="https://pubmed.ncbi.nlm.nih.gov/28975305/" target="_blank" rel="noopener">pubmed</a></li>',
+    '<li id="s6"><b>Kangovi S, et al.</b> “Evidence-Based Community Health Worker Program… Return on Investment.” <em>Health Affairs</em> 39(2), 2020: $2.47 to Medicaid per $1. <a href="https://www.healthaffairs.org/doi/10.1377/hlthaff.2019.00981" target="_blank" rel="noopener">healthaffairs.org</a></li>',
+    '<li id="s7"><b>Double Up Food Bucks / Fair Food Network</b> &amp; USDA GusNIP evaluations: SNAP produce incentives raise fruit/vegetable intake and food security. <a href="https://fairfoodnetwork.org" target="_blank" rel="noopener">fairfoodnetwork.org</a></li>',
+    '<li id="s8"><b>Cooksey-Stowers K, Schwartz MB, Brownell KD.</b> “Food Swamps Predict Obesity Rates Better Than Food Deserts.” <em>IJERPH</em> 14(11):1366, 2017. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5708005/" target="_blank" rel="noopener">PMC5708005</a></li>',
+    '<li id="s9"><b>Hager K, et al.</b> “Impact of Produce Prescriptions…” <em>Circulation: CQO</em> 16(9), 2023: median $63/mo improved BP, HbA1c, food security. <a href="https://www.ahajournals.org/doi/10.1161/CIRCOUTCOMES.122.009520" target="_blank" rel="noopener">ahajournals.org</a></li>',
+    '<li id="s10"><b>Unützer J, et al.</b> “Collaborative Care Management of Late-Life Depression (IMPACT).” <em>JAMA</em> 288(22):2836–2845, 2002; and Unützer et al., <em>Am J Manag Care</em> 2008 (long-term cost savings): collaborative care roughly doubles treatment response and lowers total costs. <a href="https://jamanetwork.com/journals/jama/fullarticle/195599" target="_blank" rel="noopener">jamanetwork.com</a></li>',
+    '<li id="s11"><b>Tenant Right to Counsel</b> — NYC Office of Civil Justice data &amp; evaluations: ~84% of represented tenants stayed housed; 45–78% fewer evictions. <a href="https://www.tandfonline.com/doi/full/10.1080/10511482.2020.1825009" target="_blank" rel="noopener">Housing Policy Debate (2020)</a></li>',
+    '<li id="s12"><b>Ali O, Raviola S.</b> “The Effects of Community Land Trusts on Neighborhood Outcomes.” <em>Real Estate Economics</em>, 2025. <a href="https://onlinelibrary.wiley.com/doi/10.1111/1540-6229.12525" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>',
+    '<li id="s13"><b>Vásquez-Vera H, et al.</b> “The threat of home eviction and its effects on health…” <em>Soc Sci Med</em> 175, 2017; <b>Sims KD, et al.</b> “Housing instability and cardiometabolic health…” <em>BMC Public Health</em>, 2023. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0277953617300102" target="_blank" rel="noopener">sciencedirect.com</a></li>'
+  ].join('');
+
+  // ---------- wiring ----------
+  function setWard(n){n=Math.max(1,Math.min(50,parseInt(n)||1));curWard=n;render();}
+  el('wardInput').addEventListener('change',function(){setWard(this.value);});
+  el('wardInput').addEventListener('keyup',function(e){if(e.key==='Enter')setWard(this.value);});
+  el('wardSelect').addEventListener('change',function(){setWard(this.value);});
+  el('prevW').onclick=function(){setWard(curWard-1);window.scrollTo({top:0,behavior:'smooth'});};
+  el('nextW').onclick=function(){setWard(curWard+1);window.scrollTo({top:0,behavior:'smooth'});};
+
+  // TODO: EJScreen — wire US EPA EJScreen + Chicago Data Portal freight/industrial layers here
+  // to add an environmental-burden driver per community area (Section D scaffold slot).
+
+  render();
+})();
+</script>
+</body>
+</html>
