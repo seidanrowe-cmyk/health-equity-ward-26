@@ -3,1261 +3,561 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ward 26 Health Briefing · Chicago Northwest Side</title>
+<title>Chicago Ward Health Dashboard · 50 Wards, 4 Vitals</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* warm institutional neutrals — paper, not app-grey */
-    --bg:#f4f5f2;
-    --surface:#ffffff;
-    --surface-2:#f8f9f6;
-    --ink:#16201c;
-    --ink-2:#43514b;
-    --ink-3:#7c877f;
-    --line:#e3e6df;
-    --line-2:#d2d7cc;
-    /* deep pine green — the institution's color, used with restraint */
-    --brand:#14453a;
-    --brand-2:#1d5c4c;
-    --brand-ink:#0e352c;
-    --brand-ghost:#e8efe9;
-    /* data semantics */
-    --crit:#b23a2e;         /* clinical red — critical stat + anatomical heart */
-    --crit-2:#c74f42;
-    --crit-ghost:#f7ebe8;
-    --warn:#b07d1e;
-    --good:#1d7a52;
-    /* heritage accents, muted, thin details only */
-    --pr-red:#9c4136;
-    --pr-blue:#3f5d78;
-    --mex-green:#2f6b4a;
-    --sun:#b8933f;
-    --z-sticky:100;--z-tooltip:200;
-    --serif:"Fraunces",Georgia,serif;
-    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --bg:#f4f5f2;--surface:#ffffff;--surface-2:#f8f9f6;
+    --ink:#16201c;--ink-2:#43514b;--ink-3:#7c877f;
+    --line:#e3e6df;--line-2:#d2d7cc;
+    --brand:#14453a;--brand-2:#1d5c4c;--brand-ink:#0e352c;--brand-ghost:#e8efe9;
+    --crit:#b23a2e;--crit-2:#c74f42;--crit-ghost:#f7ebe8;
+    --warn:#b07d1e;--good:#1d7a52;
+    --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  body{
-    background:
-      linear-gradient(180deg,#f6f7f4 0%,var(--bg) 40%),
-      radial-gradient(1100px 620px at 82% -8%, #e9efe9 0%, transparent 58%);
-    background-attachment:fixed;
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-  }
-  ::selection{background:var(--brand);color:#fff}
-  .wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+  body{background:linear-gradient(180deg,#f6f7f4,var(--bg) 40%);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 28px}
   a{color:inherit}
+  h1,h2,h3,h4{letter-spacing:-.02em}
 
-  /* ---------------- TOP BAR ---------------- */
-  .topbar{
-    position:sticky;top:0;z-index:var(--z-sticky);
-    background:rgba(244,245,242,.88);
-    backdrop-filter:blur(16px) saturate(1.3);
-    border-bottom:1px solid var(--line);
-    box-shadow:inset 0 3px 0 var(--brand);
-  }
-  .topbar .wrap{display:flex;align-items:center;gap:18px;height:64px}
-  .logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:17px;letter-spacing:-.02em}
-  .logo .mark{
-    width:34px;height:34px;border-radius:8px;
-    background:var(--brand);
-    display:grid;place-items:center;color:#fff;flex-shrink:0;
-    box-shadow:0 3px 10px -3px rgba(30,42,74,.5);
-  }
+  /* topbar + selector */
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(244,245,242,.9);backdrop-filter:blur(16px) saturate(1.3);border-bottom:1px solid var(--line);box-shadow:inset 0 3px 0 var(--brand)}
+  .topbar .wrap{display:flex;align-items:center;gap:16px;min-height:66px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:16px}
+  .logo .mark{width:34px;height:34px;border-radius:8px;background:var(--brand);display:grid;place-items:center;color:#fff;flex-shrink:0}
   .logo .mark svg{width:19px;height:19px}
-  .topnav{display:flex;gap:2px;margin-left:14px}
-  .topnav a{
-    font-size:14px;font-weight:500;color:var(--ink-2);
-    padding:8px 15px;border-radius:6px;text-decoration:none;
-    transition:background .18s,color .18s;
-  }
-  .topnav a:hover{background:var(--surface);color:var(--ink)}
-  .topnav a.on{background:var(--ink);color:#fff}
-  .topbar .meta{margin-left:auto;display:flex;align-items:center;gap:14px}
-  .chip{
-    display:flex;align-items:center;gap:8px;
-    background:var(--surface);border:1px solid var(--line);
-    padding:7px 13px;border-radius:7px;font-size:13px;font-weight:500;color:var(--ink-2);
-  }
-  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgba(31,157,107,.16)}
-  @media(max-width:920px){.topnav,.chip.hide{display:none}}
+  .logo small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);letter-spacing:.02em}
+  .xlink{margin-left:auto;font-size:13px;font-weight:600;color:var(--brand-ink);background:var(--brand-ghost);border:1px solid var(--line-2);border-radius:100px;padding:9px 15px;text-decoration:none;white-space:nowrap;transition:background .15s}
+  .xlink:hover{background:#dbe7dd}
+  .selector{display:flex;align-items:center;gap:8px}
+  .selector label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .selector .stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
+  .selector button{border:none;background:transparent;padding:10px 13px;cursor:pointer;font-size:17px;color:var(--brand);font-weight:700;transition:background .15s}
+  .selector button:hover{background:var(--brand-ghost)}
+  .selector input{width:64px;border:none;text-align:center;font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);padding:6px 0;background:transparent;outline:none}
+  .selector select{border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:11px 12px;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
 
-  /* ---------------- HERO ---------------- */
-  .hero{padding:52px 0 40px}
-  .hero-grid{
-    display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
-  }
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:9px;
-    font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--brand-ink);background:var(--brand-ghost);
-    padding:7px 14px;border-radius:100px;margin-bottom:22px;
-  }
-  .eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--crit);
-    animation:pulse 2s ease-in-out infinite}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
-  @media(prefers-reduced-motion:reduce){.eyebrow .pulse{animation:none}}
-  h1{
-    font-family:var(--serif);font-weight:600;
-    font-size:clamp(38px,5.4vw,66px);line-height:1.02;
-    letter-spacing:-.025em;text-wrap:balance;
-    margin-bottom:20px;
-  }
-  h1 em{font-style:italic;color:var(--crit)}
-  .lede{font-size:18px;color:var(--ink-2);max-width:60ch;text-wrap:pretty}
-  .lede b{color:var(--ink);font-weight:600}
-  .hero-cta{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
-  .btn{
-    font-family:var(--sans);font-size:14.5px;font-weight:600;
-    padding:13px 22px;border-radius:8px;border:none;cursor:pointer;
-    text-decoration:none;display:inline-flex;align-items:center;gap:9px;
-    transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .16s,background .16s;
-  }
-  .btn-primary{background:var(--brand);color:#fff;
-    box-shadow:0 6px 16px -8px rgba(30,42,74,.55)}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 24px -10px rgba(30,42,74,.5);background:var(--brand-2)}
-  .btn-ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line-2)}
-  .btn-ghost:hover{transform:translateY(-2px);border-color:var(--ink-3)}
-  .btn svg{width:16px;height:16px}
+  .hero{padding:34px 0 6px}
+  .hero .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink)}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.6vw,50px);line-height:1.03;margin:10px 0 6px}
+  .hero h1 em{font-style:italic;color:var(--crit)}
+  .hero p{color:var(--ink-2);max-width:70ch;font-size:16px}
+  .hero .wardmeta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:100px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+  .pill b{color:var(--ink)}
 
-  /* hero heart stage */
-  .stage{position:relative;aspect-ratio:1/1;display:grid;place-items:center;perspective:1200px}
-  /* soft radial spotlight the heart sits IN, not on */
-  .stage::before{
-    content:"";position:absolute;inset:2%;
-    background:radial-gradient(circle at 50% 42%, #f6ded9 0%, #f0cec8 28%, rgba(240,206,200,0) 62%);
-    filter:blur(14px);border-radius:50%;z-index:0;
-    animation:breathe 4.5s ease-in-out infinite;
-  }
-  /* contact shadow ON THE GROUND — the key depth cue */
-  .stage::after{
-    content:"";position:absolute;left:50%;bottom:9%;
-    width:46%;height:8%;transform:translateX(-50%);
-    background:radial-gradient(ellipse at center, rgba(120,20,15,.30) 0%, rgba(120,20,15,.12) 45%, transparent 72%);
-    filter:blur(9px);z-index:0;
-    animation:shadowpulse 6s ease-in-out infinite;
-  }
-  @keyframes breathe{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.07);opacity:1}}
-  @keyframes shadowpulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.85}50%{transform:translateX(-50%) scale(.86);opacity:.6}}
-  @media(prefers-reduced-motion:reduce){.stage::before,.stage::after{animation:none}}
-  /* the heart itself: multiply blend erases the white bg into the page,
-     layered drop-shadows give real volume, slight 3D tilt on hover */
-  .heart-wrap{
-    position:relative;width:94%;height:94%;z-index:1;
-    display:grid;place-items:center;
-    transform-style:preserve-3d;
-    animation:float 6.5s ease-in-out infinite;
-    transition:transform .5s cubic-bezier(.2,.8,.2,1);
-    filter:
-      drop-shadow(0 8px 10px rgba(150,30,25,.20))
-      drop-shadow(0 24px 36px rgba(180,45,35,.24))
-      drop-shadow(0 48px 68px rgba(160,40,30,.18));
-  }
-  .heart-wrap:hover{transform:rotateY(-8deg) rotateX(4deg) scale(1.03)}
-  .heart-img{
-    display:block;width:100%;height:100%;object-fit:contain;
-    /* radial mask clips the white frame away geometrically — works in all browsers */
-    -webkit-mask-image:radial-gradient(circle at 50% 47%, #000 54%, rgba(0,0,0,.55) 61%, transparent 66%);
-            mask-image:radial-gradient(circle at 50% 47%, #000 54%, rgba(0,0,0,.55) 61%, transparent 66%);
-    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-    -webkit-mask-size:100% 100%;mask-size:100% 100%;
-  }
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-  @media(prefers-reduced-motion:reduce){.heart-wrap{animation:none}.heart-wrap:hover{transform:none}}
-  /* floating vitals tag on the heart, like the reference */
-  .vitals-tag{
-    position:absolute;z-index:2;
-    background:rgba(255,255,255,.82);
-    backdrop-filter:blur(12px) saturate(1.3);
-    border:1px solid rgba(255,255,255,.95);
-    border-radius:12px;padding:13px 16px;
-    box-shadow:0 16px 40px -14px rgba(20,24,33,.28);
-    min-width:150px;
-  }
-  .vitals-tag.a{top:14%;right:2%;animation:float 6s ease-in-out .3s infinite}
-  .vitals-tag.b{bottom:16%;left:0%;animation:float 6.5s ease-in-out .6s infinite}
-  @media(prefers-reduced-motion:reduce){.vitals-tag{animation:none}}
-  .vitals-tag .vt-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-  .vitals-tag .vt-ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:#fff}
-  .vitals-tag .vt-ic svg{width:13px;height:13px}
-  .vitals-tag .vt-t{font-size:12px;font-weight:600;color:var(--ink-2)}
-  .vitals-tag .vt-v{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1;letter-spacing:-.02em}
-  .vitals-tag .vt-v small{font-size:13px;color:var(--ink-3);font-family:var(--sans);font-weight:500}
-  /* mini sparkline */
-  .spark{display:flex;align-items:flex-end;gap:2.5px;height:22px;margin-top:7px}
-  .spark i{width:4px;background:var(--crit);border-radius:2px;opacity:.85;
-    transform-origin:bottom;animation:sparkgrow .6s ease-out backwards}
-  @keyframes sparkgrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  section.block{padding:40px 0 4px}
+  .sec-head{margin-bottom:20px}
+  .sec-head .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink)}
+  .sec-head h2{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:600;margin-top:7px}
+  .sec-head p{color:var(--ink-2);margin-top:5px;max-width:64ch;font-size:14.5px}
 
-  @media(max-width:880px){
-    .hero-grid{grid-template-columns:1fr;gap:24px}
-    .stage{max-width:440px;margin:0 auto;order:-1}
-  }
+  /* Section A vitals grid */
+  .vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .vcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+  .vcard .vc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .vcard h3{font-size:13.5px;font-weight:600;color:var(--ink-2)}
+  .vcard .badge{font-size:11px;font-weight:700;letter-spacing:.03em;padding:4px 9px;border-radius:7px;text-transform:uppercase}
+  .vcard .num{font-family:var(--serif);font-size:38px;font-weight:600;line-height:1;letter-spacing:-.03em}
+  .vcard .num small{font-size:15px;color:var(--ink-3);font-family:var(--sans);font-weight:500}
+  .vcard .delta{font-size:12.5px;font-weight:600;margin-top:7px}
+  .vcard .rangebar{position:relative;height:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;margin-top:16px}
+  .vcard .rangebar .fillpos{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:var(--crit);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+  .vcard .rangebar .citytick{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55}
+  .vcard .rlabels{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);margin-top:6px;font-weight:600}
+  .d-bad{color:var(--crit)} .d-good{color:var(--good)}
 
-  /* ---------------- SECTION SCAFFOLD ---------------- */
-  section.block{padding:64px 0 8px}
-  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:30px;flex-wrap:wrap}
-  .sec-head .l .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink)}
-  .sec-head .l h2{font-family:var(--serif);font-size:clamp(26px,3.4vw,38px);font-weight:600;letter-spacing:-.02em;margin-top:8px;text-wrap:balance}
-  .sec-head .l p{color:var(--ink-2);margin-top:6px;max-width:56ch}
+  /* Section B split map */
+  .vital-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .vtab{font-size:13px;font-weight:600;color:var(--ink-2);background:var(--surface);border:1px solid var(--line-2);border-radius:100px;padding:8px 15px;cursor:pointer;transition:.15s}
+  .vtab.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .splitmap{display:grid;grid-template-columns:0.78fr 1.22fr;gap:18px;align-items:stretch}
+  .mapcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .mapcard h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .mapcard svg{width:100%;height:auto;display:block;overflow:visible}
+  .mapcard svg path{stroke:#fff;stroke-width:.8;cursor:pointer;transition:fill .5s,opacity .15s}
+  .mapcard svg path:hover{opacity:.8}
+  .mapcard.city svg path.sel{stroke:var(--brand);stroke-width:2.4}
+  .mapcard.zoom svg path.sel{stroke:var(--ink);stroke-width:2.4}
+  .mapcard svg text{font-family:var(--sans);fill:var(--ink);font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:2px;stroke-linejoin:round;pointer-events:none}
+  .mapcard.city svg text{font-size:6.6px}
+  .mapcard.zoom svg text{font-size:11px}
+  .legend{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:11px;font-weight:600;color:var(--ink-3)}
+  .legend .ramp{flex:1;height:8px;border-radius:100px;background:linear-gradient(90deg,#f7eee9,#8f2c22)}
+  .commlist{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .commchip{font-size:11.5px;font-weight:600;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:5px 11px;cursor:pointer}
+  .commchip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .commchip b{opacity:.7;font-weight:600}
 
-  .rv{opacity:0;transform:translateY(20px)}
-  .rv.in{opacity:1;transform:none;transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
-  @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+  /* Section C causal */
+  .causal-lead{background:var(--crit-ghost);border-radius:14px;padding:20px 24px;margin-bottom:20px}
+  .causal-lead .r{font-family:var(--serif);font-size:15px;color:var(--ink);text-wrap:pretty}
+  .causal-lead .r b{color:var(--crit)}
+  .causal-lead .chip{display:inline-block;margin-top:10px;font-size:11.5px;font-weight:700;color:var(--brand-ink);background:var(--brand-ghost);border-radius:100px;padding:4px 11px}
+  .pairgrid{display:grid;gap:10px}
+  .pairrow{display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+  .pairrow .cn{font-size:13px;font-weight:600}
+  .pairrow .cn small{display:block;color:var(--ink-3);font-weight:400;font-size:11px}
+  .minibar{position:relative}
+  .minibar .lab{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);font-weight:600;margin-bottom:4px}
+  .minibar .lab b{color:var(--ink)}
+  .minibar .track{height:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;overflow:hidden}
+  .minibar .track i{display:block;height:100%;border-radius:100px}
 
-  /* ---------------- VITALS / KPI GRID ---------------- */
-  .vitals-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .vcard{
-    background:var(--surface);border:1px solid var(--line);border-radius:10px;
-    padding:22px;position:relative;overflow:hidden;
-    transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s,border-color .18s;
-  }
-  .vcard:hover{transform:translateY(-3px);box-shadow:0 14px 30px -20px rgba(22,32,28,.28);border-color:var(--brand);}
-  .vcard .vc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-  .vcard .vc-ic{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;color:#fff}
-  .vcard .vc-ic svg{width:19px;height:19px}
-  .vcard .vc-tag{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;border-radius:7px}
-  .vcard h3{font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
-  .vcard .vc-num{font-family:var(--serif);font-size:40px;font-weight:600;line-height:1;letter-spacing:-.03em}
-  .vcard .vc-num small{font-size:16px;color:var(--ink-3);font-family:var(--sans);font-weight:500}
-  .vcard .vc-sub{font-size:13px;color:var(--ink-3);margin-top:8px;display:flex;align-items:center;gap:6px}
-  .vcard .vc-sub b{color:var(--ink-2);font-weight:600}
-  /* live progress bar */
-  .vc-bar{height:6px;background:var(--line);border-radius:100px;margin-top:15px;overflow:hidden}
-  .vc-bar i{display:block;height:100%;border-radius:100px;width:0;transition:width 1.3s cubic-bezier(.3,.7,.2,1)}
-  @media(max-width:1000px){.vitals-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:520px){.vitals-grid{grid-template-columns:1fr}}
+  /* Section D drivers */
+  .drivers-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:18px;align-items:start}
+  .sdoh-bars{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+  .sdoh-bars h4,.heat h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+  .sdrow{margin-bottom:14px}
+  .sdrow:last-child{margin-bottom:0}
+  .sdrow .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px}
+  .sdrow .top .lab{font-weight:600;color:var(--ink-2)}
+  .sdrow .top .val{font-family:var(--serif);font-weight:600}
+  .sdrow .top .val .d{font-family:var(--sans);font-size:11px;font-weight:700;margin-left:6px}
+  .sdrow .bar{position:relative;height:9px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px}
+  .sdrow .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:100px;background:var(--brand)}
+  .sdrow .bar .tick{position:absolute;top:-2.5px;bottom:-2.5px;width:2px;background:var(--ink);opacity:.55}
+  .heat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;overflow-x:auto}
+  table.heatbl{border-collapse:collapse;width:100%;font-size:12px}
+  table.heatbl th{text-align:left;font-weight:600;color:var(--ink-3);padding:6px 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+  table.heatbl td{padding:5px 8px;text-align:center;font-weight:600;color:#fff;border-radius:6px;white-space:nowrap}
+  table.heatbl td.name{background:none;color:var(--ink);text-align:left;font-weight:600}
+  .scaffold{margin-top:18px;border:1px dashed var(--line-2);border-radius:12px;padding:16px 20px;background:var(--surface-2);color:var(--ink-3);font-size:12.5px}
+  .scaffold b{color:var(--ink-2)}
 
-  /* ---------------- ANALYSIS PANEL (gap chart) ---------------- */
-  .panel{
-    background:var(--surface);border:1px solid var(--line);border-radius:12px;
-    padding:30px 32px;margin-top:20px;
-    box-shadow:0 1px 0 rgba(20,24,33,.02);
-  }
-  .panel-h{display:flex;align-items:center;gap:12px;margin-bottom:6px}
-  .panel-h .pi{width:34px;height:34px;border-radius:10px;background:var(--brand-ghost);
-    color:var(--brand);display:grid;place-items:center}
-  .panel-h .pi svg{width:18px;height:18px}
-  .panel-h h3{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-.01em}
-  .panel .note{font-size:13px;color:var(--ink-3);margin-bottom:26px;padding-left:46px}
-  .grow{display:grid;grid-template-columns:190px 1fr 66px;align-items:center;gap:16px;margin-bottom:16px}
-  .grow:last-child{margin-bottom:0}
-  .grow .who{font-size:13.5px;font-weight:600}
-  .grow .who small{display:block;font-weight:400;color:var(--ink-3);font-size:12px}
-  .track{height:34px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative}
-  .fill{height:100%;width:0;border-radius:9px;transition:width 1.5s cubic-bezier(.25,.8,.25,1);position:relative}
-  .fill.hp{background:linear-gradient(90deg,var(--crit),var(--crit-2))}
-  .fill.city{background:linear-gradient(90deg,#a7adba,#c2c7d2)}
-  .fill.top{background:linear-gradient(90deg,var(--good),#3fbd8a)}
-  .grow .val{font-family:var(--serif);font-size:18px;font-weight:600;text-align:right}
-  .callout{margin-top:24px;display:flex;gap:16px;align-items:center;
-    background:var(--crit-ghost);border-radius:14px;padding:16px 20px}
-  .callout .big{font-family:var(--serif);font-size:36px;font-weight:700;color:var(--crit);line-height:1;letter-spacing:-.02em}
-  .callout p{font-size:14px;color:var(--ink-2)}
+  /* Section E levers */
+  .levers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .lever{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column}
+  .lever .lnum{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+  .lever .tag{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--crit);margin-top:12px}
+  .lever h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:6px 0 10px;text-wrap:balance}
+  .lever ul{list-style:none;margin:0 0 14px;padding:0}
+  .lever li{position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;color:var(--ink-2);text-wrap:pretty}
+  .lever li::before{content:"";position:absolute;left:0;top:6px;width:10px;height:10px;border-radius:3px;background:var(--brand-ghost);border:1.5px solid var(--brand)}
+  .lever .why{margin-top:auto;background:var(--brand-ghost);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--brand-ink)}
+  .lever .why b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--brand);margin-bottom:4px}
+  sup.fn a{color:var(--brand-ink);text-decoration:none;font-weight:700}
 
-  /* ---------------- DRIVERS (asymmetric, no uniform cards) ---------------- */
-  .drivers{display:grid;grid-template-columns:1fr 1fr;gap:14px 40px;margin-top:6px}
-  .driver{border-top:1px solid var(--line-2);padding:22px 0 6px;position:relative}
-  .driver .dnum{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--crit)}
-  .driver .dtag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-left:10px}
-  .driver h3{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:-.01em;margin:10px 0 9px;text-wrap:balance}
-  .driver p{font-size:14.5px;color:var(--ink-2);text-wrap:pretty}
-  .driver .stat{color:var(--crit);font-weight:700}
-  .driver .arrow{margin-top:14px;font-size:12.5px;font-weight:600;color:var(--brand-ink);display:flex;align-items:center;gap:7px}
-  .driver .arrow svg{width:14px;height:14px}
-  @media(max-width:760px){.drivers{grid-template-columns:1fr;gap:0}}
+  /* Section F sources */
+  footer{margin-top:56px;border-top:1px solid var(--line);padding:26px 0 70px}
+  .sources{columns:2;column-gap:34px;font-size:12px;color:var(--ink-3);line-height:1.6}
+  .sources li{break-inside:avoid;margin-bottom:11px;padding-left:4px}
+  .sources b{color:var(--ink-2)}
+  .sources a{color:var(--brand-ink)}
+  .fnote{font-size:12px;color:var(--ink-3);margin-top:20px;max-width:80ch}
 
-  /* pull quote */
-  .pull{margin:52px auto 0;max-width:780px;text-align:center;padding:0 20px}
-  .pull blockquote{font-family:var(--serif);font-size:clamp(22px,3vw,31px);font-weight:500;font-style:italic;line-height:1.36;letter-spacing:-.01em;text-wrap:balance}
-  .pull blockquote span{color:var(--crit)}
-  .pull cite{display:block;margin-top:14px;font-size:12px;font-style:normal;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
-
-  /* ---------------- POLICY (accordion) ---------------- */
-  .levers{margin-top:6px}
-  .lever{border-bottom:1px solid var(--line-2)}
-  .lever summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:20px;padding:22px 4px;transition:color .18s}
-  .lever summary::-webkit-details-marker{display:none}
-  .lever summary:hover{color:var(--brand-ink)}
-  .lnum{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--brand);min-width:42px}
-  .lt{flex:1}
-  .lt h3{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-.01em}
-  .lt .where{font-size:13px;color:var(--ink-3);font-weight:500;margin-top:2px}
-  .lchev{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line-2);color:var(--ink-3);
-    display:grid;place-items:center;font-size:18px;transition:transform .28s cubic-bezier(.2,.8,.2,1),background .2s,color .2s,border-color .2s;flex-shrink:0}
-  .lever[open] .lchev{transform:rotate(135deg);background:var(--brand);border-color:var(--brand);color:#fff}
-  .lbody{padding:0 4px 26px 62px;max-width:74ch}
-  .lbody p{font-size:14.5px;color:var(--ink-2);margin-bottom:14px;text-wrap:pretty}
-  .why{background:var(--brand-ghost);border-radius:12px;padding:15px 18px;font-size:14px;color:var(--brand-ink)}
-  .why b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin-bottom:5px}
-
-  /* heritage hairline + kente */
-  .heritage{display:flex;height:3px;opacity:.8;border-radius:2px;overflow:hidden}
-  .heritage i{flex:1}
-  .heritage i:nth-child(1){background:var(--pr-red)}
-  .heritage i:nth-child(2){background:var(--surface)}
-  .heritage i:nth-child(3){background:var(--pr-blue)}
-  .heritage i:nth-child(4){background:var(--mex-green)}
-  .heritage i:nth-child(5){background:var(--surface)}
-  .heritage i:nth-child(6){background:var(--pr-red)}
-  .kente{height:4px;border-radius:2px;margin:56px 0 0;opacity:.6;
-    background:repeating-linear-gradient(45deg,var(--sun) 0 12px,transparent 12px 24px,var(--mex-green) 24px 36px,transparent 36px 48px,var(--pr-red) 48px 60px,transparent 60px 72px)}
-
-  /* footer */
-  footer{margin-top:72px;border-top:1px solid var(--line);padding:30px 0 70px}
-  footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
-  footer .fnote{font-size:12.5px;color:var(--ink-3);max-width:62ch;line-height:1.7}
-  footer .fnote b{color:var(--ink-2)}
-  .verify{font-size:12.5px;color:var(--ink-3);margin-top:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;display:inline-flex;gap:9px;align-items:center}
-  .verify svg{width:15px;height:15px;color:var(--warn);flex-shrink:0}
-
-  /* ---------------- FOOTNOTES / SOURCES ---------------- */
-  sup.fn{font-size:.62em;line-height:0;vertical-align:super;font-family:var(--sans);font-weight:600;letter-spacing:0}
-  sup.fn a{color:var(--brand-2);text-decoration:none;padding:0 1px}
-  sup.fn a:hover{text-decoration:underline}
-  .sources-list{list-style:none;counter-reset:src;max-width:86ch;margin-top:6px}
-  .sources-list li{
-    counter-increment:src;position:relative;
-    padding:14px 4px 14px 44px;border-bottom:1px solid var(--line);
-    font-size:13.5px;color:var(--ink-2);line-height:1.65;
-  }
-  .sources-list li::before{
-    content:counter(src);position:absolute;left:2px;top:13px;
-    font-family:var(--serif);font-size:15px;font-weight:600;color:var(--brand);
-    width:28px;height:28px;border:1px solid var(--line-2);border-radius:50%;
-    display:grid;place-items:center;background:var(--surface);
-  }
-  .sources-list li:target{background:var(--brand-ghost);border-radius:10px}
-  .sources-list b{color:var(--ink);font-weight:600}
-  .sources-list a{color:var(--brand-2);text-decoration:none;word-break:break-word}
-  .sources-list a:hover{text-decoration:underline}
-  .sources-list .acc{font-size:12px;color:var(--ink-3)}
-
-  /* ---------------- COMPARATIVE MAP ---------------- */
-  .mapwrap{margin-top:6px}
-  .metric-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-  .mtab{font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink-2);
-    background:var(--surface);border:1px solid var(--line-2);border-radius:100px;
-    padding:9px 16px;cursor:pointer;transition:background .16s,color .16s,border-color .16s,transform .16s}
-  .mtab:hover{transform:translateY(-1px);border-color:var(--ink-3)}
-  .mtab.on{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 6px 16px -10px rgba(20,69,58,.6)}
-  .mtab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-  .mapgrid{display:grid;grid-template-columns:1.55fr 1fr;gap:20px;align-items:stretch}
-  .mapstage{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;
-    box-shadow:0 1px 0 rgba(20,24,33,.02)}
-  #wardmap{width:100%;height:auto;display:block;overflow:visible}
-  #wardmap path{stroke:#fff;stroke-width:1;cursor:pointer;
-    transition:fill .55s cubic-bezier(.2,.8,.2,1),opacity .16s,stroke-width .16s}
-  #wardmap path:hover{opacity:.82}
-  #wardmap path.ward{stroke:var(--brand);stroke-width:2.4}
-  #wardmap path.sel:not(.ward){stroke:var(--ink);stroke-width:2.4}
-  #wardmap path.ward.sel{stroke:var(--brand);stroke-width:3}
-  #wardmap path:focus-visible{outline:none;stroke:var(--ink);stroke-width:2.6}
-  @media(prefers-reduced-motion:reduce){#wardmap path{transition:none}}
-  #wardmap text{font-family:var(--sans);fill:var(--ink);paint-order:stroke;
-    stroke:#fff;stroke-width:2.6px;stroke-linejoin:round;pointer-events:none}
-  #wardmap .lb-name{font-size:8.6px;font-weight:600;letter-spacing:.005em}
-  #wardmap .lb-name.lb-ward{fill:var(--brand-ink);font-weight:800}
-  #wardmap .lb-val{font-size:10.5px;font-weight:800}
-  .legend{display:flex;align-items:center;gap:11px;margin-top:14px;font-size:11.5px;font-weight:600;color:var(--ink-3)}
-  .legend .lg-ramp{flex:1;height:9px;border-radius:100px;
-    background:linear-gradient(90deg,#f8eee9,#c2695c 55%,#8e2c22)}
-  .legend .lg-end{white-space:nowrap}
-  .legend .lg-scale{white-space:nowrap;color:var(--ink-2)}
-  .maphint{font-size:12px;color:var(--ink-3);margin-top:9px;display:flex;align-items:center;gap:7px}
-  .maphint .sw{width:11px;height:11px;border-radius:3px;border:2px solid var(--brand);flex-shrink:0}
-  .mappanel{background:var(--surface);border:1px solid var(--line);border-radius:14px;
-    padding:20px 22px;display:flex;flex-direction:column}
-  .mp-name{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-.01em;
-    display:flex;align-items:center;gap:10px;flex-wrap:wrap;line-height:1.15}
-  .mp-pill{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.07em;
-    text-transform:uppercase;padding:4px 9px;border-radius:100px}
-  .mp-pill.ward{background:var(--brand-ghost);color:var(--brand-ink)}
-  .mp-pill.nb{background:var(--surface-2);color:var(--ink-3);border:1px solid var(--line)}
-  .mp-sub{font-size:12px;color:var(--ink-3);margin:7px 0 4px}
-  .mp-rows{margin-top:6px}
-  .mp-row{padding:12px 0;border-top:1px solid var(--line)}
-  .mp-row.active{margin:0 -22px;padding-left:22px;padding-right:22px;background:var(--surface-2)}
-  .mp-rowh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px}
-  .mp-lab{font-size:12.5px;font-weight:600;color:var(--ink-2)}
-  .mp-row.active .mp-lab{color:var(--brand-ink)}
-  .mp-val{font-family:var(--serif);font-size:16.5px;font-weight:600;color:var(--ink)}
-  .mp-val .d{font-family:var(--sans);font-size:11px;font-weight:700;margin-left:7px}
-  .mp-bar{position:relative;height:9px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px}
-  .mp-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:100px;background:var(--brand);
-    width:0;transition:width .7s cubic-bezier(.25,.8,.25,1)}
-  @media(prefers-reduced-motion:reduce){.mp-bar i{transition:none}}
-  .mp-bar .tick{position:absolute;top:-2.5px;bottom:-2.5px;width:2px;background:var(--ink);border-radius:2px;opacity:.65}
-  .d-bad{color:var(--crit)}
-  .d-good{color:var(--good)}
-  .mp-foot{font-size:11.5px;color:var(--ink-3);margin-top:14px;display:flex;align-items:center;gap:7px}
-  .mp-foot .tk{width:2px;height:13px;background:var(--ink);opacity:.65;flex-shrink:0}
-
-  /* life-expectancy comparison strip */
-  .legap{margin-top:26px;background:linear-gradient(180deg,var(--surface),var(--surface-2));
-    border:1px solid var(--line);border-radius:14px;padding:24px 26px}
-  .legap .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink)}
-  .legap h3{font-family:var(--serif);font-size:clamp(20px,2.5vw,26px);font-weight:600;letter-spacing:-.01em;margin-top:7px}
-  .legap-bars{margin:20px 0 16px}
-  .legap-row{display:grid;grid-template-columns:120px 1fr 58px;align-items:center;gap:14px;margin-bottom:11px}
-  .legap-row:last-child{margin-bottom:0}
-  .lgr-l{font-size:13.5px;font-weight:600}
-  .lgr-l small{display:block;font-weight:400;color:var(--ink-3);font-size:11.5px}
-  .lgr-track{height:28px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-  .lgr-track i{display:block;height:100%;width:0;border-radius:7px;transition:width 1.4s cubic-bezier(.25,.8,.25,1)}
-  @media(prefers-reduced-motion:reduce){.lgr-track i{transition:none}}
-  .lgr-track i.w26{background:linear-gradient(90deg,var(--crit),var(--crit-2))}
-  .lgr-track i.cty{background:linear-gradient(90deg,#a7adba,#c2c7d2)}
-  .lgr-track i.lp{background:linear-gradient(90deg,var(--good),#3fbd8a)}
-  .lgr-v{font-family:var(--serif);font-size:17px;font-weight:600;text-align:right}
-  .legap-note{font-size:14.5px;color:var(--ink-2);max-width:72ch;text-wrap:pretty}
-  .legap-note b{color:var(--ink);font-weight:600}
-  @media(max-width:820px){
-    .mapgrid{grid-template-columns:1fr}
-    .mp-row.active{margin:0 -22px;padding-left:22px;padding-right:22px}
-  }
-  @media(max-width:520px){
-    .legap-row{grid-template-columns:88px 1fr 46px;gap:10px}
-  }
-
-
-  /* ward-map overrides (full-city portrait) */
-  .mapgrid{grid-template-columns:.92fr 1.08fr}
-  #wardmap{max-height:660px;margin:0 auto}
-  #wardmap text{font-family:var(--sans);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:2px;stroke-linejoin:round;pointer-events:none}
-  #wardmap .wl{font-size:6.6px;font-weight:600;fill:var(--ink-2)}
-  #wardmap .wl-ward{font-size:10px;font-weight:800;fill:var(--brand-ink);stroke-width:2.6px}
-  #wardmap path.null{fill:#e3e6df}
-  @media(max-width:820px){.mapgrid{grid-template-columns:1fr}#wardmap{max-height:none}}
-
-
-  /* ward-map overrides (full-city portrait) */
-  .mapgrid{grid-template-columns:.92fr 1.08fr}
-  #wardmap{max-height:660px;margin:0 auto}
-  #wardmap text{font-family:var(--sans);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:2px;stroke-linejoin:round;pointer-events:none}
-  #wardmap .wl{font-size:6.6px;font-weight:600;fill:var(--ink-2)}
-  #wardmap .wl-ward{font-size:10px;font-weight:800;fill:var(--brand-ink);stroke-width:2.6px}
-  #wardmap path.null{fill:#e3e6df}
-  @media(max-width:820px){.mapgrid{grid-template-columns:1fr}#wardmap{max-height:none}}
-
-
-  /* CHM ward-map context strip */
-  .ctx-src{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.55;max-width:66ch}
-  .rel-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
-    padding:3px 9px;border-radius:100px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
-
-
-  /* zoom-in: intra-ward disparity */
-  .zoom{margin-top:30px;border-top:1px solid var(--line-2);padding-top:34px}
-  .zoom-head .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--crit)}
-  .zoom-head h3{font-family:var(--serif);font-size:clamp(24px,3.2vw,34px);font-weight:600;letter-spacing:-.02em;margin-top:8px}
-  .zoom-head p{color:var(--ink-2);margin-top:8px;max-width:64ch;text-wrap:pretty}
-  .comp{margin:26px 0 6px}
-  .comp-bar{display:flex;height:40px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
-  .comp-bar .seg{display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;min-width:0}
-  .comp-bar .seg b{font-weight:700}
-  .s-hp{background:var(--crit)} .s-wt{background:var(--good)} .s-ls{background:var(--brand-2)}
-  .s-he{background:var(--sun)} .s-bc{background:var(--ink-3)}
-  .comp-key{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:12.5px;color:var(--ink-2);font-weight:500}
-  .comp-key span{display:inline-flex;align-items:center;gap:7px}
-  .comp-key i{width:11px;height:11px;border-radius:3px;display:inline-block}
-  i.s-hp{background:var(--crit)} i.s-wt{background:var(--good)} i.s-ls{background:var(--brand-2)}
-  i.s-he{background:var(--sun)} i.s-bc{background:var(--ink-3)}
-  .comp-note{font-size:12.5px;color:var(--ink-3);margin-top:10px}
-  .gaps{margin-top:30px}
-  .gaps-legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);font-weight:500;margin-bottom:22px}
-  .gaps-legend .lg-dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-left:6px}
-  .gaps-legend .lg-dot.hp{background:var(--crit)} .gaps-legend .lg-dot.wt{background:var(--good)} .gaps-legend .lg-dot.other{background:var(--line-2);border:1px solid var(--ink-3)}
-  .gaps-legend .worse-note{color:var(--ink-3)}
-  .gap-row{display:grid;grid-template-columns:200px 1fr 92px;align-items:center;gap:20px;margin-bottom:34px}
-  .gap-row:last-child{margin-bottom:6px}
-  .gap-l .gap-metric{display:block;font-size:14.5px;font-weight:600;color:var(--ink)}
-  .gap-l .gap-src{display:block;font-size:11px;color:var(--ink-3);margin-top:2px}
-  .gap-track{position:relative;height:34px}
-  .gap-track .gap-line{position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);
-    background:linear-gradient(90deg,var(--good) 0%,var(--line-2) 50%,var(--crit) 100%);border-radius:3px;opacity:.5}
-  .gap-track .dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;
-    background:var(--line-2);border:1.5px solid var(--ink-3);z-index:1}
-  .gap-track .dot.other{width:11px;height:11px}
-  .gap-track .dot.wt{background:var(--good);border-color:var(--good);width:15px;height:15px;z-index:2}
-  .gap-track .dot.hp{background:var(--crit);border-color:var(--crit);width:17px;height:17px;z-index:3;
-    box-shadow:0 0 0 4px var(--crit-ghost)}
-  .gap-track .dlab{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11.5px;font-weight:700}
-  .gap-track .dlab.up{bottom:20px;color:var(--crit)}
-  .gap-track .dlab.dn{top:20px;color:var(--good)}
-  .gap-r{text-align:right}
-  .gap-r b{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--crit);line-height:1;letter-spacing:-.02em}
-  .gap-r small{display:block;font-size:11px;color:var(--ink-3);margin-top:3px;font-weight:600}
-  .zoom-punch{margin-top:30px;display:flex;gap:22px;align-items:center;background:var(--crit-ghost);border-radius:14px;padding:22px 26px;flex-wrap:wrap}
-  .zoom-punch .big{font-family:var(--serif);font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--crit);line-height:1;letter-spacing:-.02em;white-space:nowrap}
-  .zoom-punch p{font-size:14.5px;color:var(--ink-2);flex:1;min-width:280px;text-wrap:pretty}
-  .zoom-punch p b{color:var(--ink);font-weight:600}
-  @media(max-width:720px){
-    .gap-row{grid-template-columns:1fr;gap:8px}
-    .gap-track{margin:14px 0}
-    .gap-r{text-align:left}
-  }
-
-
-  /* interactive inside-ward map */
-  .inmap{margin-top:26px}
-  .inmap-controls{display:flex;flex-wrap:wrap;gap:14px 20px;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .gran-toggle{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:3px}
-  .gtab{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink-2);background:transparent;
-    border:none;border-radius:100px;padding:8px 15px;cursor:pointer;transition:background .16s,color .16s}
-  .gtab.on{background:var(--brand);color:#fff}
-  .gtab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-  .inmap-grid{display:grid;grid-template-columns:1.62fr 1fr;gap:20px;align-items:start}
-  #in26map{width:100%;height:auto;display:block;overflow:visible}
-  #in26map path{stroke:#fff;stroke-width:1.1;cursor:pointer;transition:fill .5s cubic-bezier(.2,.8,.2,1),opacity .16s}
-  #in26map path:hover{opacity:.82}
-  #in26map path.sel{stroke:var(--ink);stroke-width:2.4}
-  #in26map path.in-null{fill:#e3e6df}
-  #in26map path:focus-visible{outline:none;stroke:var(--ink);stroke-width:2.6}
-  @media(prefers-reduced-motion:reduce){#in26map path{transition:none}}
-  #in26map text{font-family:var(--sans);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:2.6px;
-    stroke-linejoin:round;pointer-events:none;font-weight:700;font-size:12px}
-  .inmap .mtab.disabled{opacity:.32;pointer-events:none}
-  .inmap-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.55;max-width:70ch}
-  @media(max-width:860px){.inmap-grid{grid-template-columns:1fr}}
-
-
-  /* why-cards (analysis explainer) */
-  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
-  .why-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 26px}
-  .why-card .wk{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--crit)}
-  .why-card h4{font-family:var(--serif);font-size:20px;font-weight:600;margin:9px 0 12px;letter-spacing:-.01em;text-wrap:balance}
-  .why-card p{font-size:14px;color:var(--ink-2);margin-bottom:11px;text-wrap:pretty}
-  .why-card p:last-child{margin-bottom:0}
-  .why-card p b{color:var(--ink);font-weight:600}
-  .why-card .why-list{list-style:none;margin:2px 0 0;padding:0}
-  .why-card .why-list li{position:relative;padding-left:18px;margin-bottom:12px;font-size:14px;color:var(--ink-2);text-wrap:pretty}
-  .why-card .why-list li:last-child{margin-bottom:0}
-  .why-card .why-list li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--crit)}
-  .why-card .why-list li b{color:var(--ink);font-weight:600}
-  .why-card .why-kick{margin-top:15px;font-size:14px;font-weight:600;color:var(--ink)}
-  @media(max-width:760px){.why-grid{grid-template-columns:1fr}}
-  /* plan list in policy levers */
-  .lbody .plan{margin:4px 0 16px;padding:0;list-style:none}
-  .lbody .plan li{position:relative;padding-left:26px;margin-bottom:11px;font-size:14.5px;color:var(--ink-2);text-wrap:pretty}
-  .lbody .plan li:last-child{margin-bottom:0}
-  .lbody .plan li::before{content:"";position:absolute;left:0;top:6px;width:12px;height:12px;border-radius:4px;
-    background:var(--brand-ghost);border:1.5px solid var(--brand)}
-  .lbody .plan li b{color:var(--ink);font-weight:600}
-
+  @media(max-width:1000px){.vgrid{grid-template-columns:repeat(2,1fr)}.splitmap,.drivers-grid{grid-template-columns:1fr}.levers{grid-template-columns:1fr}.sources{columns:1}}
+  @media(max-width:560px){.vgrid{grid-template-columns:1fr}.pairrow{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- ============ TOP BAR ============ -->
 <header class="topbar">
   <div class="wrap">
     <div class="logo">
       <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.3 4 2.5C10.8 6.3 12 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z" fill="currentColor"/></svg></span>
-      Ward&nbsp;26 · Health Signal
+      <span>Chicago Ward Health Dashboard<small>50 wards · 4 vitals · Chicago Health Map</small></span>
     </div>
-    <nav class="topnav">
-      <a href="#vitals" class="on">Vitals</a>
-      <a href="#analysis">Analysis</a>
-      <a href="#drivers">Drivers</a>
-      <a href="#policy">Policy</a>
-      <a href="#sources">Sources</a>
-    </nav>
-    <div class="meta">
-      <span class="chip hide"><span class="dot"></span>Northwest Side</span>
-      <span class="chip">2023–24 data</span>
+    <a class="xlink" href="ward26.html">Ward&nbsp;26 deep-dive&nbsp;&rarr;</a>
+    <div class="selector">
+      <label for="wardInput">Ward</label>
+      <div class="stepper">
+        <button id="prevW" aria-label="Previous ward">&minus;</button>
+        <input id="wardInput" type="number" min="1" max="50" value="26" aria-label="Ward number">
+        <button id="nextW" aria-label="Next ward">+</button>
+      </div>
+      <select id="wardSelect" aria-label="Choose a ward"></select>
     </div>
   </div>
 </header>
 
-<!-- ============ HERO ============ -->
 <section class="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <span class="eyebrow"><span class="pulse"></span>26th Ward · Cardiometabolic Focus</span>
-      <h1>The ward's health gap runs through the <em>heart</em>.</h1>
-      <p class="lede">Ward 26 residents live about <b>three years less</b> than the average Chicagoan — and nearly <b>twelve years less</b> than residents of the Loop.<sup class="fn"><a href="#src-1">1</a>,<a href="#src-2">2</a></sup> High blood pressure is where it starts — driven by grocery prices, rent pressure, and skipped prescriptions, not by choices. Diabetes rides alongside it.</p>
-      <div class="hero-cta">
-        <a href="#policy" class="btn btn-primary">See the policy levers
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a href="#analysis" class="btn btn-ghost">Read the data</a>
-      </div>
-    </div>
-
-    <div class="stage">
-      <div class="heart-wrap"><img class="heart-img" alt="Anatomical 3D heart render" src="https://d8j0ntlcm91z4.cloudfront.net/user_3FMPyCLNt29zLlOD4IH8Vx15iFA/hf_20260708_160109_069f3e88-05b5-4b0b-9d58-b9c286e42329.png"></div>
-      <div class="vitals-tag a">
-        <div class="vt-h">
-          <span class="vt-ic" style="background:linear-gradient(150deg,var(--crit-2),var(--crit))">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.3 4 2.5C10.8 6.3 12 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z"/></svg>
-          </span>
-          <span class="vt-t">Hypertension<sup class="fn"><a href="#src-3">3</a></sup></span>
-        </div>
-        <div class="vt-v"><span class="count" data-to="35">0</span><small>% of adults</small></div>
-        <div class="spark" id="spark1"></div>
-      </div>
-      <div class="vitals-tag b">
-        <div class="vt-h">
-          <span class="vt-ic" style="background:linear-gradient(150deg,var(--warn),#c9791a)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 8l7-5 7 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="vt-t">Life expectancy<sup class="fn"><a href="#src-2">2</a></sup></span>
-        </div>
-        <div class="vt-v"><span class="count" data-to="75">0</span><small>.4 yrs</small></div>
-        <div style="font-size:12px;color:var(--crit);font-weight:600;margin-top:6px">−3.3 vs city · −11.9 vs Loop</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ VITALS ============ -->
-<section class="block" id="vitals">
   <div class="wrap">
-    <div class="sec-head rv">
-      <div class="l">
-        <div class="k">Ward Body Analysis</div>
-        <h2>Four vitals, read against the city</h2>
-        <p>Ward-level figures for the 26th Ward. Each compares the ward to the Chicago average.</p>
-      </div>
-    </div>
-    <div class="vitals-grid">
-      <div class="vcard rv">
-        <div class="vc-top">
-          <span class="vc-ic" style="background:linear-gradient(150deg,var(--crit-2),var(--crit))">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.3 4 2.5C10.8 6.3 12 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z"/></svg>
-          </span>
-          <span class="vc-tag" style="background:var(--crit-ghost);color:var(--crit)">+3.4 pts</span>
-        </div>
-        <h3>Hypertension, adults<sup class="fn"><a href="#src-3">3</a></sup></h3>
-        <div class="vc-num"><span class="count" data-to="35">0</span><small>.3%</small></div>
-        <div class="vc-sub">City average <b>31.9%</b> · was 38.1% in 2022–23</div>
-        <div class="vc-bar"><i style="background:var(--crit)" data-w="80%"></i></div>
-      </div>
-
-      <div class="vcard rv">
-        <div class="vc-top">
-          <span class="vc-ic" style="background:linear-gradient(150deg,var(--warn),#c9791a)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke-linecap="round"/></svg>
-          </span>
-          <span class="vc-tag" style="background:#fdf3e3;color:var(--warn)">+4.5 pts</span>
-        </div>
-        <h3>Diabetes, adults <span style="font-weight:500;color:var(--ink-3)">· sibling</span><sup class="fn"><a href="#src-4">4</a></sup></h3>
-        <div class="vc-num"><span class="count" data-to="18">0</span><small>%</small></div>
-        <div class="vc-sub">City average <b>13.4%</b></div>
-        <div class="vc-bar"><i style="background:var(--warn)" data-w="66%"></i></div>
-      </div>
-
-      <div class="vcard rv">
-        <div class="vc-top">
-          <span class="vc-ic" style="background:var(--brand)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M7 14l4-4 3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="vc-tag" style="background:var(--brand-ghost);color:var(--brand-ink)">1 in 4</span>
-        </div>
-        <h3>Food insecurity<sup class="fn"><a href="#src-5">5</a>,<a href="#src-6">6</a></sup></h3>
-        <div class="vc-num"><span class="count" data-to="24">0</span><small>.2%</small></div>
-        <div class="vc-sub">Chicago <b>21.3%</b> · U.S. households <b>13.5%</b></div>
-        <div class="vc-bar"><i style="background:var(--brand)" data-w="62%"></i></div>
-      </div>
-
-      <div class="vcard rv">
-        <div class="vc-top">
-          <span class="vc-ic" style="background:var(--brand-ink)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M6 6h9a3 3 0 010 6H6m0 0h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="vc-tag" style="background:var(--crit-ghost);color:var(--crit)">−$21k</span>
-        </div>
-        <h3>Median income<sup class="fn"><a href="#src-7">7</a></sup></h3>
-        <div class="vc-num">$<span class="count" data-to="58">0</span><small>k</small></div>
-        <div class="vc-sub">City average <b>~$79k</b></div>
-        <div class="vc-bar"><i style="background:var(--brand-ink)" data-w="73%"></i></div>
-      </div>
-    </div>
+    <div class="k" id="heroKick">Ward Health Profile</div>
+    <h1>Ward <em id="heroWard">26</em> — a health profile</h1>
+    <p id="heroLede"></p>
+    <div class="wardmeta" id="wardMeta"></div>
   </div>
 </section>
 
-<!-- ============ COMPARATIVE MAP ============ -->
-<section class="block" id="analysis">
+<!-- ================= SECTION A: 4 VITALS ================= -->
+<section class="block" id="secA">
   <div class="wrap">
-    <div class="sec-head rv">
-      <div class="l">
-        <div class="k">Comparative Map · Chicago Health Map</div>
-        <h2>Ward 26, read against every ward</h2>
-        <p>All 50 Chicago wards at their current boundaries, with ward-level data from the <a href="https://chicagohealthmap.com" target="_blank" rel="noopener" style="color:var(--brand-ink);text-decoration:underline">Chicago Health Map</a><sup class="fn"><a href="#src-16">16</a></sup>. Each figure is the share of patients seen in Chicago health systems who carry that condition. Pick a condition, then click any ward to compare it with Ward 26 and the citywide rate.</p>
-      </div>
+    <div class="sec-head">
+      <div class="k">Section A · The four vitals</div>
+      <h2>Cardiometabolic &amp; mental-health load</h2>
+      <p>Share of patients seen in Chicago health systems carrying each diagnosis, benchmarked against the citywide rate and the ward's rank among all 50.</p>
     </div>
-
-    <div class="mapwrap rv">
-      <div class="metric-tabs" role="tablist" aria-label="Choose a condition to map">
-        <button class="mtab" data-metric="htn"    role="tab" aria-selected="false">Hypertension</button>
-        <button class="mtab on" data-metric="dia"    role="tab" aria-selected="true">Diabetes</button>
-        <button class="mtab"    data-metric="heart"  role="tab" aria-selected="false">Heart disease</button>
-        <button class="mtab"    data-metric="stroke" role="tab" aria-selected="false">Stroke</button>
-        <button class="mtab"    data-metric="ckd"    role="tab" aria-selected="false">Kidney disease</button>
-      </div>
-
-      <div class="mapgrid">
-        <div class="mapstage">
-          <svg id="wardmap" viewBox="0 0 560.0 681.5" role="group" aria-label="Map of Chicago's 50 wards">
-            <g id="areas"></g>
-            <g id="labels"></g>
-          </svg>
-          <div class="legend">
-            <span class="lg-end">Lower</span>
-            <span class="lg-ramp" aria-hidden="true"></span>
-            <span class="lg-end">Higher</span>
-            <span class="lg-scale" id="lgscale"></span>
-          </div>
-          <p class="maphint"><span class="sw"></span> Ward 26 is outlined in green · click or tab to any ward</p>
-          <p class="ctx-src">Source: <b>Chicago Health Map</b> (chicagohealthmap.com), powered by CAPriCORN, 2024. Figures are prevalence among patients seen at participating Chicago health systems &mdash; a clinical population, not a general-population survey &mdash; so wards are best read against one another. Estimates the source marks for equity context are labeled &ldquo;equity-flagged.&rdquo;</p>
-        </div>
-
-        <aside class="mappanel" id="mappanel" aria-live="polite"></aside>
-      </div>
-    </div>
-
-    <div class="legap rv">
-      <div class="k">Ward 26 in context · Chicago Health Map 2024</div>
-      <h3 id="ctxTitle">Where Ward 26 sits</h3>
-      <p class="legap-note" id="ctxBody"></p>
-    </div>
-
-    <div class="zoom rv">
-      <div class="zoom-head">
-        <div class="k">Zooming in · one ward is not one place</div>
-        <h3>One ward, two realities</h3>
-        <p>Citywide, Ward 26 looks average. Up close, it's really two wards &mdash; five community areas that split sharply by health and by wealth.</p>
-      </div>
-
-      <div class="comp">
-        <div class="comp-bar">
-          <span class="seg s-hp" style="width:33%"><b>33%</b></span>
-          <span class="seg s-wt" style="width:27%"><b>27%</b></span>
-          <span class="seg s-ls" style="width:16%"><b>16%</b></span>
-          <span class="seg s-he" style="width:13%"><b>13%</b></span>
-          <span class="seg s-bc" style="width:10%"><b>10%</b></span>
-        </div>
-        <div class="comp-key">
-          <span><i class="s-hp"></i>Humboldt Park</span>
-          <span><i class="s-wt"></i>West Town</span>
-          <span><i class="s-ls"></i>Logan Square</span>
-          <span><i class="s-he"></i>Hermosa</span>
-          <span><i class="s-bc"></i>Belmont Cragin</span>
-        </div>
-        <p class="comp-note">Humboldt Park is the ward's biggest piece &mdash; about a third &mdash; and its poorest.</p>
-      </div>
-
-      <div class="inmap rv">
-        <div class="inmap-controls">
-          <div class="metric-tabs" role="tablist" aria-label="Choose a measure">
-            <button class="mtab on" data-metric="le"      role="tab" aria-selected="true">Life expectancy</button>
-            <button class="mtab"    data-metric="inc"     role="tab" aria-selected="false">Median income</button>
-            <button class="mtab"    data-metric="htn"     role="tab" aria-selected="false">Hypertension</button>
-            <button class="mtab"    data-metric="dia"     role="tab" aria-selected="false">Diabetes</button>
-            <button class="mtab"    data-metric="obesity" role="tab" aria-selected="false">Obesity</button>
-          </div>
-        </div>
-        <div class="inmap-grid">
-          <div class="mapstage">
-            <svg id="in26map" viewBox="0 0 880.0 477.8" role="group" aria-label="Map of Ward 26 broken into its communities">
-              <g id="in-areas"></g>
-              <g id="in-labels"></g>
-            </svg>
-            <div class="legend">
-              <span class="lg-end">Better</span>
-              <span class="lg-ramp" aria-hidden="true"></span>
-              <span class="lg-end">Worse</span>
-              <span class="lg-scale" id="in-lgscale"></span>
-            </div>
-            <p class="maphint">Darker = worse for residents · click any community</p>
-            <p class="inmap-note"><b>Life expectancy &amp; income:</b> Chicago Health Atlas (community-area / ACS). <b>Conditions:</b> Chicago Health Map (CAPriCORN), 2024 &mdash; prevalence among patients seen in Chicago health systems.</p>
-          </div>
-          <aside class="mappanel" id="in26panel" aria-live="polite"></aside>
-        </div>
-      </div>
-      <div class="why-grid rv">
-        <div class="why-card">
-          <div class="wk">Why the split</div>
-          <h4>The rich side and the poor side were built that way</h4>
-          <ul class="why-list">
-            <li>The <b>606 trail</b> opened in 2015 and set off a land rush on its western end. In Logan Square and Humboldt Park, home prices jumped <b>about 344%</b> from 2012 to 2018 &mdash; $97,000 to $462,000 &mdash; and the rent hikes pushed Puerto Rican and Latino families out.<sup class="fn"><a href="#src-17">17</a></sup></li>
-            <li>Redlining got there first. In the 1930s, federal maps stamped these blocks &ldquo;hazardous&rdquo; and choked off home loans for two generations.<sup class="fn"><a href="#src-18">18</a></sup></li>
-            <li>Those same 1930s grades still track disease: diabetes runs near <b>9%</b> in the top-rated areas and <b>14%</b> in the redlined ones; obesity, <b>29%</b> to <b>35%</b>.<sup class="fn"><a href="#src-18">18</a></sup></li>
-          </ul>
-          <p class="why-kick">The money didn't land here by chance. It was steered &mdash; into the east, out of the west.</p>
-        </div>
-        <div class="why-card">
-          <div class="wk">Why it becomes disease</div>
-          <h4>The same line, drawn in blood pressure</h4>
-          <ul class="why-list">
-            <li><b>Food.</b> The west side is a <b>food swamp</b> &mdash; fast food and corner stores on every block, fresh produce almost nowhere. That mix predicts obesity better than how far you live from a grocery store.<sup class="fn"><a href="#src-19">19</a></sup></li>
-            <li><b>Stress.</b> Living one rent hike from eviction keeps stress hormones and blood pressure high. Researchers call it <b>weathering</b>, and it brings on hypertension and diabetes years early.<sup class="fn"><a href="#src-20">20</a></sup></li>
-            <li><b>Care.</b> Redlined blocks still have fewer doctor visits and more uninsured residents, so high blood pressure goes unchecked until it lands as a stroke.<sup class="fn"><a href="#src-18">18</a></sup></li>
-          </ul>
-          <p class="why-kick">The east side &mdash; groceries, savings, insurance &mdash; mostly escapes all three.</p>
-        </div>
-      </div>
-
-      <div class="zoom-punch">
-        <span class="big">6 years. $89,000.</span>
-        <p>Same ward, opposite ends: that's the gap in life expectancy and median income between <b>Humboldt Park</b> and <b>West Town</b>. Hypertension runs about <b>13 points higher</b> in Humboldt Park, diabetes <b>twice as high</b>.<sup class="fn"><a href="#src-2">2</a>,<a href="#src-7">7</a></sup> A ward office can close gaps like these. Here's how.</p>
-      </div>
-    </div>
-
+    <div class="vgrid" id="vgrid"></div>
   </div>
 </section>
 
-<div class="wrap"><div class="kente" aria-hidden="true"></div></div>
-
-<!-- ============ DRIVERS ============ -->
-<section class="block" id="drivers">
+<!-- ================= SECTION B: SPLIT MAP ================= -->
+<section class="block" id="secB">
   <div class="wrap">
-    <div class="sec-head rv">
-      <div class="l">
-        <div class="k">Root Economic Drivers</div>
-        <h2>What's actually driving it</h2>
-        <p>Four conditions in the ward's economy, and the health outcome each one produces.</p>
-      </div>
+    <div class="sec-head">
+      <div class="k">Section B · The ward in context</div>
+      <h2>City-wide, then down to the community</h2>
+      <p>Pick a vital: the left map ranks all 50 wards; the right map zooms the selected ward into its constituent community areas. Darker is worse. Click a ward or community to explore.</p>
     </div>
-    <div class="drivers">
-      <div class="driver rv">
-        <span class="dnum">01</span><span class="dtag">Food access</span>
-        <h3>The corner store sets the menu</h3>
-        <p>About <span class="stat">one in four residents</span> here faces food insecurity,<sup class="fn"><a href="#src-5">5</a></sup> well above the national rate of 13.5% of households.<sup class="fn"><a href="#src-6">6</a></sup> Fresh produce means a bus transfer; the corner store sells cheap, sodium-heavy calories within walking distance. Residents eat what the neighborhood prices within reach, and blood pressure follows.</p>
-        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: hypertension · diabetes</div>
+    <div class="vital-tabs" id="mapTabs"></div>
+    <div class="splitmap">
+      <div class="mapcard city">
+        <h4>Chicago · all 50 wards</h4>
+        <svg id="cityMap" role="img" aria-label="Chicago wards choropleth"><g id="cityAreas"></g><g id="cityLabels"></g></svg>
+        <div class="legend"><span>Lower</span><span class="ramp"></span><span>Higher</span><span id="cityScale" style="margin-left:auto;color:var(--ink-2)"></span></div>
       </div>
-      <div class="driver rv">
-        <span class="dnum">02</span><span class="dtag">Housing</span>
-        <h3>Rent crowds out prescriptions</h3>
-        <p>Median household income sits near <span class="stat">$58k</span> — about $21k below the city median<sup class="fn"><a href="#src-7">7</a></sup> — while rents climb in from the Logan Square side. Families spend the margin holding the apartment, then skip the copay and the refill. A near-miss on eviction raises blood pressure by itself.<sup class="fn"><a href="#src-12">12</a></sup></p>
-        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: deferred care · chronic stress</div>
+      <div class="mapcard zoom">
+        <h4 id="zoomTitle">Ward — its communities</h4>
+        <svg id="zoomMap" role="img" aria-label="Ward community choropleth"><g id="zoomAreas"></g><g id="zoomLabels"></g></svg>
+        <div class="commlist" id="commList"></div>
       </div>
-      <div class="driver rv">
-        <span class="dnum">03</span><span class="dtag">Coverage</span>
-        <h3>Residents skip refills to save money</h3>
-        <p>Sinai's community health survey found <span class="stat">nearly 1 in 4 residents</span> (23%) went without a needed prescription because of cost.<sup class="fn"><a href="#src-8">8</a></sup> High blood pressure gives no warning before the stroke. The neighborhood then pays for dialysis and cardiac admissions that a $4 pill would have prevented.<sup class="fn"><a href="#src-14">14</a></sup></p>
-        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: stroke · kidney failure</div>
-      </div>
-      <div class="driver rv">
-        <span class="dnum">04</span><span class="dtag">Public dollars</span>
-        <h3>The city bought incarceration here</h3>
-        <p>Public spending on incarceration in the ward’s community area ran to <span class="stat">$292 million</span> over just five years (2005–2009) — the second-highest neighborhood total in Chicago, behind only Austin.<sup class="fn"><a href="#src-9">9</a></sup> Those same dollars could have funded clinics, jobs, or housing. Residents pay the difference in years of life.</p>
-        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Outcome: compounding disinvestment</div>
-      </div>
-    </div>
-
-    <div class="pull rv">
-      <blockquote>These are economic conditions expressed as <span>blood pressure</span>.</blockquote>
-      <cite>The case for treating health policy as economic policy</cite>
     </div>
   </div>
 </section>
 
-<div class="wrap"><div class="kente" aria-hidden="true"></div></div>
-
-<!-- ============ POLICY ============ -->
-<section class="block" id="policy">
+<!-- ================= SECTION C: CAUSAL ================= -->
+<section class="block" id="secC">
   <div class="wrap">
-    <div class="sec-head rv">
-      <div class="l">
-        <div class="k">Strategic Policy Levers</div>
-        <h2>Three levers a ward office can pull</h2>
-        <p>Ward-scale and fundable now &mdash; each a concrete plan, with the peer-reviewed evidence attached.</p>
-      </div>
+    <div class="sec-head">
+      <div class="k">Section C · Why it clusters</div>
+      <h2>The social determinant under the spike</h2>
+      <p>Within this ward, the communities carrying the most disease are the ones carrying the most economic and food-access hardship. The pairing below sorts the ward's communities by the driver most closely tracking its worst vital.</p>
     </div>
-    <div class="levers">
-      <details class="lever rv" open>
-        <summary>
-          <span class="lnum">1</span>
-          <span class="lt"><h3>Make the healthy choice the cheap, close choice</h3><span class="where">Division &amp; Chicago Ave corridors · corner stores · farmers’ market</span></span>
-          <span class="lchev">+</span>
-        </summary>
-        <div class="lbody">
-          <p>The west side isn't short on food &mdash; it's short on <em>fresh</em> food. Turn the stores residents already use into produce access, and put a thumb on the price of vegetables.</p>
-          <ul class="plan">
-            <li><b>Match SNAP dollars on produce.</b> Stand up a Double Up Food Bucks–style 1:1 match on fruits and vegetables at the Division Street market and enrolled corner stores. Families in these programs report eating more produce and greater food security.<sup class="fn"><a href="#src-21">21</a></sup></li>
-            <li><b>Retrofit corner stores.</b> Menu and participatory-budget dollars for refrigeration, shelving, and healthy-stocking agreements in west-side stores &mdash; converting food-swamp outlets, which track higher obesity and diabetes, into fresh-food points.<sup class="fn"><a href="#src-19">19</a></sup></li>
-            <li><b>Prescribe produce from the clinic.</b> Route produce-prescription referrals from Humboldt Park clinics; a median $63/month benefit improved blood pressure and blood sugar across nine U.S. programs.<sup class="fn"><a href="#src-15">15</a></sup></li>
-          </ul>
-          <div class="why"><b>Pay for it</b>Federal GusNIP grants match local nutrition-incentive dollars, and one avoided stroke &mdash; about $20,000 in acute care, much of it uncompensated at the safety-net hospital<sup class="fn"><a href="#src-10">10</a></sup> &mdash; funds a great many $63 produce boxes. Fund the cheap end of the ledger.</div>
-        </div>
-      </details>
-      <details class="lever rv">
-        <summary>
-          <span class="lnum">2</span>
-          <span class="lt"><h3>Stand up a west-side community health worker corps</h3><span class="where">Libraries · churches · the fieldhouse · corner stores</span></span>
-          <span class="lchev">+</span>
-        </summary>
-        <div class="lbody">
-          <p>Blood pressure is controllable with a cuff, a cheap pill, and someone who follows up. The gap isn't the medicine &mdash; it's the contact. Hire that contact from the neighborhood.</p>
-          <ul class="plan">
-            <li><b>Hire and train CHWs locally.</b> Recruit community health workers from Humboldt Park and Hermosa to run walk-in screening and monthly medication check-ins where people already spend their week.</li>
-            <li><b>Use a protocol proven in a trial.</b> A CHW-led multicomponent hypertension program cut systolic blood pressure about <b>7 mmHg</b> beyond usual care and raised control rates from <b>17% to 73%</b> in a randomized trial.<sup class="fn"><a href="#src-22">22</a></sup></li>
-            <li><b>Pair with $4 generics.</b> First-line drugs like lisinopril and amlodipine cost $4 for a month;<sup class="fn"><a href="#src-14">14</a></sup> each controlled patient is one fewer stroke, dialysis start, or cardiac admission.</li>
-          </ul>
-          <div class="why"><b>Pay for it</b>Illinois Medicaid now reimburses certified community health worker services, and the IMPaCT CHW model returned <b>$2.47 to Medicaid per $1 spent</b> within a year.<sup class="fn"><a href="#src-11">11</a></sup> The program pays for itself in avoided hospitalizations &mdash; and the wages stay in the ward.</div>
-        </div>
-      </details>
-      <details class="lever rv">
-        <summary>
-          <span class="lnum">3</span>
-          <span class="lt"><h3>Treat housing stability as health infrastructure</h3><span class="where">Right to counsel · anti-displacement zoning · community land trust</span></span>
-          <span class="lchev">+</span>
-        </summary>
-        <div class="lbody">
-          <p>The east–west health gap is, underneath, a housing gap. A family that keeps its home keeps its clinic, its pharmacy, and its routines; one pushed out restarts care from zero. Stop the churn.</p>
-          <ul class="plan">
-            <li><b>Fund a right to counsel.</b> Guarantee tenants a lawyer in eviction court. In New York, <b>84% of represented tenants stayed housed</b>, and right-to-counsel areas saw 45–78% fewer evictions &mdash; with measurably better infant birth outcomes.<sup class="fn"><a href="#src-23">23</a></sup></li>
-            <li><b>Zone against the teardown churn.</b> Deconversion protection and affordable set-asides along the western 606, where a 344% price run displaced Latino families.<sup class="fn"><a href="#src-17">17</a></sup></li>
-            <li><b>Seed a community land trust.</b> Move west-side parcels permanently off the speculative market; land trusts slow displacement and turnover in gentrifying neighborhoods and carried homeowners through the 2008 crash.<sup class="fn"><a href="#src-24">24</a></sup></li>
-          </ul>
-          <div class="why"><b>Why it’s health policy</b>Eviction threat and housing instability raise blood pressure and cardiometabolic risk across dozens of U.S. studies,<sup class="fn"><a href="#src-12">12</a>,<a href="#src-13">13</a></sup> and the chronic stress of precarity is biological &mdash; it weathers the body early.<sup class="fn"><a href="#src-20">20</a></sup> Keep families housed and you keep them in care.</div>
-        </div>
-      </details>
-    </div>
-    <div class="verify">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Figures verified against the Chicago Health Map (chicagohealthmap.com) and Chicago Health Atlas (chicagohealthatlas.org), plus the peer-reviewed sources below, July 2026. Life expectancy and Healthy Chicago Survey rates are community-area estimates with sampling uncertainty; the 26th Ward's boundaries do not align exactly with community area 23, the ward’s core.
-    </div>
+    <div class="causal-lead" id="causalLead"></div>
+    <div class="pairgrid" id="pairGrid"></div>
   </div>
 </section>
 
-<!-- ============ SOURCES & NOTES ============ -->
-<section class="block" id="sources">
+<!-- ================= SECTION D: DRIVERS ================= -->
+<section class="block" id="secD">
   <div class="wrap">
-    <div class="sec-head rv">
-      <div class="l">
-        <div class="k">References</div>
-        <h2>Sources &amp; notes</h2>
-        <p>Every figure on this page is footnoted below. Community-area data refer to community area 23 (the ward’s core) unless otherwise noted.</p>
+    <div class="sec-head">
+      <div class="k">Section D · What's driving it</div>
+      <h2>The structural inputs</h2>
+      <p>Social-determinant profile for the ward (share-weighted across its communities) against the city, and a block-by-block heat grid of every community in the ward.</p>
+    </div>
+    <div class="drivers-grid">
+      <div class="sdoh-bars">
+        <h4>Ward vs. Chicago · social determinants</h4>
+        <div id="sdohBars"></div>
+      </div>
+      <div class="heat">
+        <h4>Community &times; determinant heat grid</h4>
+        <div id="heatWrap"></div>
       </div>
     </div>
-    <ol class="sources-list rv">
-      <li id="src-1"><b>Chicago Department of Public Health.</b> "Life Expectancy in Chicago, 2023." CDPH Data Brief, September 2025. Citywide life expectancy at birth: 78.7 years (2023); the Loop was the city's highest community area at 87.3 years. <a href="https://www.chicago.gov/content/dam/city/depts/cdph/statistics_and_reports/2025/2023-Life-Expectancy-Data-Brief_Final-for-Public-Release-09.10.2025.ax.em.pdf" target="_blank" rel="noopener">chicago.gov (PDF)</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-2"><b>Chicago Health Atlas.</b> Life expectancy (indicator VRLE), community area 23: 75.4 years (2023); pandemic low of 71.9 years (2021). Underlying data: Illinois Department of Public Health death certificate files. Ward 26–Loop gap, 2023: 11.9 years; Ward 26–citywide gap: 3.3 years. <a href="https://chicagohealthatlas.org/indicators/VRLE" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/VRLE</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-3"><b>Chicago Health Atlas.</b> Hypertension rate (indicator HCSHYTP), CDPH Healthy Chicago Survey, 2023–2024 pooled: community area 23 at 35.3% of adults vs. Chicago 31.9% (+3.4 pts). The 2022–2023 pooled estimate was 38.1%. <a href="https://chicagohealthatlas.org/indicators/HCSHYTP" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/HCSHYTP</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-4"><b>Chicago Health Atlas.</b> Adult diabetes rate (indicator HCSDIAP), CDPH Healthy Chicago Survey, 2023–2024 pooled: community area 23 at 17.9% of adults vs. Chicago 13.4% (+4.5 pts). <a href="https://chicagohealthatlas.org/indicators/HCSDIAP" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/HCSDIAP</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-5"><b>Feeding America, Map the Meal Gap</b> (via Chicago Health Atlas, indicator FAI), 2020: food insecurity 24.2% of community-area-23 residents vs. 21.3% citywide — the most recent neighborhood-level estimate available. Sinai Urban Health Institute's 2015–16 Community Health Survey 2.0 measured 46% of the area’s <em>households</em> as food insecure. <a href="https://chicagohealthatlas.org/indicators/FAI" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/FAI</a> · <a href="https://www.cct.org/stories/in-humboldt-park-healthy-food-and-health-care-often-out-of-reach/" target="_blank" rel="noopener">cct.org</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-6"><b>U.S. Department of Agriculture, Economic Research Service.</b> "Household Food Security in the United States in 2023" (Report ERR-337, September 2024): 13.5% of U.S. households were food insecure at some time during 2023. Note the unit difference — national figures count households; neighborhood figures count residents. <a href="https://www.ers.usda.gov/publications/pub-details?pubid=109895" target="_blank" rel="noopener">ers.usda.gov</a></li>
-      <li id="src-7"><b>U.S. Census Bureau, American Community Survey</b> 5-year estimates, 2019–2023 (via Chicago Health Atlas, indicator INC): median household income $58,087 in community area 23 vs. $79,432 citywide (−$21,345). <a href="https://chicagohealthatlas.org/indicators/INC" target="_blank" rel="noopener">chicagohealthatlas.org/indicators/INC</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-8"><b>Shah AM, Whitman S, Silva A.</b> "Variations in the Health Conditions of 6 Chicago Community Areas: A Case for Local-Level Data." <em>American Journal of Public Health</em> 96(8), 2006. Sinai Urban Health Institute's Improving Community Health Survey (2002–03): 23% of adults in the ward’s community area did not obtain needed prescription medicines in the past year because they could not afford them. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1522111/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov/articles/PMC1522111</a></li>
-      <li id="src-9"><b>DataMade &amp; Chicago Justice Project.</b> "Chicago's Million Dollar Blocks." Cook County Circuit Court sentencing data, 2005–2009: $292.5M committed to incarcerating residents of the ward’s community area over five years — second only to Austin ($550.2M) among Chicago's 77 community areas. <a href="https://chicagosmilliondollarblocks.com/" target="_blank" rel="noopener">chicagosmilliondollarblocks.com</a></li>
-      <li id="src-10"><b>Wang G, Zhang Z, Ayala C, et al.</b> "Costs of Hospitalization for Stroke Patients Aged 18–64 Years in the United States." <em>Journal of Stroke and Cerebrovascular Diseases</em> 23(5), 2014: mean cost per stroke hospitalization $20,396 (ischemic $18,963; hemorrhagic $32,035), before rehabilitation or readmission. <a href="https://pubmed.ncbi.nlm.nih.gov/23954598/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/23954598</a></li>
-      <li id="src-11"><b>Kangovi S, Mitra N, Grande D, Long JA, Asch DA.</b> "Evidence-Based Community Health Worker Program Addresses Unmet Social Needs and Generates Positive Return on Investment." <em>Health Affairs</em> 39(2), 2020: the IMPaCT community health worker model returned $2.47 to Medicaid for every $1 invested, within one fiscal year, driven by reduced hospitalizations. <a href="https://www.healthaffairs.org/doi/10.1377/hlthaff.2019.00981" target="_blank" rel="noopener">healthaffairs.org</a></li>
-      <li id="src-12"><b>Vásquez-Vera H, Palència L, Magna I, et al.</b> "The threat of home eviction and its effects on health through the equity lens: A systematic review." <em>Social Science &amp; Medicine</em> 175, 2017: across 47 studies, threat of eviction is consistently associated with worse mental and physical health, including high blood pressure. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0277953617300102" target="_blank" rel="noopener">sciencedirect.com</a></li>
-      <li id="src-13"><b>Sims KD, et al.</b> "Housing instability and cardiometabolic health in the United States: a narrative review of the literature." <em>BMC Public Health</em>, 2023: review of 42 U.S. studies linking housing instability to hypertension, diabetes, and cardiovascular disease. <a href="https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-023-15875-6" target="_blank" rel="noopener">bmcpublichealth.biomedcentral.com</a></li>
-      <li id="src-14"><b>Walmart $4 Prescriptions program.</b> Common first-line antihypertensives (e.g., lisinopril, amlodipine) are available on 30-day $4 generic lists at major retail pharmacies. <a href="https://www.walmart.com/cp/4-prescriptions/1078664" target="_blank" rel="noopener">walmart.com/cp/4-prescriptions</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-15"><b>Hager K, Du M, Li Z, et al.</b> "Impact of Produce Prescriptions on Diet, Food Security, and Cardiometabolic Health Outcomes: A Multisite Evaluation of 9 Produce Prescription Programs in the United States." <em>Circulation: Cardiovascular Quality and Outcomes</em> 16(9), 2023: programs provided a median of $63/month for 4–10 months and were associated with improved blood pressure, HbA1c, and food security. <a href="https://www.ahajournals.org/doi/10.1161/CIRCOUTCOMES.122.009520" target="_blank" rel="noopener">ahajournals.org</a></li>
-      <li id="src-16"><b>Chicago Health Map</b> (chicagohealthmap.com), a project of CAPriCORN — the Chicago Area Patient-Centered Outcomes Research Network. Ward- and community-area-level condition prevalence, 2024. Figures are the share of patients seen at participating Chicago health systems carrying each diagnosis — a clinical population, not a general-population survey, so they run higher than survey rates and are best read as comparisons between geographies. Ward 26 (2024): hypertension 39.4%, diabetes 34.3% among ~5,772 patients; citywide patient rates 44.5% and 29.2%. Within Ward 26 — Humboldt Park: hypertension 45.6%, diabetes 38.1%; West Town: 32.8%, 19.0%. <a href="https://chicagohealthmap.com" target="_blank" rel="noopener">chicagohealthmap.com</a> <span class="acc">Accessed July 2026.</span></li>
-      <li id="src-17"><b>Institute for Housing Studies at DePaul University</b> (via Block Club Chicago, Jan 2020). Along the western half of the 606 / Bloomingdale Trail (Logan Square and Humboldt Park), median single-family home-sale prices rose roughly <b>344% between 2012 and 2018</b> &mdash; from about $97,000 to $462,000 &mdash; accelerating displacement of longtime Latino renters. <a href="https://blockclubchicago.org/2020/01/15/home-prices-along-western-portion-of-606-skyrocketing-344-increase-since-2012-new-study-finds/" target="_blank" rel="noopener">blockclubchicago.org</a> · <a href="https://www.housingstudies.org/" target="_blank" rel="noopener">housingstudies.org</a></li>
-      <li id="src-18"><b>Historical redlining &amp; cardiometabolic health.</b> Lynch EE, et al. &ldquo;Associations between 1930s HOLC grades and population burden of cardiovascular disease risk factors in 2020&rdquo; and Mujahid MS, et al., &ldquo;Historical Neighborhood Redlining and Contemporary Cardiometabolic Risk,&rdquo; <em>J Am Coll Cardiol</em> 80(2), 2022. Across HOLC grades A (&ldquo;best&rdquo;) to D (redlined), present-day diabetes rises from ~9.2% to ~13.5% and obesity from ~28.5% to ~35.3%, with higher coronary disease, stroke, and chronic kidney disease; redlined areas also show lower screening and higher uninsurance. <a href="https://www.jacc.org/doi/10.1016/j.jacc.2022.05.010" target="_blank" rel="noopener">jacc.org</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11323776/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov</a></li>
-      <li id="src-19"><b>Cooksey-Stowers K, Schwartz MB, Brownell KD.</b> &ldquo;Food Swamps Predict Obesity Rates Better Than Food Deserts in the United States.&rdquo; <em>Int. J. Environ. Res. Public Health</em> 14(11):1366, 2017: a high density of fast-food and convenience outlets relative to healthy retailers (a &ldquo;food swamp&rdquo;) predicts obesity more strongly than distance to a grocery store, and tracks diabetes hospitalization rates. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5708005/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov/PMC5708005</a></li>
-      <li id="src-20"><b>Geronimus AT, Hicken M, Keene D, Bound J.</b> &ldquo;&lsquo;Weathering&rsquo; and Age Patterns of Allostatic Load Scores Among Blacks and Whites in the United States.&rdquo; <em>American Journal of Public Health</em> 96(5):826–833, 2006: cumulative stress from socioeconomic disadvantage and discrimination raises allostatic load &mdash; chronic physiological dysregulation including elevated blood pressure &mdash; producing earlier onset of hypertension and diabetes. <a href="https://ajph.aphapublications.org/doi/10.2105/AJPH.2004.060749" target="_blank" rel="noopener">ajph.aphapublications.org</a></li>
-      <li id="src-21"><b>Double Up Food Bucks / Fair Food Network</b> and USDA GusNIP nutrition-incentive evaluations. SNAP produce-incentive programs that match benefits 1:1 on fruits and vegetables are associated with greater fruit-and-vegetable consumption and improved food security among participating families. <a href="https://fairfoodnetwork.org/what-we-do/nutrition-incentives/" target="_blank" rel="noopener">fairfoodnetwork.org</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7352438/" target="_blank" rel="noopener">scoping review (PMC7352438)</a></li>
-      <li id="src-22"><b>He J, Irazola V, Mills KT, et al.</b> &ldquo;Effect of a Community Health Worker–Led Multicomponent Intervention on Blood Pressure Control in Low-Income Patients in Argentina: A Randomized Clinical Trial.&rdquo; <em>JAMA</em> 318(11):1016–1025, 2017: systolic blood pressure fell 6.6 mmHg more than usual care and hypertension control rose from 17.0% to 72.9% (vs. 52.2% in usual care); CHW-led programs reduce systolic BP by roughly 7 mmHg on average across trials. <a href="https://pubmed.ncbi.nlm.nih.gov/28975305/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/28975305</a></li>
-      <li id="src-23"><b>Tenant Right to Counsel.</b> New York City Office of Civil Justice program data and evaluations: about <b>84% of represented tenants</b> remained in their homes, and right-to-counsel coverage is associated with a 45–78% lower likelihood that an eviction case ends in eviction; RTC has also been linked to reduced adverse birth outcomes among Medicaid-insured parents. <a href="https://www.tandfonline.com/doi/full/10.1080/10511482.2020.1825009" target="_blank" rel="noopener">Housing Policy Debate (2020)</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11581741/" target="_blank" rel="noopener">birth-outcomes study (PMC11581741)</a></li>
-      <li id="src-24"><b>Ali O, Raviola S.</b> &ldquo;The Effects of Community Land Trusts on Neighborhood Outcomes.&rdquo; <em>Real Estate Economics</em>, 2025: across 46 U.S. community land trusts, evidence that CLTs slow displacement and turnover in gentrifying neighborhoods; CLT homeowners were far less likely to lose homes during the 2008 foreclosure crisis. <a href="https://onlinelibrary.wiley.com/doi/10.1111/1540-6229.12525" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>
-    </ol>
+    <div class="scaffold">
+      <b>Wire-in slot — environmental burden.</b> Freight-corridor proximity, diesel PM2.5, and industrial-land adjacency are not in the Chicago Health Map or Health Atlas feeds. Connect the <b>Chicago Data Portal</b> (industrial corridors, truck routes) and <b>US EPA EJScreen</b> (traffic proximity, PM2.5, air-toxics respiratory index) here to add a pollution driver per community. <span style="color:var(--ink-3)">See <code>// TODO: EJScreen</code> in the source.</span>
+    </div>
   </div>
 </section>
 
+<!-- ================= SECTION E: LEVERS ================= -->
+<section class="block" id="secE">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="k">Section E · Three levers</div>
+      <h2 id="leverHead">What this ward office can pull</h2>
+      <p>Chosen to match this ward's most-elevated conditions, each a concrete plan with the peer-reviewed evidence attached.</p>
+    </div>
+    <div class="levers" id="levers"></div>
+  </div>
+</section>
+
+<!-- ================= SECTION F: SOURCES ================= -->
 <footer>
   <div class="wrap">
-    <div class="fnote">
-      <b>26th Ward Health Signal.</b> Serving Chicago’s 26th Ward — Hermosa, Logan Square, Ukrainian Village and the surrounding Northwest Side. Compiled from public data: Chicago Health Map (CAPriCORN), Chicago Health Atlas, CDPH, Feeding America, USDA ERS, Sinai Urban Health Institute, U.S. Census / ACS, DataMade &amp; Chicago Justice Project. Full citations in <a href="#sources">Sources &amp; notes</a>. Prepared for the office of Ald. Jessie Fuentes.
-    </div>
-    <div class="heritage" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="sec-head"><div class="k">Section F · Sources &amp; notes</div></div>
+    <ol class="sources" id="sources"></ol>
+    <p class="fnote">Health conditions: <b>Chicago Health Map</b> (chicagohealthmap.com), a project of CAPriCORN, 2024 — prevalence among patients seen at participating Chicago health systems, a clinical population rather than a general-population survey, so rates run higher and are best read as comparisons between geographies. Social determinants and income: <b>Chicago Health Atlas</b> (chicagohealthatlas.org) and the U.S. Census / ACS. Ward and community-area boundaries: the Chicago Health Map and the Chicago Data Portal. Reliability labels are carried from the source. Figures accessed 2026.</p>
   </div>
 </footer>
 
+<script src="warddash.js"></script>
 <script>
 (function(){
-  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var D=window.DASH, SVGNS='http://www.w3.org/2000/svg';
+  var VM=D.vitalMeta, SM=D.sdohMeta;
+  var vitalKeys=VM.map(function(v){return v.key;});
+  var curWard=26, curVital='htn', curComm=null;
 
-  // reveal
-  var rvs=[].slice.call(document.querySelectorAll('.rv'));
-  if(reduced){rvs.forEach(function(e){e.classList.add('in')});}
-  else{
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
-    },{threshold:.14});
-    rvs.forEach(function(e){io.observe(e)});
-  }
-
-  // count-up
-  function cu(el){
-    var to=parseFloat(el.dataset.to),dur=1200,t0=null;
-    if(reduced){el.textContent=to;return;}
-    function s(t){if(!t0)t0=t;var p=Math.min((t-t0)/dur,1);var e=1-Math.pow(1-p,3);
-      el.textContent=Math.round(to*e);if(p<1)requestAnimationFrame(s);}
-    requestAnimationFrame(s);
-  }
-  var cio=new IntersectionObserver(function(es){
-    es.forEach(function(e){if(e.isIntersecting){cu(e.target);cio.unobserve(e.target);}});
-  },{threshold:.5});
-  document.querySelectorAll('.count').forEach(function(c){cio.observe(c)});
-
-  // bar fills (gap chart + vitals mini bars)
-  var fio=new IntersectionObserver(function(es){
-    es.forEach(function(e){if(e.isIntersecting){
-      var el=e.target;requestAnimationFrame(function(){el.style.width=el.dataset.w;});fio.unobserve(el);
-    }});
-  },{threshold:.4});
-  document.querySelectorAll('.fill,[data-w]').forEach(function(f){fio.observe(f)});
-
-  // sparkline in hero tag
-  var sp=document.getElementById('spark1');
-  if(sp){var hs=[9,11,10,13,12,15,14,17,16,19,18,21];
-    hs.forEach(function(h,i){var b=document.createElement('i');b.style.height=h+'px';
-      b.style.animationDelay=(reduced?0:i*0.05)+'s';sp.appendChild(b);});}
-
-  // scrollspy
-  var links=[].slice.call(document.querySelectorAll('.topnav a'));
-  var secs=['vitals','analysis','drivers','policy','sources'].map(function(id){return document.getElementById(id);});
-  var sio=new IntersectionObserver(function(es){
-    es.forEach(function(e){if(e.isIntersecting){
-      links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id);});
-    }});
-  },{rootMargin:'-35% 0px -55% 0px'});
-  secs.forEach(function(s){if(s)sio.observe(s)});
-})();
-</script>
-
-
-
-
-<script>
-var MAP={"W":560.0,"H":681.5,"city":{"htn":44.5,"dia":29.2,"heart":10.2,"stroke":5.6,"ckd":6.7},"year":"2024","wards":[{"w":1,"d":"M338.3,173.1 339.1,205.4 368.1,204.8 372.8,211.7 373.4,216.0 373.2,217.6 366.4,217.7 371.6,222.2 371.7,226.4 368.5,226.5 367.6,235.4 378.3,235.1 375.1,241.3 373.8,241.4 374.0,243.3 372.1,243.2 372.0,241.4 367.7,241.5 367.7,239.6 359.1,239.7 358.8,224.3 342.7,224.7 342.6,223.1 339.4,223.1 339.2,211.8 332.7,211.9 332.5,199.0 325.4,198.9 325.2,192.7 313.0,192.9 312.8,184.2 319.3,184.0 319.1,177.7 314.6,174.0 315.8,173.4 315.7,167.0 330.2,166.8 338.3,173.0 338.3,173.1Z","cx":360.4,"cy":205.1,"htn":30.9,"dia":18.8,"heart":6.2,"stroke":2.9,"ckd":3.3,"pop":7207,"rel":"Moderate"},{"w":2,"d":"M420.8,216.6 423.2,216.8 425.3,220.1 428.8,221.8 436.0,235.8 435.7,239.4 424.2,239.7 424.0,232.5 416.9,232.7 418.6,229.5 422.1,229.4 421.7,219.3 416.7,219.4 416.7,223.8 414.7,223.8 413.8,229.6 408.9,229.7 408.9,228.2 403.0,228.9 402.9,225.5 404.9,225.5 404.9,226.9 408.9,226.8 408.7,221.3 410.6,221.3 410.5,218.1 412.6,218.1 412.6,216.7 405.2,216.9 405.1,213.6 403.4,213.6 403.3,210.2 405.0,210.2 404.4,204.0 405.7,202.9 403.1,203.9 403.2,207.3 400.0,207.4 399.9,215.0 398.5,213.8 398.4,207.4 396.8,207.4 396.8,205.2 394.1,205.5 393.6,203.4 392.0,203.5 393.2,205.5 390.4,205.9 390.5,208.5 386.7,208.5 386.7,204.4 382.7,204.5 380.9,201.5 382.3,200.5 377.9,195.0 370.9,189.5 370.7,186.9 364.2,180.7 364.3,179.1 374.8,178.9 378.6,178.9 378.6,182.1 377.1,182.1 377.1,185.3 378.7,185.3 378.8,186.5 378.8,188.5 377.2,188.5 377.2,193.2 388.8,204.4 390.4,204.3 390.3,199.2 395.4,199.1 395.6,204.2 401.6,204.0 401.5,200.9 410.8,200.5 412.3,203.9 415.9,203.8 416.2,215.1 420.0,215.0 420.4,216.6 420.8,216.6Z","cx":406.2,"cy":212.2,"htn":41.0,"dia":17.7,"heart":14.4,"stroke":7.6,"ckd":6.0,"pop":13149,"rel":"Good"},{"w":3,"d":"M427.8,284.2 431.9,297.8 429.1,298.1 431.5,306.8 424.7,307.1 424.8,314.9 422.8,314.9 423.3,332.7 425.1,332.7 425.2,336.0 428.4,335.8 428.4,339.1 426.8,339.1 426.9,345.6 429.8,345.5 431.6,358.4 437.4,358.3 435.4,371.0 437.1,371.0 437.1,374.2 443.1,374.1 443.1,377.3 441.0,377.3 441.0,380.5 438.9,380.6 439.0,387.0 437.4,387.0 437.4,390.3 433.5,390.3 433.6,393.6 432.3,393.6 433.0,411.3 418.7,410.0 418.7,407.0 417.3,406.8 417.1,397.1 416.0,397.2 415.6,371.4 409.8,371.5 409.7,369.2 407.4,369.2 408.4,378.4 411.8,379.7 411.9,382.3 406.8,384.5 406.1,358.8 409.5,358.8 409.4,352.3 411.0,352.3 412.5,345.8 415.0,345.7 414.1,294.2 408.0,294.2 407.5,281.4 417.8,281.4 417.8,284.2 422.8,284.2 424.2,284.1 424.1,281.0 427.1,281.0 427.7,284.1 427.8,284.2Z","cx":422.4,"cy":351.1,"htn":46.8,"dia":26.4,"heart":10.2,"stroke":6.4,"ckd":6.8,"pop":9432,"rel":"Good \u00b7 equity-flagged"},{"w":4,"d":"M422.0,264.3 422.1,271.1 432.6,270.9 432.6,278.7 437.1,279.6 437.3,282.5 445.4,281.6 446.6,282.7 446.0,285.9 445.2,285.1 444.0,286.7 446.1,290.8 446.2,294.3 444.7,294.4 445.4,306.1 442.1,306.5 440.9,305.3 441.7,299.8 439.9,293.2 441.4,288.4 440.2,284.0 437.3,284.1 436.3,288.3 438.0,293.8 437.1,301.0 441.9,310.5 441.5,315.6 442.9,318.5 441.9,321.9 445.8,332.1 448.5,330.1 447.9,331.8 445.9,332.3 447.9,341.4 449.9,342.4 450.7,346.0 456.9,353.7 457.5,360.3 459.6,364.4 463.7,368.0 467.1,376.6 471.0,380.3 466.9,382.2 470.2,388.5 468.4,389.3 470.8,401.3 461.3,401.5 458.4,401.5 458.4,396.3 448.5,396.5 448.4,393.3 437.5,393.5 438.9,380.6 441.0,380.5 441.0,377.3 443.1,377.3 443.1,374.1 437.1,374.2 437.1,371.0 435.4,371.0 437.4,358.3 431.6,358.4 429.8,345.5 426.9,345.6 426.8,339.1 428.4,339.1 428.4,335.8 425.2,336.0 425.1,332.7 423.3,332.7 422.8,314.9 424.8,314.9 424.7,307.1 431.5,306.8 429.1,298.1 431.9,297.8 427.1,281.0 413.9,281.3 413.5,266.6 416.2,266.9 416.2,265.0 413.5,264.5 413.4,262.3 419.6,262.1 419.7,265.8 421.9,264.3 422.0,264.3Z","cx":441.9,"cy":341.7,"htn":49.7,"dia":28.2,"heart":9.9,"stroke":6.3,"ckd":7.7,"pop":8086,"rel":"Good"},{"w":5,"d":"M506.3,460.0 498.2,460.1 496.6,466.7 491.2,466.8 481.3,466.9 481.2,460.5 473.3,460.6 473.4,463.8 472.0,460.6 462.2,460.7 462.9,470.3 460.4,470.3 459.9,473.6 456.9,473.7 443.2,461.0 446.7,460.9 446.4,448.0 464.3,447.8 467.3,430.2 465.3,430.1 465.3,428.5 461.1,428.5 461.0,425.2 458.8,425.3 458.9,428.5 457.9,428.6 450.4,428.7 450.3,426.6 446.1,425.5 445.8,409.4 450.4,408.8 450.2,396.5 458.4,396.3 458.4,401.5 470.8,401.3 468.4,389.3 470.2,388.5 466.9,382.2 471.0,380.3 473.8,388.2 480.3,393.7 480.5,403.4 482.5,405.7 486.7,406.7 486.4,408.6 481.7,410.7 480.9,414.4 485.2,420.7 483.3,421.4 485.5,429.4 494.0,433.6 495.7,433.1 496.8,427.8 495.8,433.2 487.4,437.3 486.9,443.4 491.0,443.2 489.1,439.0 489.3,437.3 490.6,437.3 498.9,448.1 502.0,450.0 503.6,455.3 506.3,456.4 507.3,455.0 507.5,459.3 506.4,460.0 506.3,460.0Z","cx":471.2,"cy":434.0,"htn":52.3,"dia":31.1,"heart":10.5,"stroke":6.6,"ckd":7.8,"pop":6340,"rel":"Moderate \u00b7 equity-flagged"},{"w":6,"d":"M430.4,448.4 446.4,448.0 446.7,460.9 443.2,461.0 456.4,473.7 446.9,473.8 447.7,512.6 434.9,512.8 435.1,522.5 441.5,522.7 441.5,525.6 435.1,525.8 435.4,538.7 422.7,539.0 422.0,503.4 415.8,503.6 415.6,500.3 408.9,500.5 406.6,499.3 405.9,500.5 396.2,500.7 396.0,491.1 397.6,491.0 397.6,487.8 412.0,487.5 412.1,494.0 420.1,493.8 420.1,490.9 420.0,487.3 418.4,487.4 418.3,480.9 416.4,481.0 415.9,477.8 402.1,478.1 402.3,471.6 395.7,471.7 395.3,452.4 397.1,452.4 397.7,442.8 401.8,442.7 401.8,439.4 412.9,439.2 417.6,444.3 426.2,445.1 429.9,447.9 430.4,448.4Z","cx":424.6,"cy":480.6,"htn":57.4,"dia":34.8,"heart":10.3,"stroke":6.4,"ckd":10.2,"pop":6059,"rel":"Good \u00b7 equity-flagged"},{"w":7,"d":"M527.9,470.8 532.3,476.0 527.9,479.6 528.3,484.8 532.6,485.7 544.5,492.0 545.7,498.3 519.5,498.4 519.5,500.8 517.6,500.5 517.9,503.0 516.4,501.6 513.1,501.7 512.8,524.3 516.4,524.3 516.5,528.3 514.7,530.7 514.8,537.2 507.1,537.3 508.2,539.6 508.4,553.8 507.1,553.7 507.2,566.1 503.2,566.1 503.2,569.3 499.3,569.2 499.6,575.2 496.9,575.5 488.7,563.3 472.4,563.7 474.0,557.7 473.6,537.9 486.5,537.7 486.3,524.8 490.3,524.7 490.1,518.2 498.9,518.1 499.2,511.6 498.7,502.0 490.1,502.8 486.1,499.0 495.5,498.8 495.3,489.2 492.1,489.2 492.1,483.0 490.4,482.8 490.3,473.2 482.3,473.3 482.2,470.1 469.3,470.3 469.2,463.8 473.4,463.8 473.3,460.6 481.2,460.5 481.3,466.9 496.6,466.7 498.2,460.1 506.3,460.0 506.4,462.4 509.8,466.3 519.6,472.7 524.0,473.5 528.0,471.1 524.5,470.1 527.4,470.2 527.9,470.8Z","cx":502.2,"cy":512.6,"htn":56.7,"dia":37.9,"heart":9.9,"stroke":7.4,"ckd":10.3,"pop":5650,"rel":"Moderate"},{"w":8,"d":"M472.6,463.8 469.2,463.8 469.3,470.3 482.2,470.1 482.3,473.3 490.3,473.2 490.4,482.8 492.1,483.0 492.1,489.2 495.3,489.2 495.5,498.8 486.1,499.0 490.1,502.8 498.7,502.0 499.2,511.6 498.9,518.1 490.1,518.2 490.3,524.7 486.3,524.8 486.5,537.7 473.6,537.9 474.0,557.7 472.4,563.7 445.4,564.3 447.3,553.4 435.6,553.6 435.1,525.8 441.5,525.6 441.5,522.7 435.1,522.5 434.9,516.9 434.9,512.8 447.7,512.6 446.9,473.8 459.9,473.6 460.4,470.3 462.9,470.3 462.2,460.7 472.0,460.6 472.6,463.7 472.6,463.8Z","cx":465.2,"cy":514.6,"htn":59.2,"dia":38.1,"heart":10.7,"stroke":6.8,"ckd":10.8,"pop":6169,"rel":"Good \u00b7 equity-flagged"},{"w":9,"d":"M435.4,538.7 435.6,553.6 447.3,553.4 445.4,564.3 464.5,564.5 463.9,573.1 451.7,602.5 451.7,618.6 453.3,624.3 468.1,647.5 444.0,649.7 444.0,652.8 441.3,652.8 441.4,658.4 438.8,656.4 439.1,662.6 431.3,662.6 431.3,665.4 427.2,664.3 430.7,649.8 428.1,649.8 428.3,646.8 425.0,643.9 419.4,645.2 413.1,652.0 392.1,652.4 391.8,642.6 399.4,642.4 399.1,629.5 411.8,629.4 411.5,616.5 414.7,616.4 413.9,582.6 417.1,582.6 416.8,565.0 402.4,565.1 402.1,552.2 405.3,552.2 405.3,550.6 402.1,550.6 401.6,526.4 403.2,526.4 403.2,524.4 422.3,524.1 422.7,539.0 435.1,538.7 435.4,538.7Z","cx":430.1,"cy":597.0,"htn":56.3,"dia":38.1,"heart":9.9,"stroke":5.9,"ckd":10.9,"pop":4711,"rel":"Moderate \u00b7 equity-flagged"},{"w":10,"d":"M546.0,501.2 546.6,504.2 553.6,504.2 533.3,505.8 546.5,505.6 546.9,520.2 553.3,522.4 553.6,538.7 552.1,543.8 553.6,546.6 550.7,546.9 548.0,549.6 551.0,555.6 548.4,558.3 554.0,560.8 551.3,560.5 553.5,562.4 552.6,675.5 471.4,675.3 466.6,668.9 464.1,667.7 456.8,669.4 456.9,675.4 431.3,675.4 431.3,662.6 439.1,662.6 438.8,656.4 441.4,658.4 441.3,652.8 444.0,652.8 444.0,649.7 468.1,647.5 453.3,624.3 451.7,618.6 451.7,602.5 464.1,572.5 464.3,563.9 488.7,563.3 496.9,575.5 499.6,575.2 499.2,569.3 503.2,569.3 503.2,566.1 507.2,566.1 507.1,553.7 508.4,553.8 508.2,539.6 507.1,537.3 514.8,537.2 514.7,530.7 516.5,528.3 516.4,524.3 512.8,524.3 513.1,501.7 516.4,501.6 517.9,503.0 517.6,500.5 519.5,500.8 519.5,498.4 545.7,498.3 545.9,500.1 546.0,501.2Z","cx":508.0,"cy":605.4,"htn":49.4,"dia":39.6,"heart":10.0,"stroke":5.6,"ckd":7.9,"pop":3628,"rel":"Limited"},{"w":11,"d":"M406.6,371.6 404.6,371.7 404.6,374.1 393.8,374.3 393.9,378.4 368.3,378.9 367.7,359.6 363.1,359.5 363.0,356.3 367.7,356.3 366.9,353.0 365.4,353.1 364.5,346.6 354.8,346.8 354.8,344.2 364.3,336.4 364.3,337.7 366.6,337.6 367.5,340.1 369.2,340.0 369.2,343.3 374.3,343.3 375.9,346.4 378.4,346.4 369.1,331.0 368.4,326.7 370.0,322.2 378.8,315.2 385.0,315.6 397.8,312.1 403.0,303.7 402.6,294.4 414.1,294.2 415.0,345.7 412.5,345.8 411.0,352.3 409.4,352.3 409.5,358.8 406.1,358.8 406.6,371.3 406.6,371.6Z","cx":390.8,"cy":341.6,"htn":47.3,"dia":33.0,"heart":13.8,"stroke":7.4,"ckd":6.5,"pop":7460,"rel":"Moderate"},{"w":12,"d":"M367.2,321.0 369.8,322.7 368.4,327.1 370.8,335.2 378.4,346.4 375.9,346.4 374.3,343.3 369.2,343.3 369.2,340.0 367.5,340.1 366.6,337.6 364.3,337.7 364.3,336.4 354.8,344.2 354.8,346.8 364.5,346.6 365.4,353.1 366.9,353.0 367.7,356.3 363.0,356.3 363.1,359.5 367.7,359.6 368.2,372.5 358.5,372.6 358.7,382.2 355.2,382.3 355.2,385.5 352.4,385.5 352.5,392.0 349.9,392.0 349.3,385.6 343.5,385.6 343.2,372.8 339.2,372.8 339.3,379.2 336.2,379.3 336.3,385.7 320.2,386.1 320.1,382.9 316.9,382.9 317.0,386.2 303.9,386.4 303.2,350.9 328.6,339.9 329.0,338.4 338.5,334.0 338.5,321.3 341.5,321.2 351.0,316.3 351.2,325.3 354.5,327.0 367.1,321.0 367.2,321.0Z","cx":338.1,"cy":357.1,"htn":45.6,"dia":42.6,"heart":9.0,"stroke":5.7,"ckd":6.4,"pop":5568,"rel":"Moderate \u00b7 equity-flagged"},{"w":13,"d":"M266.8,451.6 266.6,445.1 189.4,446.9 188.4,414.8 283.4,412.6 291.7,412.6 292.0,425.4 288.7,426.3 288.9,431.9 292.1,431.8 292.5,451.2 266.9,451.6 266.8,451.6Z","cx":242.0,"cy":430.5,"htn":44.6,"dia":35.0,"heart":10.1,"stroke":4.1,"ckd":5.5,"pop":4948,"rel":"Moderate"},{"w":14,"d":"M329.9,385.9 330.1,398.8 341.4,398.5 341.6,409.0 336.8,409.1 336.8,411.5 327.2,411.8 327.3,418.2 324.1,418.3 324.2,424.7 321.0,424.8 321.2,431.2 319.6,431.3 320.0,450.6 312.7,450.8 308.7,450.8 308.6,444.4 305.6,444.5 304.3,399.3 265.6,400.0 265.5,393.5 270.3,393.4 270.2,387.0 271.9,386.9 271.4,364.2 303.2,350.9 303.9,386.4 317.0,386.2 316.9,382.9 320.1,382.9 320.2,386.1 329.8,385.9 329.9,385.9Z","cx":302.9,"cy":396.0,"htn":43.4,"dia":44.5,"heart":8.3,"stroke":4.8,"ckd":6.9,"pop":4711,"rel":"Limited"},{"w":15,"d":"M406.8,384.5 400.4,384.7 400.7,391.2 397.3,391.8 394.1,391.8 393.8,384.8 365.2,385.3 365.3,391.8 362.1,391.8 362.2,395.0 358.2,395.1 358.2,398.3 349.1,398.5 349.1,402.6 343.8,402.6 344.0,411.4 354.5,411.3 354.6,414.5 365.8,414.4 365.9,424.0 367.6,424.2 367.8,440.1 369.4,440.1 369.6,446.5 360.0,446.7 359.6,424.1 347.1,424.3 347.1,421.1 342.6,421.1 341.9,424.3 329.9,425.4 331.2,450.4 319.9,450.4 319.6,431.3 321.2,431.2 321.0,424.8 324.2,424.7 324.1,418.3 327.3,418.2 327.2,411.8 336.8,411.5 336.8,409.1 341.6,409.0 341.4,398.5 330.1,398.8 329.9,385.9 336.3,385.7 336.2,379.3 339.3,379.2 339.2,372.8 343.2,372.8 343.5,385.6 349.3,385.6 349.9,392.0 352.5,392.0 352.4,385.5 355.2,385.5 355.2,382.3 358.7,382.2 358.5,372.6 368.2,372.5 368.3,378.9 373.7,378.9 393.9,378.4 393.8,374.3 404.6,374.1 404.6,371.7 406.6,371.6 406.7,383.2 406.8,384.5Z","cx":340.4,"cy":411.1,"htn":48.0,"dia":42.0,"heart":9.7,"stroke":5.5,"ckd":7.6,"pop":5299,"rel":"Moderate \u00b7 equity-flagged"},{"w":16,"d":"M400.3,442.7 397.7,442.8 397.1,452.4 395.3,452.4 395.5,462.1 382.7,462.3 382.2,439.8 375.8,439.9 376.1,452.8 358.5,453.1 358.6,456.3 345.9,456.5 346.0,459.7 337.8,459.9 337.7,456.7 331.3,456.8 329.9,428.6 330.7,424.6 341.9,424.3 342.6,421.1 347.1,421.1 347.1,424.3 359.6,424.1 360.0,446.7 369.6,446.5 369.4,440.1 367.8,440.1 367.6,424.2 365.9,424.0 365.8,414.4 354.6,414.5 354.5,411.3 344.0,411.4 343.8,402.6 349.1,402.6 349.1,398.5 375.0,398.1 373.7,411.0 381.7,410.8 381.6,404.4 400.7,404.1 401.3,434.6 395.0,436.3 395.0,437.6 400.2,437.5 400.3,442.6 400.3,442.7Z","cx":367.9,"cy":430.6,"htn":52.5,"dia":37.6,"heart":9.5,"stroke":5.4,"ckd":9.0,"pop":5718,"rel":"Moderate \u00b7 equity-flagged"},{"w":17,"d":"M382.6,455.9 382.7,462.3 395.5,462.1 395.7,471.7 402.3,471.6 402.1,478.1 415.9,477.8 416.4,481.0 418.3,480.9 418.4,487.4 420.0,487.3 420.1,493.8 412.1,494.0 412.0,487.5 397.6,487.8 397.6,491.0 396.0,491.1 396.5,511.4 394.8,512.7 391.7,512.1 391.7,513.7 378.9,514.0 377.0,501.1 357.9,501.5 357.4,475.7 350.6,475.8 350.4,462.9 344.3,463.0 344.4,466.2 332.5,466.5 331.5,466.5 331.4,463.3 318.5,463.5 318.6,469.9 312.2,470.1 312.3,474.1 306.3,474.3 305.4,450.9 331.2,450.4 331.3,456.8 337.7,456.7 337.8,459.9 346.0,459.7 345.9,456.5 358.6,456.3 358.5,453.1 376.1,452.8 375.8,439.9 382.2,439.8 382.6,455.6 382.6,455.9Z","cx":368.8,"cy":476.2,"htn":56.8,"dia":38.6,"heart":10.1,"stroke":6.0,"ckd":10.2,"pop":5518,"rel":"Good \u00b7 equity-flagged"},{"w":18,"d":"M377.2,507.5 370.8,507.7 372.6,520.7 367.9,522.2 367.8,520.7 366.2,520.7 366.3,524.0 360.5,514.3 268.1,516.3 267.0,466.0 267.0,464.0 292.8,464.0 293.0,476.9 306.0,476.8 305.9,470.2 306.3,474.3 312.3,474.1 312.2,470.1 318.6,469.9 318.5,463.5 331.4,463.3 331.5,466.5 332.5,466.5 344.4,466.2 344.3,463.0 350.4,462.9 350.6,475.8 357.4,475.7 357.9,501.5 377.0,501.1 377.2,507.3 377.2,507.5Z","cx":315.4,"cy":492.5,"htn":52.9,"dia":38.6,"heart":9.1,"stroke":5.8,"ckd":9.1,"pop":4900,"rel":"Moderate"},{"w":19,"d":"M366.1,524.0 364.1,524.0 370.4,539.8 370.9,544.9 375.5,552.8 380.2,565.4 375.8,581.4 359.3,617.5 340.4,617.7 341.0,604.9 328.0,605.1 327.8,598.5 322.9,598.8 321.5,605.3 315.1,605.4 315.3,611.8 307.2,611.8 307.1,605.6 270.5,606.2 269.8,593.7 295.4,592.9 294.4,554.1 305.6,553.9 305.7,557.1 307.3,557.1 307.6,566.7 333.4,564.7 333.1,553.4 346.2,553.3 345.3,514.6 360.5,514.3 366.0,523.9 366.1,524.0ZM327.6,592.2 334.1,591.1 333.8,579.2 327.3,579.3 327.6,591.9 327.6,592.2Z","cx":337.0,"cy":575.4,"htn":50.8,"dia":23.1,"heart":13.7,"stroke":5.4,"ckd":6.9,"pop":5696,"rel":"Moderate"},{"w":20,"d":"M426.6,411.4 433.0,411.3 432.3,393.6 433.6,393.6 433.5,390.3 437.4,390.3 437.5,393.5 448.4,393.3 448.5,396.5 450.2,396.5 450.4,408.8 445.8,409.4 446.1,425.5 450.3,426.6 450.4,428.7 457.9,428.6 458.9,428.5 458.8,425.3 461.0,425.2 461.1,428.5 465.3,428.5 465.3,430.1 467.3,430.2 464.3,447.8 430.4,448.4 426.2,445.1 417.6,444.3 412.9,439.2 401.8,439.4 401.8,442.7 400.3,442.7 400.2,437.5 395.0,437.6 395.0,436.3 401.3,434.6 400.7,404.1 381.6,404.4 381.7,410.8 373.7,411.0 375.0,398.1 358.2,398.3 358.2,395.1 362.2,395.0 362.1,391.8 365.3,391.8 365.2,385.3 393.8,384.8 394.1,391.8 400.4,391.4 400.4,384.7 408.2,384.5 411.9,382.3 411.8,379.7 408.4,378.4 407.4,369.2 409.7,369.2 409.8,371.5 415.6,371.4 417.3,406.8 418.7,407.0 418.7,410.0 426.5,409.9 426.6,411.3 426.6,411.4Z","cx":419.0,"cy":415.4,"htn":50.2,"dia":33.0,"heart":7.8,"stroke":4.9,"ckd":7.7,"pop":6605,"rel":"Good \u00b7 equity-flagged"},{"w":21,"d":"M422.3,524.1 403.2,524.4 403.2,526.4 401.6,526.4 402.1,550.6 405.3,550.6 405.3,552.2 402.1,552.2 402.4,565.1 416.8,565.0 417.1,582.6 413.9,582.6 414.7,616.4 411.5,616.5 411.8,629.4 373.4,629.9 373.1,617.1 366.0,617.3 365.3,619.9 363.9,619.5 364.5,617.4 359.3,617.5 375.8,581.4 380.2,565.4 375.5,552.8 370.9,544.9 370.4,539.8 364.1,524.0 366.3,524.0 366.2,520.7 367.8,520.7 367.9,522.2 372.6,520.7 370.8,507.7 378.8,507.5 378.9,514.0 391.7,513.7 391.7,512.1 394.8,512.7 396.5,511.4 396.2,500.7 405.9,500.5 406.6,499.3 408.9,500.5 415.6,500.3 415.8,503.6 422.0,503.4 422.3,524.0 422.3,524.1Z","cx":392.3,"cy":568.9,"htn":56.6,"dia":36.0,"heart":10.8,"stroke":6.7,"ckd":10.7,"pop":5220,"rel":"Moderate \u00b7 equity-flagged"},{"w":22,"d":"M312.2,312.2 312.2,315.4 309.0,315.5 309.2,325.1 315.7,325.0 316.1,345.2 271.4,364.2 271.9,386.9 270.2,387.0 270.3,393.4 265.5,393.5 265.5,396.7 252.6,397.0 252.3,380.8 252.3,377.0 263.4,372.3 263.2,361.6 271.5,361.4 270.2,309.7 307.5,308.6 312.1,309.0 312.2,312.1 312.2,312.2Z","cx":285.2,"cy":342.8,"htn":48.4,"dia":50.2,"heart":9.3,"stroke":5.8,"ckd":8.1,"pop":4981,"rel":"Moderate \u00b7 equity-flagged"},{"w":23,"d":"M308.7,450.8 305.4,450.9 306.0,476.8 293.0,476.9 292.8,464.0 267.0,464.0 266.8,451.6 292.5,451.2 292.1,431.8 288.9,431.9 288.7,426.3 292.0,425.4 291.7,412.6 188.4,414.8 188.3,412.1 188.3,404.1 194.3,401.5 252.7,400.2 252.6,397.0 253.7,396.9 265.5,396.7 265.6,400.0 304.3,399.3 305.5,443.6 308.6,444.4 308.7,450.7 308.7,450.8Z","cx":298.8,"cy":436.8,"htn":44.4,"dia":37.3,"heart":9.0,"stroke":4.7,"ckd":5.9,"pop":5106,"rel":"Moderate"},{"w":24,"d":"M334.5,300.8 331.3,301.9 331.2,298.9 328.0,299.0 328.1,302.3 323.3,302.3 323.4,308.8 328.2,308.7 328.4,315.2 331.6,315.1 331.7,321.4 333.0,321.4 331.6,327.1 329.6,327.6 330.0,333.1 328.8,334.4 322.3,334.5 321.8,312.1 312.2,312.2 312.1,309.0 307.5,308.6 270.2,309.7 269.5,283.9 250.3,284.2 250.1,274.9 263.0,274.6 262.8,267.9 266.0,267.8 266.0,266.2 269.2,266.1 269.4,273.3 279.6,269.6 314.4,268.5 314.4,270.2 317.7,270.1 318.0,283.0 327.6,282.9 327.9,295.8 334.4,295.7 334.4,300.7 334.5,300.8Z","cx":296.9,"cy":291.9,"htn":54.2,"dia":37.5,"heart":12.0,"stroke":7.2,"ckd":10.1,"pop":6790,"rel":"Good \u00b7 equity-flagged"},{"w":25,"d":"M402.6,294.4 403.0,303.7 397.8,312.1 385.0,315.6 378.8,315.2 369.8,322.7 367.9,321.1 365.0,321.2 354.5,327.0 351.2,325.3 351.0,316.3 341.5,321.2 338.5,321.3 338.5,334.0 316.1,345.2 315.7,325.0 309.2,325.1 309.0,316.1 312.2,315.4 312.2,312.2 321.8,312.1 322.3,334.5 328.8,334.4 330.0,333.1 329.6,327.6 331.6,327.1 333.0,321.4 331.7,321.4 331.6,315.1 328.4,315.2 328.2,308.7 323.4,308.8 323.3,305.9 323.3,302.3 328.1,302.3 328.0,299.0 331.2,298.9 331.3,301.9 337.8,299.9 338.0,305.3 334.6,305.3 334.7,311.5 341.2,311.7 340.9,299.3 351.2,296.1 375.5,294.9 378.6,290.0 391.0,290.3 390.9,287.5 392.3,287.0 394.7,287.0 394.8,290.2 402.5,290.0 402.6,294.3 402.6,294.4Z","cx":357.5,"cy":310.9,"htn":45.0,"dia":39.8,"heart":9.5,"stroke":5.6,"ckd":7.3,"pop":7348,"rel":"Moderate \u00b7 equity-flagged"},{"w":26,"d":"M274.1,183.8 274.3,193.5 284.0,193.3 283.9,190.1 312.9,189.6 313.0,192.9 325.2,192.7 325.4,198.9 332.5,199.0 332.7,211.9 339.2,211.8 339.3,219.9 326.3,219.3 326.4,223.3 329.7,223.3 329.7,224.9 326.4,224.9 326.5,227.1 321.6,227.1 321.7,230.1 319.6,225.0 310.5,225.1 306.6,223.5 300.4,219.7 300.3,215.6 296.3,215.6 296.2,212.4 289.0,212.7 288.2,209.3 284.1,209.4 280.8,206.3 276.2,205.5 274.5,199.7 267.8,199.0 267.6,193.6 257.1,194.6 251.8,193.8 251.7,190.6 246.8,190.7 246.7,184.3 267.2,183.9 267.1,180.7 267.4,183.8 273.8,183.8 274.1,183.8Z","cx":300.6,"cy":203.6,"htn":39.4,"dia":34.3,"heart":7.3,"stroke":4.1,"ckd":5.5,"pop":5772,"rel":"Moderate \u00b7 equity-flagged"},{"w":27,"d":"M408.9,229.7 395.7,229.9 395.9,234.0 399.7,238.8 397.2,239.1 397.5,243.0 390.4,243.0 391.4,247.0 392.8,247.0 393.3,253.4 390.0,253.5 390.1,255.9 388.5,255.9 388.5,253.5 380.8,253.0 375.4,256.2 375.6,258.5 378.8,258.4 378.8,260.7 382.0,260.6 382.1,262.9 375.7,263.0 375.5,265.3 369.3,265.4 369.1,256.4 366.9,256.4 362.8,261.0 362.9,265.5 366.2,265.5 366.5,282.3 343.8,282.6 356.4,267.8 353.2,267.8 353.2,269.6 346.8,269.7 346.8,268.0 340.3,267.9 340.3,265.9 333.6,266.0 333.5,261.9 330.4,261.9 330.5,266.1 327.3,266.1 327.4,270.0 320.9,270.1 320.6,257.2 314.1,255.7 313.8,240.8 307.4,240.9 307.4,244.7 294.6,244.8 294.5,241.5 292.9,241.5 292.4,222.1 292.4,218.1 294.0,218.0 297.2,219.6 297.3,222.0 302.1,222.0 302.2,225.2 308.8,225.1 313.5,229.2 313.5,226.6 338.8,240.2 367.7,239.6 367.7,241.5 372.0,241.4 372.1,243.2 374.0,243.3 373.8,241.4 375.1,241.3 378.3,235.1 367.6,235.4 368.5,226.5 371.7,226.4 371.6,222.2 366.4,217.7 373.2,217.6 373.4,216.0 372.8,211.7 368.1,204.8 386.7,204.4 386.7,208.5 390.5,208.5 390.4,205.9 393.2,205.5 392.0,203.5 393.6,203.4 394.1,205.5 396.8,205.2 396.8,207.4 398.4,207.4 398.5,213.8 399.9,215.0 400.0,207.4 403.2,207.3 403.1,203.9 405.7,202.9 404.4,204.0 405.0,210.2 403.3,210.2 403.4,213.6 405.1,213.6 405.2,216.9 412.6,216.7 412.6,218.1 410.5,218.1 410.6,221.3 408.7,221.3 408.9,226.8 404.9,226.9 404.9,225.5 402.9,225.5 403.0,228.9 408.9,228.2 408.9,229.6 408.9,229.7Z","cx":355.5,"cy":241.9,"htn":45.0,"dia":28.0,"heart":10.7,"stroke":6.8,"ckd":7.4,"pop":11259,"rel":"Good"},{"w":28,"d":"M294.6,244.8 307.4,244.7 307.4,240.9 313.8,240.8 314.1,255.7 320.6,257.2 320.9,270.1 327.4,270.0 327.3,266.1 330.5,266.1 330.4,261.9 333.5,261.9 333.6,266.0 340.3,265.9 340.3,267.9 346.8,268.0 346.8,269.7 353.2,269.6 353.2,267.8 356.4,267.8 343.8,282.6 366.5,282.3 366.2,267.6 370.9,267.4 372.5,267.4 372.6,270.1 369.4,270.1 369.5,273.8 379.1,272.7 379.3,282.0 383.7,281.9 386.4,277.6 392.1,277.4 391.9,269.0 400.0,268.9 399.9,264.8 401.1,264.7 405.1,264.7 406.8,267.7 408.7,281.4 407.5,281.4 408.0,294.2 402.6,294.4 402.5,290.0 394.8,290.2 394.7,287.0 392.3,287.0 390.9,287.5 391.0,290.3 378.6,290.0 375.5,294.9 351.2,296.1 340.9,299.3 341.2,311.7 334.8,311.8 334.6,305.3 338.0,305.3 337.8,299.9 334.4,300.7 334.4,295.7 327.9,295.8 327.6,282.9 318.0,283.0 317.7,270.1 314.4,270.2 314.4,268.5 279.6,269.6 269.4,273.3 269.2,266.1 262.0,267.9 261.9,264.7 257.3,264.8 257.3,266.4 251.9,266.5 251.9,268.1 249.9,268.1 249.3,245.2 262.2,245.3 261.8,232.5 268.8,232.3 276.2,237.0 285.0,238.7 288.1,244.3 288.3,249.4 294.6,249.8 294.6,244.9 294.6,244.8Z","cx":335.4,"cy":272.1,"htn":54.0,"dia":35.5,"heart":11.0,"stroke":7.7,"ckd":9.0,"pop":9693,"rel":"Good"},{"w":29,"d":"M188.7,153.9 189.5,185.5 192.0,186.7 200.5,186.2 200.4,181.9 205.5,181.8 206.6,193.5 209.0,194.2 209.8,191.4 212.7,191.3 232.3,191.7 232.4,193.8 234.0,193.8 233.9,190.1 235.5,190.5 236.6,255.0 241.0,255.0 241.1,258.5 249.6,258.4 249.9,268.1 251.9,268.1 251.9,266.5 257.3,266.4 257.3,264.8 261.9,264.7 263.0,272.0 263.0,274.6 250.1,274.9 250.3,284.2 224.5,284.7 222.6,207.3 182.9,208.0 181.7,162.6 168.8,162.9 168.6,153.6 188.7,153.8 188.7,153.9Z","cx":229.3,"cy":219.1,"htn":58.2,"dia":38.0,"heart":13.2,"stroke":7.6,"ckd":9.5,"pop":8104,"rel":"Good"},{"w":30,"d":"M279.5,132.0 283.8,132.0 285.9,133.6 285.9,130.4 289.2,130.3 289.2,131.9 298.8,131.7 299.3,154.3 260.4,155.0 260.2,142.1 244.0,142.3 244.2,150.4 240.9,150.5 241.0,153.7 247.5,153.6 247.5,156.8 250.8,156.7 250.8,158.4 241.1,158.5 241.0,155.3 231.4,155.5 231.6,165.1 233.2,165.1 233.3,168.3 234.9,168.3 235.1,174.8 241.6,174.6 241.6,177.9 235.2,178.0 235.2,181.2 209.6,181.8 209.4,175.3 217.5,175.1 217.4,170.9 217.3,168.7 209.3,168.8 208.4,144.5 209.7,142.8 234.2,142.5 233.9,129.6 243.7,129.4 243.7,131.9 253.4,132.5 253.5,136.5 266.0,136.3 266.4,129.0 279.4,128.8 279.5,131.4 279.5,132.0Z","cx":225.2,"cy":155.3,"htn":39.6,"dia":31.0,"heart":9.4,"stroke":4.0,"ckd":5.7,"pop":4874,"rel":"Limited"},{"w":31,"d":"M290.7,154.4 296.3,159.0 293.0,163.0 293.1,167.3 286.7,167.4 286.9,180.3 280.5,181.3 280.6,183.7 267.4,183.8 267.1,180.7 267.2,183.9 247.1,184.3 245.1,184.3 245.0,181.1 235.2,181.2 235.2,178.0 241.6,177.9 241.6,174.6 235.1,174.8 234.9,168.3 233.3,168.3 233.2,165.1 231.6,165.1 231.4,155.5 241.0,155.3 241.1,158.5 250.8,158.4 250.8,156.7 247.5,156.8 247.5,153.6 241.0,153.7 240.9,150.5 244.2,150.4 244.0,142.3 260.2,142.1 260.4,155.0 290.5,154.4 290.7,154.4Z","cx":261.4,"cy":166.0,"htn":42.0,"dia":39.9,"heart":10.1,"stroke":5.0,"ckd":6.7,"pop":4276,"rel":"Limited"},{"w":32,"d":"M347.3,141.6 348.9,141.6 349.0,144.0 353.7,143.9 353.8,147.1 369.0,146.9 369.9,153.3 376.3,153.2 377.0,178.9 364.3,179.1 364.2,180.7 370.7,186.9 370.9,189.5 377.9,195.0 382.3,200.5 380.9,201.5 382.7,204.4 339.1,205.4 337.7,141.0 347.3,141.4 347.3,141.6Z","cx":356.4,"cy":175.3,"htn":28.5,"dia":11.8,"heart":7.2,"stroke":2.4,"ckd":1.7,"pop":8339,"rel":"Moderate"},{"w":33,"d":"M317.6,96.5 320.8,102.4 317.5,102.5 317.6,108.9 322.7,109.1 324.3,111.1 324.2,115.3 329.2,115.4 329.5,127.8 322.9,128.2 323.1,134.6 315.0,134.7 315.1,141.1 324.8,141.1 325.1,154.0 312.1,154.1 311.9,142.4 305.4,136.4 305.2,128.4 298.7,128.5 298.7,125.3 293.8,125.4 293.8,122.1 292.1,122.2 290.4,115.8 285.5,115.8 285.3,102.1 290.0,102.1 290.0,99.6 294.9,99.6 294.8,96.3 307.7,96.2 307.6,93.4 310.8,92.9 311.1,89.6 316.0,89.6 317.5,96.4 317.6,96.5Z","cx":309.3,"cy":118.6,"htn":35.6,"dia":28.6,"heart":7.1,"stroke":2.6,"ckd":4.8,"pop":5234,"rel":"Limited"},{"w":34,"d":"M401.7,243.0 403.7,248.9 399.6,248.9 399.6,252.3 399.7,256.7 401.7,256.9 401.9,262.5 411.5,262.3 411.4,256.7 407.5,256.8 407.4,252.2 415.2,253.3 415.2,251.1 419.4,251.1 419.4,248.9 422.5,248.8 422.0,264.3 419.7,265.8 419.6,262.1 413.4,262.3 413.5,264.5 416.2,265.0 416.2,266.9 413.5,266.6 413.9,281.3 424.1,281.0 424.2,284.1 417.8,284.2 417.8,281.4 408.7,281.4 408.4,273.2 405.1,264.7 399.9,264.8 400.0,268.9 391.9,269.0 392.1,277.4 386.4,277.6 383.9,281.7 382.3,282.0 379.3,282.0 379.1,272.7 369.5,273.8 369.4,270.1 372.6,270.1 372.5,267.4 366.2,267.6 366.2,265.5 362.9,265.5 362.8,261.0 366.9,256.4 369.1,256.4 369.3,265.4 375.5,265.3 375.7,263.0 382.1,262.9 382.0,260.6 378.8,260.7 378.8,258.4 375.6,258.5 375.4,256.2 380.8,253.0 388.5,253.5 388.5,255.9 390.1,255.9 390.0,253.5 393.3,253.4 392.8,247.0 391.4,247.0 390.4,243.0 397.5,243.0 397.2,239.1 398.7,238.9 401.6,242.7 401.7,243.0Z","cx":394.6,"cy":263.2,"htn":37.3,"dia":21.5,"heart":9.3,"stroke":5.4,"ckd":5.2,"pop":10540,"rel":"Good \u00b7 equity-flagged"},{"w":35,"d":"M327.2,141.0 330.6,152.5 335.2,158.8 338.1,159.8 338.3,173.1 330.2,166.8 315.7,167.0 315.8,173.4 314.6,174.0 319.1,177.7 319.3,184.0 312.8,184.2 312.9,189.6 283.9,190.1 284.0,193.3 274.3,193.5 274.1,184.4 280.6,183.7 280.5,181.3 286.9,180.3 286.7,167.4 293.1,167.3 293.0,163.0 296.3,159.0 290.7,154.4 299.3,154.3 298.7,128.5 305.2,128.4 305.4,136.4 311.9,142.4 312.1,154.1 325.1,154.0 324.8,141.1 315.1,141.1 315.0,134.7 323.1,134.6 322.9,128.2 329.4,128.1 326.4,134.6 327.2,140.8 327.2,141.0Z","cx":307.1,"cy":165.0,"htn":36.9,"dia":28.2,"heart":7.6,"stroke":4.0,"ckd":4.7,"pop":5363,"rel":"Limited"},{"w":36,"d":"M235.2,181.2 245.0,181.1 245.1,184.3 246.7,184.3 246.8,190.7 251.7,190.6 251.8,193.8 267.6,193.6 267.8,199.0 274.5,199.7 276.2,205.5 280.8,206.3 284.1,209.4 288.2,209.3 289.0,212.7 296.2,212.4 296.3,215.6 300.3,215.6 300.4,219.7 306.6,223.5 310.5,225.1 319.6,225.0 321.7,230.1 321.6,227.1 326.5,227.1 326.4,224.9 329.7,224.9 329.7,223.3 326.4,223.3 326.3,219.3 338.3,219.2 339.4,223.1 342.6,223.1 342.7,224.7 358.8,224.3 359.1,239.7 340.3,240.2 313.5,226.6 313.5,229.2 308.8,225.1 302.2,225.2 302.1,222.0 297.3,222.0 297.2,219.6 290.7,218.1 290.7,215.8 288.3,215.8 287.6,213.7 274.5,214.4 274.3,206.9 275.4,206.4 261.6,198.0 248.6,195.9 248.5,193.7 234.2,190.1 234.0,193.8 232.4,193.8 232.3,191.7 216.3,191.3 209.8,191.4 209.9,194.2 207.2,193.8 205.5,181.8 200.4,181.9 200.5,186.2 192.0,186.7 189.5,185.5 188.7,153.9 192.8,153.0 192.9,156.2 207.2,155.9 207.0,149.4 209.4,149.3 209.3,168.8 217.3,168.7 217.5,175.1 209.4,175.3 209.6,181.8 234.9,181.2 235.2,181.2Z","cx":260.0,"cy":197.5,"htn":39.8,"dia":30.5,"heart":9.2,"stroke":5.4,"ckd":6.1,"pop":5921,"rel":"Moderate \u00b7 equity-flagged"},{"w":37,"d":"M292.4,218.1 292.9,241.5 294.5,241.5 294.6,249.8 288.2,249.3 288.1,244.3 285.0,238.7 276.2,237.0 268.8,232.3 261.8,232.5 262.2,245.3 249.3,245.2 249.6,258.4 244.0,258.5 241.1,258.5 241.0,255.0 236.6,255.0 235.5,190.5 248.5,193.7 248.6,195.9 261.6,198.0 275.4,206.4 274.3,206.9 274.5,214.4 287.6,213.7 288.3,215.8 290.7,215.8 290.7,218.1 292.1,218.1 292.4,218.1Z","cx":259.0,"cy":223.5,"htn":57.0,"dia":39.5,"heart":11.6,"stroke":7.7,"ckd":9.9,"pop":7649,"rel":"Good"},{"w":38,"d":"M243.7,129.4 233.9,129.6 234.2,142.5 208.5,142.9 207.2,155.9 192.9,156.2 192.8,153.0 184.7,153.1 169.0,153.5 167.9,156.6 126.1,157.7 122.1,154.4 117.9,137.1 119.2,132.6 129.0,132.3 129.0,125.1 113.5,125.1 113.0,121.9 116.9,113.2 118.0,106.7 142.1,105.8 142.1,118.6 147.4,118.5 148.5,131.4 180.8,130.3 180.8,128.7 197.7,117.5 207.8,117.1 207.9,105.9 214.2,105.8 214.2,109.2 233.4,108.6 233.7,119.9 246.7,119.7 246.7,122.1 253.5,122.6 253.4,129.3 244.2,129.4 243.7,129.4Z","cx":176.0,"cy":133.7,"htn":44.6,"dia":30.0,"heart":11.5,"stroke":4.8,"ckd":5.7,"pop":4246,"rel":"Limited"},{"w":39,"d":"M323.3,76.6 323.6,89.5 311.1,89.6 310.8,92.9 307.6,93.4 307.7,96.2 294.8,96.3 294.9,99.6 290.0,99.6 290.0,102.1 285.3,102.1 285.5,115.8 290.4,115.8 292.1,122.2 293.8,122.1 293.8,126.3 285.8,125.5 285.8,128.7 284.2,128.8 281.4,128.8 259.8,113.2 259.0,94.6 219.6,64.1 206.8,64.1 207.0,51.4 292.2,51.6 291.5,57.9 293.1,57.9 294.1,64.0 310.3,63.8 313.1,76.7 323.0,76.6 323.3,76.6Z","cx":270.3,"cy":79.2,"htn":39.9,"dia":24.2,"heart":11.0,"stroke":4.4,"ckd":5.0,"pop":4727,"rel":"Limited"},{"w":40,"d":"M346.6,32.4 348.9,39.1 354.9,39.0 355.0,43.8 359.4,43.9 361.5,53.0 364.1,92.1 362.3,92.1 362.3,93.7 353.8,93.9 353.4,95.5 349.5,95.6 349.6,98.8 336.8,99.1 336.9,105.6 324.9,105.6 325.6,106.5 324.1,106.6 329.1,115.3 324.2,115.3 324.3,111.1 322.7,109.1 317.6,108.9 317.5,102.5 320.8,102.4 317.5,96.4 316.0,89.6 323.6,89.5 323.2,72.3 318.0,68.2 318.2,63.7 324.6,63.6 324.5,57.4 345.4,57.0 345.2,50.5 352.7,50.4 351.3,46.1 335.5,47.6 335.3,36.3 334.5,37.9 328.9,38.0 328.9,31.6 334.9,31.4 336.2,32.5 346.1,30.9 346.5,32.0 346.6,32.4Z","cx":341.3,"cy":73.5,"htn":36.2,"dia":24.1,"heart":8.4,"stroke":4.3,"ckd":4.9,"pop":5226,"rel":"Moderate"},{"w":41,"d":"M202.7,46.0 204.2,48.1 202.5,48.7 202.4,51.5 200.6,51.5 201.4,57.9 196.5,58.9 206.7,66.6 206.6,78.5 208.2,78.5 208.0,89.8 209.6,90.1 209.4,102.6 219.1,102.4 220.4,105.7 207.9,105.9 207.9,102.6 206.2,101.8 181.0,102.9 181.1,91.8 168.1,92.2 168.1,98.7 165.4,98.7 164.9,92.3 148.6,94.4 148.6,92.8 146.4,92.9 146.1,90.3 135.7,91.5 135.7,93.1 140.4,93.0 140.4,97.4 142.1,97.4 142.1,99.4 135.6,99.6 135.6,96.3 129.1,96.5 129.0,106.2 118.0,106.7 119.1,97.8 117.6,95.4 112.6,97.3 108.8,93.9 84.0,94.8 83.9,122.5 68.0,121.0 68.0,133.8 53.6,134.1 39.4,130.2 37.7,122.5 37.6,131.2 6.6,123.2 6.0,61.0 6.0,58.3 7.5,58.2 9.3,51.3 13.0,45.2 12.1,32.3 14.4,32.3 14.5,37.2 18.6,37.9 25.1,33.1 31.5,39.9 31.5,38.0 40.5,37.8 40.9,31.3 41.5,37.8 48.5,37.5 48.5,31.0 51.3,30.9 66.1,36.7 66.1,42.0 67.5,39.8 71.8,41.0 71.3,42.7 59.6,43.4 55.5,39.6 53.3,40.5 59.2,44.1 62.0,44.0 62.0,45.8 78.4,49.5 79.0,55.4 84.5,55.2 89.1,72.1 90.4,72.0 93.2,88.0 90.4,88.1 90.4,93.0 108.7,93.0 109.7,89.2 116.8,80.2 115.8,74.5 116.8,66.0 159.7,74.4 162.2,52.3 162.4,26.7 164.4,26.6 164.0,19.2 162.4,19.3 162.5,13.8 181.8,13.2 181.5,45.3 189.0,44.0 191.1,46.7 194.2,46.7 194.2,45.1 202.7,45.9 202.7,46.0ZM159.3,78.3 159.4,76.8 157.1,76.8 157.1,78.7 153.3,78.7 153.4,75.3 146.8,75.4 146.1,77.4 144.2,77.4 144.2,80.1 145.2,80.1 144.2,81.3 152.4,81.1 153.4,83.4 150.8,85.6 151.4,87.5 146.1,87.6 146.1,89.4 158.2,89.1 159.3,78.4 159.3,78.3Z","cx":48.3,"cy":73.7,"htn":41.4,"dia":23.4,"heart":11.3,"stroke":3.2,"ckd":5.5,"pop":3284,"rel":"Limited"},{"w":42,"d":"M418.6,229.5 416.9,232.7 424.0,232.5 424.2,239.7 435.7,239.4 435.5,236.1 438.2,235.4 440.6,230.3 450.9,230.1 450.9,235.6 441.1,235.8 441.1,237.4 455.9,237.3 456.0,238.8 453.3,239.4 441.4,239.5 441.5,242.4 443.9,242.4 443.9,243.7 450.8,244.3 441.0,244.9 440.9,251.8 437.2,251.8 436.2,254.0 432.3,255.7 433.3,256.5 432.3,258.0 432.6,270.9 425.3,271.1 422.1,271.1 422.5,248.8 419.4,248.9 419.4,251.1 415.2,251.1 415.2,253.3 407.4,252.2 407.5,256.8 411.4,256.7 411.5,262.3 401.9,262.5 401.7,256.9 399.7,256.7 399.6,248.9 403.7,248.7 399.5,238.1 395.9,234.0 395.7,229.9 413.8,229.6 414.7,223.8 416.7,223.8 416.7,219.4 421.7,219.3 422.1,220.8 422.1,229.4 419.0,229.5 418.6,229.5Z","cx":421.0,"cy":244.9,"htn":37.7,"dia":16.2,"heart":12.8,"stroke":6.9,"ckd":5.3,"pop":11440,"rel":"Good"},{"w":43,"d":"M412.1,165.2 413.6,167.3 413.2,171.5 415.0,176.2 414.5,181.8 415.8,183.4 416.7,182.8 415.2,184.2 416.4,186.4 417.5,185.8 415.9,187.0 417.1,189.1 418.0,188.6 416.9,190.4 418.7,191.3 417.2,192.5 418.8,194.6 419.7,193.9 418.7,194.9 423.4,199.3 426.9,200.0 427.4,197.8 426.4,197.4 427.5,197.9 426.7,200.3 421.5,203.4 421.0,208.5 422.9,216.4 421.3,216.6 419.9,216.6 420.0,215.0 416.2,215.1 415.9,203.8 412.3,203.9 410.8,200.5 401.5,200.9 401.6,204.0 395.6,204.2 395.4,199.1 390.3,199.2 390.4,204.3 388.8,204.4 377.2,193.2 377.2,188.5 378.8,188.5 378.8,186.5 378.7,185.3 377.1,185.3 378.6,178.9 377.0,178.9 376.6,166.1 412.0,165.2 412.1,165.2Z","cx":398.8,"cy":185.5,"htn":33.4,"dia":12.4,"heart":11.5,"stroke":5.6,"ckd":4.4,"pop":9186,"rel":"Moderate"},{"w":44,"d":"M379.1,132.7 383.9,133.2 383.9,136.9 388.7,136.8 389.1,143.3 393.2,143.2 393.7,144.3 403.9,138.3 410.5,148.3 409.5,152.7 413.9,164.1 413.6,166.1 413.5,165.2 376.6,166.1 376.3,153.2 369.1,152.5 366.3,134.0 369.5,133.9 369.4,130.7 373.8,130.6 372.7,127.4 379.2,127.3 379.1,132.4 379.1,132.7Z","cx":388.4,"cy":150.0,"htn":31.3,"dia":13.3,"heart":8.9,"stroke":4.0,"ckd":3.7,"pop":8174,"rel":"Moderate"},{"w":45,"d":"M225.9,26.5 231.0,38.1 235.5,40.9 233.2,38.4 233.3,32.0 240.9,32.1 240.1,43.8 252.5,51.5 207.0,51.4 206.8,64.1 219.6,64.1 259.0,94.6 259.8,113.2 263.5,116.2 281.4,128.8 285.8,128.7 285.8,125.5 293.8,126.3 298.7,125.3 298.8,131.7 289.2,131.9 289.2,130.3 285.9,130.4 285.9,133.6 283.8,132.0 279.5,132.0 279.4,128.8 266.4,129.0 266.0,136.3 253.5,136.5 253.4,132.5 243.7,131.9 243.7,129.4 253.4,129.3 253.1,122.0 246.7,122.1 246.7,119.7 233.7,119.9 233.4,108.6 214.2,109.2 214.2,105.8 220.4,105.7 219.9,103.3 209.4,102.6 209.6,90.1 208.0,89.8 208.2,78.5 206.6,78.5 206.7,66.6 196.5,58.9 201.4,57.9 200.6,51.5 202.4,51.5 202.5,48.7 204.2,48.1 202.7,46.0 214.1,38.8 205.2,25.5 217.7,25.5 218.5,19.4 220.8,19.5 220.7,25.6 225.7,26.1 225.9,26.5Z","cx":234.5,"cy":84.5,"htn":40.3,"dia":24.8,"heart":11.2,"stroke":4.5,"ckd":5.1,"pop":4608,"rel":"Limited"},{"w":46,"d":"M394.4,100.3 395.6,100.0 397.4,103.3 400.7,105.3 411.7,108.5 413.2,102.8 411.9,102.3 413.1,102.0 411.9,107.9 413.2,112.1 405.0,118.6 400.8,118.9 400.0,116.6 405.6,116.2 407.1,112.7 398.4,114.4 399.9,118.7 399.0,120.6 400.0,127.1 403.9,138.3 393.7,144.3 393.2,143.2 388.9,143.2 388.7,136.8 383.9,136.9 383.9,133.2 379.1,133.3 379.2,127.3 372.0,127.5 373.8,130.6 369.4,130.7 368.8,134.0 363.1,133.3 363.0,127.6 369.4,127.5 365.1,101.8 373.6,101.6 373.5,97.3 375.7,97.1 387.6,96.9 388.6,101.3 394.0,100.4 394.4,100.3Z","cx":386.2,"cy":117.9,"htn":38.1,"dia":20.8,"heart":9.4,"stroke":5.0,"ckd":4.9,"pop":7657,"rel":"Moderate"},{"w":47,"d":"M375.2,93.9 375.2,95.1 373.4,95.1 373.6,101.6 365.1,101.8 369.4,127.5 363.0,127.6 363.1,133.3 367.3,133.2 366.4,139.8 368.2,146.9 353.8,147.1 353.7,143.9 349.0,144.0 348.9,141.6 347.3,140.8 337.7,141.0 338.1,159.8 335.1,158.7 328.4,148.0 326.4,134.6 329.4,128.5 329.2,115.4 324.1,106.6 325.6,106.5 324.9,105.6 336.9,105.6 336.8,99.1 349.6,98.8 349.5,95.6 353.4,95.5 353.4,94.0 362.3,93.7 362.3,92.1 364.1,92.1 363.8,88.9 375.1,88.6 375.2,93.7 375.2,93.9Z","cx":349.1,"cy":121.1,"htn":30.4,"dia":13.2,"heart":7.3,"stroke":2.7,"ckd":2.0,"pop":7845,"rel":"Moderate"},{"w":48,"d":"M395.6,100.0 388.6,101.3 387.6,96.9 373.5,97.3 373.4,95.1 375.2,95.1 375.1,88.6 363.8,88.9 361.0,50.2 381.9,49.7 382.4,67.3 387.1,72.2 388.3,72.5 389.0,70.8 387.2,76.5 387.5,83.1 390.0,86.0 393.2,86.0 393.0,93.7 395.5,99.8 395.6,100.0Z","cx":376.0,"cy":74.3,"htn":42.7,"dia":24.4,"heart":12.0,"stroke":5.5,"ckd":6.6,"pop":7629,"rel":"Moderate"},{"w":49,"d":"M378.5,39.4 381.9,49.7 361.0,50.2 359.3,43.7 355.0,43.8 354.9,39.0 348.9,39.1 344.6,25.1 338.6,25.1 338.7,16.0 335.1,15.9 335.2,12.2 357.6,12.5 352.5,6.0 368.2,6.2 373.6,25.5 381.1,34.9 378.4,35.6 378.5,39.3 378.5,39.4Z","cx":360.7,"cy":28.0,"htn":36.9,"dia":24.1,"heart":7.6,"stroke":3.7,"ckd":5.6,"pop":4779,"rel":"Moderate"},{"w":50,"d":"M346.1,30.9 336.2,32.5 334.9,31.4 328.9,31.6 328.9,38.0 334.5,37.9 335.3,36.3 335.5,47.6 351.3,46.1 352.7,50.4 345.2,50.5 345.4,57.0 324.5,57.4 324.6,63.6 318.2,63.7 317.9,68.0 323.2,72.3 323.3,76.6 313.1,76.7 310.3,63.8 294.1,64.0 293.1,57.9 291.5,57.9 291.4,53.7 292.2,51.6 309.8,51.4 310.3,12.9 335.2,12.2 335.1,15.9 338.7,16.0 338.6,25.1 344.6,25.1 346.1,30.8 346.1,30.9Z","cx":321.5,"cy":42.2,"htn":40.4,"dia":33.4,"heart":10.4,"stroke":4.8,"ckd":6.9,"pop":3307,"rel":"Limited"}]};
-(function(){
-  var SVGNS='http://www.w3.org/2000/svg';
-  var wards=MAP.wards, city=MAP.city, YEAR=MAP.year;
-  var order=['htn','dia','heart','stroke','ckd'];
-  var LAB={htn:'Hypertension',dia:'Diabetes',heart:'Heart disease',stroke:'Stroke',ckd:'Kidney disease'};
-  var ext={};
-  order.forEach(function(k){
-    var vs=wards.map(function(a){return a[k];}).filter(function(v){return v!=null;});
-    ext[k]={min:Math.min.apply(null,vs),max:Math.max.apply(null,vs)};
-  });
-  function sev(k,v){if(v==null)return null;var e=ext[k];return (v-e.min)/((e.max-e.min)||1);} // higher = worse
-  function ramp(t){var c0=[248,238,233],c1=[142,44,34];
-    var r=Math.round(c0[0]+(c1[0]-c0[0])*t),g=Math.round(c0[1]+(c1[1]-c0[1])*t),b=Math.round(c0[2]+(c1[2]-c0[2])*t);
-    return 'rgb('+r+','+g+','+b+')';}
-  function fmt(v){return v==null?'n/a':v.toFixed(1)+'%';}
-  function pct(k,v){var e=ext[k];return Math.max(2,Math.min(100,((v-e.min)/((e.max-e.min)||1))*100));}
-  function byW(n){for(var i=0;i<wards.length;i++){if(wards[i].w===n)return wards[i];}}
-  function rankOf(k,n){
-    var s=wards.slice().sort(function(a,b){return b[k]-a[k];});
-    for(var i=0;i<s.length;i++){if(s[i].w===n)return i+1;}
-  }
-  function ord(n){var s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
-
-  var gAreas=document.getElementById('areas'), gLabels=document.getElementById('labels');
-  var panel=document.getElementById('mappanel');
-  var curMetric='dia', curSel=26;
-
-  wards.forEach(function(a){
-    var p=document.createElementNS(SVGNS,'path');
-    p.setAttribute('d',a.d); p.setAttribute('data-w',a.w);
-    if(a.w===26) p.setAttribute('class','ward');
-    p.setAttribute('tabindex','0'); p.setAttribute('role','button'); p.setAttribute('aria-label','Ward '+a.w);
-    p.addEventListener('click',function(){select(a.w);});
-    p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();select(a.w);}});
-    gAreas.appendChild(p); a._el=p;
-    var t=document.createElementNS(SVGNS,'text');
-    t.setAttribute('x',a.cx); t.setAttribute('y',a.cy+2); t.setAttribute('text-anchor','middle');
-    t.setAttribute('class',a.w===26?'wl-ward':'wl'); t.textContent=a.w;
-    gLabels.appendChild(t);
-  });
-
-  function render(k){
-    curMetric=k;
-    wards.forEach(function(a){
-      var s=sev(k,a[k]);
-      if(s==null){a._el.classList.add('null');a._el.removeAttribute('fill');}
-      else{a._el.classList.remove('null');a._el.setAttribute('fill',ramp(s));}
-    });
-    document.getElementById('lgscale').textContent=fmt(ext[k].min)+' – '+fmt(ext[k].max);
-    document.querySelectorAll('.mtab').forEach(function(b){
-      var on=b.dataset.metric===k;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');});
-    updateCtx(k);
-    buildPanel(curSel);
-  }
-  function select(n){
-    curSel=n;
-    wards.forEach(function(a){a._el.classList.toggle('sel',a.w===n);});
-    var a=byW(n); gAreas.appendChild(a._el);
-    buildPanel(n);
-  }
-  function deltaHTML(k,v){
-    if(v==null)return '';
-    var d=v-city[k], worse=d>0;
-    return '<span class="d '+(worse?'d-bad':'d-good')+'">'+(d>=0?'+':'−')+Math.abs(d).toFixed(1)+' pts vs city</span>';
-  }
-  function buildPanel(n){
-    var a=byW(n), isWard=n===26;
-    var h='<div class="mp-name">Ward '+a.w+' <span class="mp-pill '+(isWard?'ward':'nb')+'">'+(isWard?'Focus ward':'Ward')+'</span></div>';
-    h+='<div class="mp-sub">~'+(a.pop?a.pop.toLocaleString():'—')+' patients in the Chicago Health Map · <span class="rel-pill">'+(a.rel||'—')+'</span></div>';
-    h+='<div class="mp-rows">';
-    order.forEach(function(k){
-      var v=a[k], w=pct(k,v), tk=Math.max(0,Math.min(100,((city[k]-ext[k].min)/((ext[k].max-ext[k].min)||1))*100));
-      h+='<div class="mp-row'+(k===curMetric?' active':'')+'">'
-        +'<div class="mp-rowh"><span class="mp-lab">'+LAB[k]+'</span>'
-        +'<span class="mp-val">'+fmt(v)+deltaHTML(k,v)+'</span></div>'
-        +'<div class="mp-bar"><i style="width:'+w.toFixed(1)+'%;background:'+ramp(sev(k,v))+'"></i>'
-        +'<span class="tick" style="left:'+tk.toFixed(1)+'%"></span></div></div>';
-    });
-    h+='</div><div class="mp-foot"><span class="tk"></span> Vertical line marks the citywide patient rate</div>';
-    panel.innerHTML=h;
-  }
-  function updateCtx(k){
-    var a=byW(26), v=a[k], c=city[k], r=rankOf(k,26);
-    var hl=v>=c?'above':'below';
-    document.getElementById('ctxTitle').textContent='Ward 26 · '+LAB[k]+': '+fmt(v);
-    document.getElementById('ctxBody').innerHTML='In the Chicago Health Map’s '+YEAR+' data, Ward 26’s '+LAB[k].toLowerCase()
-      +' rate is <b>'+fmt(v)+'</b> — <b>'+hl+'</b> the citywide patient rate of '+fmt(c)
-      +', and the <b>'+ord(r)+'-highest</b> of Chicago’s 50 wards. Rates count patients seen in Chicago health systems, so they run higher than survey rates; compare wards to each other.';
-  }
-
-  document.querySelectorAll('.mtab').forEach(function(b){b.addEventListener('click',function(){render(b.dataset.metric);});});
-  render('dia'); select(26);
-})();
-</script>
-
-
-<script>
-var INSIDE={"W":880.0,"H":477.8,"city":{"le":78.7,"inc":79432,"htn":44.5,"dia":29.2,"obesity":22.4},"year":"2024","communities":[{"name":"Humboldt Park","share":33,"d":"M267.2,186.9 450.1,183.5 507.6,184.1 507.7,185.6 626.0,183.7 628.1,181.9 683.8,181.1 683.7,179.4 688.0,179.4 689.4,241.3 626.8,242.3 630.3,422.6 632.1,422.5 609.0,422.9 604.0,423.0 572.5,406.0 566.3,408.4 555.1,396.9 509.0,372.3 508.1,333.9 470.8,334.4 470.0,304.6 402.8,305.4 402.8,306.7 401.4,306.5 395.3,303.4 394.9,275.9 357.1,276.5 356.8,266.4 341.7,266.7 341.5,255.2 326.4,255.4 326.2,247.2 298.8,247.6 298.6,239.3 283.6,239.6 283.1,217.8 268.0,218.1 267.2,186.9ZM639.1,422.4 647.7,422.3 638.1,422.5 639.1,422.4ZM672.5,422.0 676.8,422.0 667.9,422.1 672.5,422.0ZM681.3,421.9 679.6,422.0 678.9,422.0 681.3,421.9ZM688.4,421.8 688.4,421.9 685.8,421.9 688.4,421.8ZM688.3,426.7 688.3,425.9 688.4,422.7 688.3,426.7ZM688.6,440.6 688.6,441.5 688.6,439.4 688.6,440.6Z","cx":511.4,"cy":301.6,"le":75.4,"inc":58087,"htn":45.6,"dia":38.1,"obesity":24.6},{"name":"West Town","share":27,"d":"M688.6,441.9 688.4,421.8 630.3,422.6 626.8,242.3 689.4,241.3 688.0,179.4 744.9,178.0 748.0,178.1 748.0,179.7 808.1,178.9 810.2,300.0 870.6,299.2 872.0,374.8 862.4,374.9 862.2,367.7 750.8,369.1 751.5,406.0 781.8,405.7 782.0,420.8 751.8,421.1 752.1,441.1 707.0,441.7 707.5,469.8 699.7,465.1 699.5,441.8 688.6,441.9Z","cx":749.5,"cy":324.5,"le":81.4,"inc":146769,"htn":32.8,"dia":19.0,"obesity":21.1},{"name":"Logan Square","share":16,"d":"M808.1,178.9 805.4,179.0 805.2,179.0 805.4,179.0 808.1,178.9ZM800.6,179.0 796.7,179.1 804.4,179.0 800.6,179.0ZM790.7,179.1 790.3,179.1 792.4,179.1 790.7,179.1ZM785.9,179.2 785.7,179.2 789.8,179.1 785.9,179.2ZM781.2,179.3 781.9,179.2 782.6,179.2 781.2,179.3ZM775.8,179.3 775.2,179.3 776.8,179.3 775.8,179.3ZM770.6,179.4 770.0,179.4 774.9,179.3 770.6,179.4ZM765.5,179.4 764.3,179.5 766.2,179.4 765.5,179.4ZM759.7,179.5 760.1,179.5 760.9,179.5 759.7,179.5ZM757.8,179.6 757.3,179.6 758.5,179.5 757.8,179.6ZM746.2,178.0 748.0,178.0 748.0,178.1 746.2,178.0ZM741.7,178.1 683.7,179.4 683.8,181.1 628.1,181.9 626.0,183.7 507.7,185.6 507.6,184.1 484.2,183.6 437.7,184.1 428.0,155.2 416.7,155.4 416.1,130.7 414.8,125.3 418.6,125.3 406.7,95.3 625.9,91.8 626.7,121.9 740.4,120.6 741.7,178.1ZM397.7,95.4 393.0,95.5 403.4,95.3 397.7,95.4ZM388.3,95.6 389.6,95.6 392.5,95.5 388.3,95.6ZM387.7,95.6 387.9,95.6 388.2,95.6 387.7,95.6ZM385.3,95.7 386.4,95.6 387.0,95.6 385.3,95.7Z","cx":578.6,"cy":139.3,"le":81.4,"inc":114689,"htn":32.4,"dia":21.4,"obesity":21.1},{"name":"Hermosa","share":13,"d":"M355.3,96.1 406.7,95.3 418.6,125.3 414.8,125.3 416.1,130.7 416.7,155.4 428.0,155.2 437.7,184.1 267.2,186.9 242.7,185.1 204.8,179.7 200.7,8.0 201.4,37.2 263.9,37.2 266.0,127.8 356.0,126.4 355.3,96.1Z","cx":234.0,"cy":97.0,"le":80.4,"inc":70747,"htn":42.1,"dia":42.5,"obesity":20.9},{"name":"Belmont Cragin","share":10,"d":"M200.7,8.0 203.3,128.8 145.7,129.7 146.1,137.3 107.1,137.9 104.9,137.8 104.7,130.4 56.5,131.2 54.5,101.1 9.3,101.3 8.0,41.6 199.0,38.3 198.3,8.0 200.7,8.0Z","cx":105.4,"cy":74.7,"le":80.2,"inc":71624,"htn":43.0,"dia":41.7,"obesity":23.1}],"tracts":[{"id":"17031831200","name":"Tract 8312","d":"M203.9,128.8 414.8,125.3 416.2,131.0 416.7,155.4 429.7,155.2 440.7,183.9 417.4,184.1 414.4,181.4 402.2,181.5 387.3,181.7 387.3,184.0 267.2,186.0 243.0,185.1 204.8,179.7 203.9,128.8Z","cx":317.1,"cy":155.8,"htn":41.3,"dia":50.5,"obesity":20.2,"rel":"Limited","pop":392},{"id":"17031836600","name":"Tract 8366","d":"","cx":592.9,"cy":391.2,"htn":46.8,"dia":33.2,"obesity":24.0,"rel":"Good","pop":425},{"id":"17031200402","name":"Tract 2004.02","d":"","cx":384.2,"cy":111.3,"htn":44.4,"dia":39.8,"obesity":18.4,"rel":"Limited","pop":342},{"id":"17031200401","name":"Tract 2004.01","d":"","cx":233.6,"cy":83.0,"htn":39.2,"dia":39.5,"obesity":21.9,"rel":"Limited","pop":306},{"id":"17031221100","name":"Tract 2211","d":"M625.8,91.8 626.6,121.9 546.2,123.2 545.7,93.1 625.8,91.8Z","cx":586.1,"cy":107.2,"htn":33.7,"dia":21.9,"obesity":23.3,"rel":"Moderate","pop":484},{"id":"17031221000","name":"Tract 2210","d":"M545.7,93.1 546.2,123.2 506.2,123.9 505.6,93.7 545.7,93.1Z","cx":526.0,"cy":108.5,"htn":40.6,"dia":29.7,"obesity":24.5,"rel":"Limited","pop":229},{"id":"17031241100","name":"Tract 2411","d":"","cx":840.9,"cy":329.7,"htn":36.8,"dia":17.9,"obesity":21.2,"rel":"Moderate","pop":429},{"id":"17031220901","name":"Tract 2209.01","d":"","cx":458.9,"cy":109.3,"htn":39.9,"dia":35.1,"obesity":20.5,"rel":"Moderate","pop":268},{"id":"17031222500","name":"Tract 2225","d":"M686.9,121.2 740.4,120.6 741.7,178.1 748.0,178.0 748.1,180.1 688.0,180.0 686.9,121.2Z","cx":714.2,"cy":150.4,"htn":37.6,"dia":32.9,"obesity":21.4,"rel":"Moderate","pop":173},{"id":"17031222600","name":"Tract 2226","d":"M626.7,121.9 686.7,121.2 688.0,180.0 628.0,181.0 626.7,121.9Z","cx":657.3,"cy":150.7,"htn":30.8,"dia":21.4,"obesity":18.9,"rel":"Moderate","pop":159},{"id":"17031191200","name":"Tract 1912","d":"M23.1,41.4 24.3,101.3 9.3,101.3 8.0,41.6 23.1,41.4Z","cx":16.1,"cy":68.6,"htn":35.8,"dia":41.9,"obesity":28.3,"rel":"Limited","pop":265},{"id":"17031222700","name":"Tract 2227","d":"M546.2,123.2 626.6,121.9 628.0,182.8 547.5,184.9 546.2,123.2Z","cx":587.0,"cy":154.1,"htn":35.1,"dia":26.3,"obesity":19.9,"rel":"Limited","pop":171},{"id":"17031230100","name":"Tract 2301","d":"M627.8,241.7 629.2,232.4 628.0,181.0 688.0,180.0 689.4,241.3 627.8,241.7Z","cx":658.7,"cy":210.4,"htn":39.0,"dia":23.6,"obesity":20.2,"rel":"Moderate","pop":267},{"id":"17031230200","name":"Tract 2302","d":"M547.5,184.9 628.0,182.8 629.2,232.4 628.1,241.3 548.8,243.6 547.5,184.9Z","cx":588.4,"cy":212.8,"htn":36.4,"dia":34.2,"obesity":19.0,"rel":"Moderate","pop":184},{"id":"17031230300","name":"Tract 2303","d":"M507.1,244.2 508.7,231.6 507.7,185.6 547.5,184.9 548.8,243.6 507.1,244.2Z","cx":528.3,"cy":216.8,"htn":37.3,"dia":43.4,"obesity":25.3,"rel":"Moderate","pop":83},{"id":"17031230400","name":"Tract 2304","d":"M387.3,181.7 414.4,181.4 417.4,184.1 507.6,183.3 508.7,231.6 507.1,244.2 388.8,246.2 387.3,181.7Z","cx":448.1,"cy":212.3,"htn":44.3,"dia":36.8,"obesity":19.7,"rel":"Moderate","pop":228},{"id":"17031222900","name":"Tract 2229","d":"M415.5,125.3 506.2,123.9 507.6,183.3 440.7,183.9 429.7,155.2 416.7,155.4 416.2,131.0 414.8,126.5 415.5,125.3Z","cx":461.8,"cy":151.7,"htn":42.7,"dia":34.5,"obesity":20.0,"rel":"Limited","pop":110},{"id":"17031241000","name":"Tract 2410","d":"M749.8,315.8 748.8,240.4 809.3,239.6 810.4,315.0 749.8,315.8Z","cx":779.5,"cy":279.9,"htn":42.1,"dia":31.1,"obesity":24.2,"rel":"Moderate","pop":273},{"id":"17031230500","name":"Tract 2305","d":"","cx":328.0,"cy":214.8,"htn":38.4,"dia":46.3,"obesity":22.4,"rel":"Moderate","pop":294},{"id":"17031222800","name":"Tract 2228","d":"M506.2,123.9 546.2,123.2 547.5,184.9 507.7,185.6 506.2,123.9Z","cx":526.9,"cy":155.7,"htn":35.4,"dia":13.4,"obesity":23.2,"rel":"Limited","pop":82},{"id":"17031230700","name":"Tract 2307","d":"","cx":451.1,"cy":290.7,"htn":37.4,"dia":40.6,"obesity":24.5,"rel":"Moderate","pop":641},{"id":"17031230800","name":"Tract 2308","d":"M506.3,252.2 507.1,244.2 535.9,243.7 538.1,333.6 568.2,333.1 568.9,363.2 508.8,363.8 508.1,333.9 506.8,321.0 507.7,319.0 506.3,252.2Z","cx":522.4,"cy":303.8,"htn":35.5,"dia":34.8,"obesity":29.7,"rel":"Moderate","pop":138},{"id":"17031230900","name":"Tract 2309","d":"M535.9,243.7 627.8,241.7 626.6,244.6 626.3,251.2 628.9,362.2 568.9,363.2 568.2,333.1 538.1,333.6 535.9,243.7Z","cx":582.4,"cy":303.0,"htn":41.5,"dia":36.5,"obesity":25.1,"rel":"Moderate","pop":518},{"id":"17031191100","name":"Tract 1911","d":"M144.0,39.2 146.1,137.3 104.9,137.8 104.7,130.4 56.5,131.2 54.5,101.1 24.3,101.3 23.1,41.4 144.0,39.2Z","cx":84.5,"cy":91.4,"htn":44.5,"dia":43.6,"obesity":24.0,"rel":"Limited","pop":555},{"id":"17031242500","name":"Tract 2425","d":"M811.2,360.3 871.7,359.5 872.0,374.8 862.4,374.9 862.2,367.7 811.4,368.3 811.2,360.3Z","cx":841.6,"cy":366.0,"htn":37.1,"dia":26.6,"obesity":24.1,"rel":"Moderate","pop":399},{"id":"17031230600","name":"Tract 2306","d":"M326.3,247.4 388.8,246.2 386.8,254.8 387.1,275.9 357.1,276.5 356.8,266.4 341.7,266.7 341.5,255.2 326.4,255.4 326.3,247.4Z","cx":364.3,"cy":261.8,"htn":43.8,"dia":42.3,"obesity":27.3,"rel":"Moderate","pop":673},{"id":"17031242700","name":"Tract 2427","d":"M688.6,441.9 688.4,421.9 751.8,421.1 752.1,441.1 707.0,441.7 707.5,469.8 699.7,465.1 699.5,441.8 688.6,441.9Z","cx":703.3,"cy":447.0,"htn":33.8,"dia":30.4,"obesity":27.1,"rel":"Moderate","pop":240},{"id":"17031240800","name":"Tract 2408","d":"M688.0,180.0 748.1,180.1 748.8,240.4 689.4,241.3 688.0,180.0Z","cx":718.8,"cy":212.7,"htn":35.7,"dia":26.9,"obesity":21.4,"rel":"Moderate","pop":182},{"id":"17031231100","name":"Tract 2311","d":"M508.8,363.8 533.1,363.5 570.4,406.8 566.3,408.4 555.1,396.9 509.0,372.3 508.8,363.8Z","cx":542.3,"cy":385.3,"htn":52.0,"dia":48.0,"obesity":27.6,"rel":"Moderate","pop":152},{"id":"17031240700","name":"Tract 2407","d":"M748.0,179.7 808.1,178.9 809.3,239.6 748.8,240.4 748.0,179.7Z","cx":778.7,"cy":209.9,"htn":32.7,"dia":26.5,"obesity":19.8,"rel":"Moderate","pop":162},{"id":"17031240900","name":"Tract 2409","d":"M626.6,244.6 627.8,241.7 748.8,240.4 751.8,421.1 630.3,422.6 626.6,244.6Z","cx":689.2,"cy":331.5,"htn":44.4,"dia":24.3,"obesity":17.8,"rel":"Moderate","pop":169},{"id":"17031242600","name":"Tract 2426","d":"","cx":780.6,"cy":342.1,"htn":35.4,"dia":27.6,"obesity":19.6,"rel":"Moderate","pop":649},{"id":"17031191000","name":"Tract 1910","d":"","cx":173.3,"cy":68.9,"htn":45.0,"dia":39.3,"obesity":17.8,"rel":"Limited","pop":191}]};
-(function(){
-  var NS='http://www.w3.org/2000/svg';
-  var C=INSIDE.city;
-  var MET={
-    le:{lab:'Life expectancy',worse:'low',city:C.le,commOnly:true,full:function(v){return v.toFixed(1)+' yrs';},short:function(v){return v.toFixed(1);},dp:'yrs'},
-    inc:{lab:'Median income',worse:'low',city:C.inc,commOnly:true,full:function(v){return '$'+Math.round(v).toLocaleString();},short:function(v){return '$'+Math.round(v/1000)+'k';},dp:'$'},
-    htn:{lab:'Hypertension',worse:'high',city:C.htn,full:function(v){return v.toFixed(1)+'%';},short:function(v){return v.toFixed(1)+'%';},dp:'pts'},
-    dia:{lab:'Diabetes',worse:'high',city:C.dia,full:function(v){return v.toFixed(1)+'%';},short:function(v){return v.toFixed(1)+'%';},dp:'pts'},
-    obesity:{lab:'Obesity',worse:'high',city:C.obesity,full:function(v){return v.toFixed(1)+'%';},short:function(v){return v.toFixed(1)+'%';},dp:'pts'}
-  };
-  var ORDER=['le','inc','htn','dia','obesity'];
-  var curGran='comm', curMetric='le', curKey=null;
-
-  function feats(){return curGran==='comm'?INSIDE.communities:INSIDE.tracts;}
-  function keyOf(f){return curGran==='comm'?f.name:f.id;}
-  function metricsFor(){return ORDER.filter(function(k){return curGran==='comm'||!MET[k].commOnly;});}
-  function ext(k){
-    var vs=feats().map(function(f){return f[k];}).filter(function(v){return v!=null;});
-    return {min:Math.min.apply(null,vs),max:Math.max.apply(null,vs)};
-  }
-  function sev(k,v){if(v==null)return null;var e=ext(k);var t=(v-e.min)/((e.max-e.min)||1);return MET[k].worse==='low'?1-t:t;}
-  function ramp(t){var a=[248,238,233],b=[142,44,34];
+  // ---------- helpers ----------
+  function ramp(t){var a=[247,238,233],b=[142,44,34];t=Math.max(0,Math.min(1,t));
     return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';}
+  function pct(v){return v==null?'n/a':v.toFixed(1)+'%';}
+  function money(v){return v==null?'n/a':'$'+Math.round(v).toLocaleString();}
+  function moneyK(v){return v==null?'n/a':'$'+Math.round(v/1000)+'k';}
+  function fmtSdoh(k,v){var m=sm(k);return v==null?'n/a':(m.fmt==='money'?money(v):v.toFixed(1)+'%');}
+  function vm(k){for(var i=0;i<VM.length;i++)if(VM[i].key===k)return VM[i];}
+  function sm(k){for(var i=0;i<SM.length;i++)if(SM[i].key===k)return SM[i];}
+  function el(id){return document.getElementById(id);}
 
-  var gA=document.getElementById('in-areas'), gL=document.getElementById('in-labels');
-  var panel=document.getElementById('in26panel');
-
-  function drawGeom(){
-    gA.innerHTML='';gL.innerHTML='';
-    feats().forEach(function(f){
-      var p=document.createElementNS(NS,'path');
-      p.setAttribute('d',f.d);
-      p.setAttribute('tabindex','0');p.setAttribute('role','button');
-      p.setAttribute('aria-label',curGran==='comm'?f.name:'Census '+f.name);
-      p.addEventListener('click',function(){select(keyOf(f));});
-      p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();select(keyOf(f));}});
-      gA.appendChild(p); f._el=p;
-      if(curGran==='comm'){
-        var t=document.createElementNS(NS,'text');
-        t.setAttribute('x',f.cx);t.setAttribute('y',f.cy);t.setAttribute('text-anchor','middle');
-        t.textContent=f.name; gL.appendChild(t);
-      }
-    });
-  }
-  function paint(){
-    var k=curMetric;
-    feats().forEach(function(f){
-      var s=sev(k,f[k]);
-      if(s==null){f._el.classList.add('in-null');f._el.removeAttribute('fill');}
-      else{f._el.classList.remove('in-null');f._el.setAttribute('fill',ramp(s));}
-    });
-    var e=ext(k),lo,hi;
-    if(MET[k].worse==='high'){lo=e.min;hi=e.max;}else{lo=e.max;hi=e.min;}
-    document.getElementById('in-lgscale').textContent=MET[k].short(lo)+' – '+MET[k].short(hi);
-  }
-  function setMetricTabs(){
-    document.querySelectorAll('.inmap .mtab').forEach(function(b){
-      var k=b.dataset.metric, dis=(curGran==='tract'&&MET[k].commOnly);
-      b.classList.toggle('disabled',dis);
-      var on=(k===curMetric);b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');
-    });
-  }
-  function delta(k,v){
-    if(v==null)return '';
-    var d=v-MET[k].city, worse=MET[k].worse==='high'?d>0:d<0, sign=d>=0?'+':'−',a=Math.abs(d),txt;
-    if(k==='inc')txt=sign+'$'+Math.round(a).toLocaleString();
-    else if(k==='le')txt=sign+a.toFixed(1)+' yrs';
-    else txt=sign+a.toFixed(1)+' pts';
-    return '<span class="d '+(worse?'d-bad':'d-good')+'">'+txt+' vs city</span>';
-  }
-  function byKey(kk){var a=feats();for(var i=0;i<a.length;i++){if(keyOf(a[i])===kk)return a[i];}return a[0];}
-  function select(kk){
-    curKey=kk;
-    feats().forEach(function(f){f._el.classList.toggle('sel',keyOf(f)===kk);});
-    var f=byKey(kk); gA.appendChild(f._el);
-    buildPanel(f);
-  }
-  function buildPanel(f){
-    var h;
-    if(curGran==='comm'){
-      var isHP=f.name==='Humboldt Park';
-      h='<div class="mp-name">'+f.name+' <span class="mp-pill '+(isHP?'ward':'nb')+'">'+f.share+'% of Ward 26</span></div>';
-      h+='<div class="mp-sub">Community area · Chicago Health Atlas &amp; Chicago Health Map</div>';
-    }else{
-      h='<div class="mp-name">'+f.name+' <span class="mp-pill nb">Ward 26</span></div>';
-      h+='<div class="mp-sub">~'+(f.pop?f.pop.toLocaleString():'—')+' patients · <span class="rel-pill">'+(f.rel||'—')+' reliability</span></div>';
-    }
-    h+='<div class="mp-rows">';
-    metricsFor().forEach(function(k){
-      var v=f[k];
-      if(v==null){h+='<div class="mp-row'+(k===curMetric?' active':'')+'"><div class="mp-rowh"><span class="mp-lab">'+MET[k].lab+'</span><span class="mp-val" style="color:var(--ink-3)">n/a</span></div></div>';return;}
-      var e=ext(k),w=Math.max(2,Math.min(100,((v-e.min)/((e.max-e.min)||1))*100));
-      var tk=Math.max(0,Math.min(100,((MET[k].city-e.min)/((e.max-e.min)||1))*100));
-      h+='<div class="mp-row'+(k===curMetric?' active':'')+'">'
-        +'<div class="mp-rowh"><span class="mp-lab">'+MET[k].lab+'</span>'
-        +'<span class="mp-val">'+MET[k].full(v)+delta(k,v)+'</span></div>'
-        +'<div class="mp-bar"><i style="width:'+w.toFixed(1)+'%;background:'+ramp(sev(k,v))+'"></i>'
-        +'<span class="tick" style="left:'+tk.toFixed(1)+'%"></span></div></div>';
-    });
-    h+='</div><div class="mp-foot"><span class="tk"></span> Vertical line marks the Chicago average · bars compare areas within Ward 26</div>';
-    panel.innerHTML=h;
-  }
-  function render(){drawGeom();paint();setMetricTabs();
-    // keep selection if key still exists, else default
-    var exists=feats().some(function(f){return keyOf(f)===curKey;});
-    if(!exists) curKey=keyOf(feats()[0]);
-    select(curKey);
-  }
-
-  document.querySelectorAll('.inmap .mtab').forEach(function(b){
-    b.addEventListener('click',function(){ if(b.classList.contains('disabled'))return;
-      curMetric=b.dataset.metric; paint(); setMetricTabs(); buildPanel(byKey(curKey)); });
+  // vital extents across wards (for map + range bars)
+  var vext={};
+  vitalKeys.forEach(function(k){
+    var vs=Object.keys(D.wards).map(function(w){return D.wards[w].vitals[k];}).filter(function(x){return x!=null;});
+    vext[k]={min:Math.min.apply(null,vs),max:Math.max.apply(null,vs)};
   });
-  document.querySelectorAll('.gtab').forEach(function(b){
-    b.addEventListener('click',function(){
-      curGran=b.dataset.gran;
-      document.querySelectorAll('.gtab').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
-      if(curGran==='tract'&&MET[curMetric].commOnly) curMetric='htn';
-      render();
-    });
-  });
+  function vsev(k,v){var e=vext[k];return (v-e.min)/((e.max-e.min)||1);} // higher=worse
 
-  // default: communities, life expectancy, Humboldt Park selected
-  curKey='Humboldt Park';
+  // community set for current ward
+  function wardComms(w){ return (D.geo.zoom[String(w)]||{comms:[]}).comms; }
+  function caV(caId,k){var c=D.caVitals[String(caId)];return c?c[k]:null;}
+  function caS(caId,k){var c=D.caSdoh[String(caId)];return c?c[k]:null;}
+  // share-weighted ward SDOH estimate
+  function wardSdoh(w,k){
+    var comms=wardComms(w),num=0,den=0;
+    comms.forEach(function(c){var v=caS(c.caId,k);if(v!=null){num+=c.share*v;den+=c.share;}});
+    return den?num/den:null;
+  }
+
+  // ---------- populate ward <select> ----------
+  var sel=el('wardSelect');
+  for(var w=1;w<=50;w++){var o=document.createElement('option');o.value=w;o.textContent='Ward '+w;sel.appendChild(o);}
+
+  // ==================================================== RENDER
+  function render(){
+    var w=curWard, W=D.wards[String(w)];
+    el('heroWard').textContent=w;
+    el('wardInput').value=w; sel.value=w;
+    // hero lede: worst vital
+    var worst=vitalKeys.slice().sort(function(a,b){return W.rank[a]-W.rank[b];})[0];
+    var wv=W.vitals[worst], cityv=D.city.vitals[worst];
+    el('heroLede').innerHTML='Across Chicago Health Map’s four tracked conditions, Ward '+w+' ranks <b>#'+W.rank[worst]+' of 50</b> for <b>'+vm(worst).label.toLowerCase()+'</b> ('+pct(wv)+' of patients, vs '+pct(cityv)+' citywide). Every figure below is real 2024 ward-level data; the section maps show how the load is distributed inside the ward.';
+    // meta pills
+    el('wardMeta').innerHTML=
+      '<span class="pill">≈<b>&nbsp;'+(W.pop?W.pop.toLocaleString():'—')+'</b>&nbsp;patients in the Health Map</span>'+
+      '<span class="pill">'+wardComms(w).length+' community areas</span>'+
+      '<span class="pill">data reliability: <b>&nbsp;'+(W.rel||'—')+'</b></span>';
+    curComm=wardComms(w).length?wardComms(w)[0].caId:null;
+    buildVitals(); buildMap(); buildCausal(); buildDrivers(); buildLevers();
+  }
+
+  // ---------- Section A ----------
+  function buildVitals(){
+    var W=D.wards[String(curWard)], html='';
+    VM.forEach(function(m){
+      var v=W.vitals[m.key], city=D.city.vitals[m.key], e=vext[m.key];
+      var d=v-city, worse=d>0;
+      var sevr=vsev(m.key,v);
+      var badgebg = sevr>.66?'var(--crit-ghost)':sevr>.33?'#fdf3e3':'var(--brand-ghost)';
+      var badgecl = sevr>.66?'var(--crit)':sevr>.33?'var(--warn)':'var(--brand-ink)';
+      var posPct=Math.max(4,Math.min(96,sevr*100));
+      var cityPct=Math.max(0,Math.min(100,vsev(m.key,city)*100));
+      html+='<div class="vcard">'
+        +'<div class="vc-top"><h3>'+m.label+'</h3><span class="badge" style="background:'+badgebg+';color:'+badgecl+'">#'+W.rank[m.key]+' of 50</span></div>'
+        +'<div class="num">'+(v==null?'n/a':v.toFixed(1))+'<small>%</small></div>'
+        +'<div class="delta '+(worse?'d-bad':'d-good')+'">'+(d>=0?'+':'−')+Math.abs(d).toFixed(1)+' pts vs city ('+pct(city)+')</div>'
+        +'<div class="rangebar"><span class="citytick" style="left:'+cityPct+'%"></span><span class="fillpos" style="left:'+posPct+'%;background:'+ramp(sevr)+'"></span></div>'
+        +'<div class="rlabels"><span>best ward '+e.min.toFixed(0)+'%</span><span>worst '+e.max.toFixed(0)+'%</span></div>'
+        +'</div>';
+    });
+    el('vgrid').innerHTML=html;
+  }
+
+  // ---------- Section B ----------
+  function buildMapTabs(){
+    el('mapTabs').innerHTML=VM.map(function(m){return '<button class="vtab'+(m.key===curVital?' on':'')+'" data-v="'+m.key+'">'+m.label+'</button>';}).join('');
+    el('mapTabs').querySelectorAll('.vtab').forEach(function(b){b.onclick=function(){curVital=b.dataset.v;buildMap();};});
+  }
+  function buildMap(){
+    buildMapTabs();
+    // city map
+    var g=D.geo.city, ca=el('cityAreas'), cl=el('cityLabels');
+    el('cityMap').setAttribute('viewBox','0 0 '+g.W+' '+g.H);
+    ca.innerHTML='';cl.innerHTML='';
+    g.wards.forEach(function(a){
+      var v=D.wards[String(a.w)].vitals[curVital];
+      var p=document.createElementNS(SVGNS,'path');
+      p.setAttribute('d',a.d);p.setAttribute('fill',ramp(vsev(curVital,v)));
+      if(a.w===curWard)p.setAttribute('class','sel');
+      p.style.cursor='pointer';p.onclick=function(){curWard=a.w;render();};
+      ca.appendChild(p);
+      var t=document.createElementNS(SVGNS,'text');t.setAttribute('x',a.cx);t.setAttribute('y',a.cy+2);t.setAttribute('text-anchor','middle');t.textContent=a.w;cl.appendChild(t);
+    });
+    el('cityScale').textContent=vext[curVital].min.toFixed(0)+'%–'+vext[curVital].max.toFixed(0)+'%';
+    // zoom map
+    var z=D.geo.zoom[String(curWard)]; var za=el('zoomAreas'), zl=el('zoomLabels');
+    el('zoomTitle').textContent='Ward '+curWard+' · '+vm(curVital).label+' by community';
+    el('zoomMap').setAttribute('viewBox','0 0 '+z.W+' '+z.H);
+    za.innerHTML='';zl.innerHTML='';
+    // local extent across this ward's communities
+    var cvs=z.comms.map(function(c){return caV(c.caId,curVital);}).filter(function(x){return x!=null;});
+    var lmin=Math.min.apply(null,cvs),lmax=Math.max.apply(null,cvs);
+    function lsev(v){return v==null?null:(v-lmin)/((lmax-lmin)||1);}
+    z.comms.forEach(function(c){
+      var v=caV(c.caId,curVital),s=lsev(v);
+      var p=document.createElementNS(SVGNS,'path');p.setAttribute('d',c.d);
+      p.setAttribute('fill',s==null?'#e3e6df':ramp(s));
+      if(c.caId===curComm)p.setAttribute('class','sel');
+      p.style.cursor='pointer';p.onclick=function(){curComm=c.caId;buildMap();};
+      za.appendChild(p);
+      var t=document.createElementNS(SVGNS,'text');t.setAttribute('x',c.cx);t.setAttribute('y',c.cy);t.setAttribute('text-anchor','middle');t.textContent=c.name;zl.appendChild(t);
+    });
+    // community chips w/ selected value
+    el('commList').innerHTML=z.comms.map(function(c){
+      return '<span class="commchip'+(c.caId===curComm?' on':'')+'" data-ca="'+c.caId+'">'+c.name+' <b>'+pct(caV(c.caId,curVital))+'</b></span>';
+    }).join('');
+    el('commList').querySelectorAll('.commchip').forEach(function(ch){ch.onclick=function(){curComm=+ch.dataset.ca;buildMap();};});
+  }
+
+  // ---------- Section C: causal ----------
+  function corr(xs,ys){ // pearson
+    var n=xs.length;if(n<2)return 0;
+    var mx=xs.reduce(function(a,b){return a+b;},0)/n, my=ys.reduce(function(a,b){return a+b;},0)/n;
+    var num=0,dx=0,dy=0;
+    for(var i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);dx+=(xs[i]-mx)*(xs[i]-mx);dy+=(ys[i]-my)*(ys[i]-my);}
+    return (dx&&dy)?num/Math.sqrt(dx*dy):0;
+  }
+  function buildCausal(){
+    var comms=wardComms(curWard);
+    // search ALL vital x driver pairs; pick the strongest POSITIVE aligned signal
+    // (community hardship up -> community disease up), so we surface the cleanest causal story.
+    var best=null;
+    vitalKeys.forEach(function(vk){
+      SM.forEach(function(m){
+        var xs=[],ys=[];
+        comms.forEach(function(c){var x=caS(c.caId,m.key),y=caV(c.caId,vk);if(x!=null&&y!=null){xs.push(x);ys.push(y);}});
+        if(xs.length<3)return;
+        var r=corr(xs,ys), aligned=(m.worse==='high')?r:-r;
+        if(best===null||aligned>best.aligned)best={vk:vk,m:m,aligned:aligned,n:xs.length};
+      });
+    });
+    var lead=el('causalLead');
+    if(!best){lead.innerHTML='<div class="r">This ward is essentially one community area, so a within-ward causal comparison isn’t meaningful. Use the city map above to see how it ranks against the other 49 wards.</div>';el('pairGrid').innerHTML='';return;}
+    var dm=best.m, worst=best.vk;
+    var weak=best.aligned<0.25;
+    lead.innerHTML='<div class="r">In <b>Ward '+curWard+'</b>, the communities with the most <b>'+dm.label.toLowerCase()+'</b> are largely the same ones carrying the most <b>'+vm(worst).label.toLowerCase()+'</b>'+(weak?' — though the signal is faint at this scale':'')+'.</div>'
+      +'<div class="chip">'+dm.label+' ↔ '+vm(worst).label+' · r = '+best.aligned.toFixed(2)+' across '+best.n+' communities'+(weak?' · weak, small sample':' · directional')+'</div>';
+    // sort communities by driver severity
+    var rows=comms.slice().filter(function(c){return caS(c.caId,dm.key)!=null&&caV(c.caId,worst)!=null;});
+    rows.sort(function(a,b){var av=caS(a.caId,dm.key),bv=caS(b.caId,dm.key);return dm.worse==='high'?bv-av:av-bv;});
+    var dvs=rows.map(function(c){return caS(c.caId,dm.key);}), yvs=rows.map(function(c){return caV(c.caId,worst);});
+    var dmin=Math.min.apply(null,dvs),dmax=Math.max.apply(null,dvs),ymin=Math.min.apply(null,yvs),ymax=Math.max.apply(null,yvs);
+    el('pairGrid').innerHTML=rows.map(function(c){
+      var dv=caS(c.caId,dm.key),yv2=caV(c.caId,worst);
+      var dw=Math.max(6,((dm.worse==='high'?(dv-dmin):(dmax-dv))/((dmax-dmin)||1))*100);
+      var yw=Math.max(6,((yv2-ymin)/((ymax-ymin)||1))*100);
+      return '<div class="pairrow"><div class="cn">'+c.name+'<small>'+c.share+'% of ward</small></div>'
+        +'<div class="minibar"><div class="lab"><span>'+dm.label+'</span><b>'+fmtSdoh(dm.key,dv)+'</b></div><div class="track"><i style="width:'+dw.toFixed(0)+'%;background:var(--warn)"></i></div></div>'
+        +'<div class="minibar"><div class="lab"><span>'+vm(worst).label+'</span><b>'+pct(yv2)+'</b></div><div class="track"><i style="width:'+yw.toFixed(0)+'%;background:var(--crit)"></i></div></div>'
+        +'</div>';
+    }).join('');
+  }
+
+  // ---------- Section D: drivers ----------
+  function buildDrivers(){
+    // sdoh bars: ward-weighted vs city
+    var html='';
+    SM.forEach(function(m){
+      var v=wardSdoh(curWard,m.key), city=D.city.sdoh[m.key];
+      if(v==null){html+='';return;}
+      // severity scale across all CAs for tick + width
+      var vals=Object.keys(D.caSdoh).map(function(id){return D.caSdoh[id][m.key];}).filter(function(x){return x!=null;});
+      var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);
+      var sev=(m.worse==='high')?(v-mn)/((mx-mn)||1):(mx-v)/((mx-mn)||1);
+      var wpct=Math.max(3,Math.min(100,((v-mn)/((mx-mn)||1))*100));
+      var cpct=Math.max(0,Math.min(100,((city-mn)/((mx-mn)||1))*100));
+      var d=v-city, worse=(m.worse==='high')?d>0:d<0;
+      var dtxt=(m.fmt==='money')?((d>=0?'+':'−')+'$'+Math.abs(Math.round(d)).toLocaleString()):((d>=0?'+':'−')+Math.abs(d).toFixed(1)+' pts');
+      html+='<div class="sdrow"><div class="top"><span class="lab">'+m.label+'</span><span class="val">'+fmtSdoh(m.key,v)+'<span class="d '+(worse?'d-bad':'d-good')+'">'+dtxt+'</span></span></div>'
+        +'<div class="bar"><i style="width:'+wpct.toFixed(0)+'%;background:'+ramp(sev)+'"></i><span class="tick" style="left:'+cpct.toFixed(0)+'%"></span></div></div>';
+    });
+    el('sdohBars').innerHTML=html+'<div style="font-size:11px;color:var(--ink-3);margin-top:12px">Ward figure is share-weighted across its community areas. Vertical line = Chicago average.</div>';
+    // heat grid: communities x sdoh
+    var comms=wardComms(curWard);
+    var cols=SM;
+    var extents={};cols.forEach(function(m){var vals=Object.keys(D.caSdoh).map(function(id){return D.caSdoh[id][m.key];}).filter(function(x){return x!=null;});extents[m.key]={mn:Math.min.apply(null,vals),mx:Math.max.apply(null,vals)};});
+    var t='<table class="heatbl"><thead><tr><th>Community</th>'+cols.map(function(m){return '<th>'+m.label.replace('Median household ','').replace('No health ','No ')+'</th>';}).join('')+'</tr></thead><tbody>';
+    comms.forEach(function(c){
+      t+='<tr><td class="name">'+c.name+' <span style="color:var(--ink-3);font-weight:400">'+c.share+'%</span></td>';
+      cols.forEach(function(m){
+        var v=caS(c.caId,m.key),e=extents[m.key];
+        if(v==null){t+='<td style="background:#e3e6df;color:#7c877f">—</td>';return;}
+        var sev=(m.worse==='high')?(v-e.mn)/((e.mx-e.mn)||1):(e.mx-v)/((e.mx-e.mn)||1);
+        t+='<td style="background:'+ramp(sev)+'">'+(m.fmt==='money'?moneyK(v):v.toFixed(0)+'%')+'</td>';
+      });
+      t+='</tr>';
+    });
+    t+='</tbody></table>';
+    el('heatWrap').innerHTML=t;
+  }
+
+  // ---------- Section E: adaptive levers ----------
+  var LEVER_LIB={
+    cardio:{tag:'Hypertension · hyperlipidemia',h:'A neighborhood community health worker corps',
+      ul:['Hire community health workers from the ward to run walk-in blood-pressure and cholesterol checks and monthly medication follow-up at libraries, churches, and the fieldhouse.',
+          'Use a trial-proven protocol: CHW-led programs cut systolic blood pressure ~7 mmHg beyond usual care and raised control from 17% to 73%.<sup class="fn"><a href="#s5">5</a></sup>',
+          'Pair with $4 generic statins and antihypertensives so cost is never the barrier.'],
+      why:['Pays for it','Illinois Medicaid reimburses certified CHW services, and the IMPaCT model returned $2.47 per $1 within a year.<sup class="fn"><a href="#s6">6</a></sup>']},
+    food:{tag:'Obesity',h:'Make healthy food the cheap, close choice',
+      ul:['Stand up a Double Up Food Bucks 1:1 SNAP match on produce at markets and enrolled corner stores.<sup class="fn"><a href="#s7">7</a></sup>',
+          'Retrofit corner stores with refrigeration and healthy-stocking agreements — food-swamp density predicts obesity better than distance to a grocery.<sup class="fn"><a href="#s8">8</a></sup>',
+          'Route clinic produce-prescriptions; a median $63/month benefit improved blood pressure and blood sugar.<sup class="fn"><a href="#s9">9</a></sup>'],
+      why:['Pays for it','Federal GusNIP grants match local nutrition-incentive dollars; the ledger clears against a single avoided cardiac admission.']},
+    mind:{tag:'Depression',h:'Fund collaborative mental-health care where people already are',
+      ul:['Place behavioral-health staff in primary-care, school-based, and library settings using the collaborative-care model.',
+          'Collaborative care roughly doubles depression treatment response versus usual care and is cost-effective.<sup class="fn"><a href="#s10">10</a></sup>',
+          'Fund warm hand-offs and peer support so screening actually reaches treatment.'],
+      why:['Pays for it','Collaborative care returns net savings over 4 years through reduced total health-care costs.<sup class="fn"><a href="#s10">10</a></sup>']},
+    housing:{tag:'Structural — every ward',h:'Treat housing stability as health infrastructure',
+      ul:['Fund tenant right to counsel: represented tenants stayed housed ~84% of the time and eviction filings fell 45–78%.<sup class="fn"><a href="#s11">11</a></sup>',
+          'Anti-displacement zoning and affordable set-asides in fast-gentrifying corridors.',
+          'Seed a community land trust to hold parcels off the speculative market.<sup class="fn"><a href="#s12">12</a></sup>'],
+      why:['Why it’s health policy','Housing instability and eviction threat raise blood pressure and cardiometabolic risk across dozens of U.S. studies.<sup class="fn"><a href="#s13">13</a></sup>']}
+  };
+  function buildLevers(){
+    var W=D.wards[String(curWard)];
+    var leverFor={htn:'cardio',hyperlip:'cardio',obesity:'food',depression:'mind'};
+    // conditions the ward is ABOVE the city on, worst-first; then any remaining, worst-first
+    var above=vitalKeys.filter(function(k){return W.vitals[k]>D.city.vitals[k];}).sort(function(a,b){return W.rank[a]-W.rank[b];});
+    var rest =vitalKeys.filter(function(k){return above.indexOf(k)<0;}).sort(function(a,b){return W.rank[a]-W.rank[b];});
+    var cond=[];
+    above.concat(rest).forEach(function(k){var id=leverFor[k];if(cond.indexOf(id)<0)cond.push(id);});
+    // two most-relevant condition levers, then housing (structural) as the third
+    var chosen=cond.slice(0,2); chosen.push('housing');
+    el('leverHead').textContent='What Ward '+curWard+' can pull';
+    el('levers').innerHTML=chosen.map(function(id,i){
+      var L=LEVER_LIB[id];
+      return '<div class="lever"><span class="lnum">'+(i+1)+'</span><div class="tag">'+L.tag+'</div><h3>'+L.h+'</h3>'
+        +'<ul>'+L.ul.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>'
+        +'<div class="why"><b>'+L.why[0]+'</b>'+L.why[1]+'</div></div>';
+    }).join('');
+  }
+
+  // ---------- Section F sources ----------
+  el('sources').innerHTML=[
+    '<li id="s1"><b>Chicago Health Map</b> (chicagohealthmap.com) — CAPriCORN. Ward- and community-area-level condition prevalence, 2024, among patients seen at participating Chicago health systems. <a href="https://chicagohealthmap.com" target="_blank" rel="noopener">chicagohealthmap.com</a></li>',
+    '<li id="s2"><b>Chicago Health Atlas</b> (chicagohealthatlas.org). Median household income (INC), poverty (POV), food insecurity (FAI), low food access (LFA), no health insurance (NHI), unemployment (UMP), by community area. <a href="https://chicagohealthatlas.org" target="_blank" rel="noopener">chicagohealthatlas.org</a></li>',
+    '<li id="s3"><b>Chicago Data Portal.</b> Ward boundaries (2023–) and community-area boundaries. <a href="https://data.cityofchicago.org" target="_blank" rel="noopener">data.cityofchicago.org</a></li>',
+    '<li id="s4"><b>U.S. Census Bureau, American Community Survey</b> 5-year estimates (via Chicago Health Atlas) for income and social-determinant measures.</li>',
+    '<li id="s5"><b>He J, Irazola V, Mills KT, et al.</b> “Community Health Worker–Led Multicomponent Intervention on Blood Pressure Control…” <em>JAMA</em> 318(11), 2017: systolic BP −6.6 mmHg vs usual care; control 17.0%→72.9%. <a href="https://pubmed.ncbi.nlm.nih.gov/28975305/" target="_blank" rel="noopener">pubmed</a></li>',
+    '<li id="s6"><b>Kangovi S, et al.</b> “Evidence-Based Community Health Worker Program… Return on Investment.” <em>Health Affairs</em> 39(2), 2020: $2.47 to Medicaid per $1. <a href="https://www.healthaffairs.org/doi/10.1377/hlthaff.2019.00981" target="_blank" rel="noopener">healthaffairs.org</a></li>',
+    '<li id="s7"><b>Double Up Food Bucks / Fair Food Network</b> &amp; USDA GusNIP evaluations: SNAP produce incentives raise fruit/vegetable intake and food security. <a href="https://fairfoodnetwork.org" target="_blank" rel="noopener">fairfoodnetwork.org</a></li>',
+    '<li id="s8"><b>Cooksey-Stowers K, Schwartz MB, Brownell KD.</b> “Food Swamps Predict Obesity Rates Better Than Food Deserts.” <em>IJERPH</em> 14(11):1366, 2017. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5708005/" target="_blank" rel="noopener">PMC5708005</a></li>',
+    '<li id="s9"><b>Hager K, et al.</b> “Impact of Produce Prescriptions…” <em>Circulation: CQO</em> 16(9), 2023: median $63/mo improved BP, HbA1c, food security. <a href="https://www.ahajournals.org/doi/10.1161/CIRCOUTCOMES.122.009520" target="_blank" rel="noopener">ahajournals.org</a></li>',
+    '<li id="s10"><b>Unützer J, et al.</b> “Collaborative Care Management of Late-Life Depression (IMPACT).” <em>JAMA</em> 288(22):2836–2845, 2002; and Unützer et al., <em>Am J Manag Care</em> 2008 (long-term cost savings): collaborative care roughly doubles treatment response and lowers total costs. <a href="https://jamanetwork.com/journals/jama/fullarticle/195599" target="_blank" rel="noopener">jamanetwork.com</a></li>',
+    '<li id="s11"><b>Tenant Right to Counsel</b> — NYC Office of Civil Justice data &amp; evaluations: ~84% of represented tenants stayed housed; 45–78% fewer evictions. <a href="https://www.tandfonline.com/doi/full/10.1080/10511482.2020.1825009" target="_blank" rel="noopener">Housing Policy Debate (2020)</a></li>',
+    '<li id="s12"><b>Ali O, Raviola S.</b> “The Effects of Community Land Trusts on Neighborhood Outcomes.” <em>Real Estate Economics</em>, 2025. <a href="https://onlinelibrary.wiley.com/doi/10.1111/1540-6229.12525" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>',
+    '<li id="s13"><b>Vásquez-Vera H, et al.</b> “The threat of home eviction and its effects on health…” <em>Soc Sci Med</em> 175, 2017; <b>Sims KD, et al.</b> “Housing instability and cardiometabolic health…” <em>BMC Public Health</em>, 2023. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0277953617300102" target="_blank" rel="noopener">sciencedirect.com</a></li>'
+  ].join('');
+
+  // ---------- wiring ----------
+  function setWard(n){n=Math.max(1,Math.min(50,parseInt(n)||1));curWard=n;render();}
+  el('wardInput').addEventListener('change',function(){setWard(this.value);});
+  el('wardInput').addEventListener('keyup',function(e){if(e.key==='Enter')setWard(this.value);});
+  el('wardSelect').addEventListener('change',function(){setWard(this.value);});
+  el('prevW').onclick=function(){setWard(curWard-1);window.scrollTo({top:0,behavior:'smooth'});};
+  el('nextW').onclick=function(){setWard(curWard+1);window.scrollTo({top:0,behavior:'smooth'});};
+
+  // TODO: EJScreen — wire US EPA EJScreen + Chicago Data Portal freight/industrial layers here
+  // to add an environmental-burden driver per community area (Section D scaffold slot).
+
   render();
 })();
 </script>
