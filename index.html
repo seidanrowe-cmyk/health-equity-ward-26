@@ -9,17 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f4f5f2;--surface:#ffffff;--surface-2:#f8f9f6;
-    --ink:#16201c;--ink-2:#43514b;--ink-3:#7c877f;
-    --line:#e3e6df;--line-2:#d2d7cc;
-    --brand:#14453a;--brand-2:#1d5c4c;--brand-ink:#0e352c;--brand-ghost:#e8efe9;
-    --crit:#b23a2e;--crit-2:#c74f42;--crit-ghost:#f7ebe8;
-    --warn:#b07d1e;--good:#1d7a52;
+    --bg:#f5f8f9;--surface:#ffffff;--surface-2:#eef4f6;
+    --ink:#13272e;--ink-2:#44565d;--ink-3:#7f8d93;
+    --line:#e2e9eb;--line-2:#cdd8db;
+    --brand:#00597c;--brand-2:#1a7fa3;--brand-ink:#003d54;--brand-ghost:#e2eef4;
+    --crit:#c0392b;--crit-2:#d1503f;--crit-ghost:#fbecea;
+    --warn:#b45309;--good:#00a66c;
     --serif:"Fraunces",Georgia,serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:linear-gradient(180deg,#f6f7f4,var(--bg) 40%);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  body{background:linear-gradient(180deg,#f7fbfc,var(--bg) 40%);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1280px;margin:0 auto;padding:0 28px}
   a{color:inherit}
   h1,h2,h3,h4{letter-spacing:-.02em}
@@ -35,7 +35,7 @@
 
   /* ---- landing / search gate ---- */
   #landing{min-height:100vh;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(180deg,#f6f7f4,var(--bg) 55%),radial-gradient(1000px 560px at 50% -8%,#e9efe9 0%,transparent 60%)}
+    background:linear-gradient(180deg,#f7fbfc,var(--bg) 55%),radial-gradient(1000px 560px at 50% -8%,#e2eef4 0%,transparent 60%)}
   .landing-inner{max-width:740px;text-align:center;padding:40px 24px}
   .landing-mark{display:inline-flex;align-items:center;gap:10px;font-weight:700;color:var(--brand-ink);font-size:14px;margin-bottom:28px}
   .landing-mark .m{width:32px;height:32px;border-radius:9px;background:var(--brand);display:grid;place-items:center;color:#fff}
@@ -110,7 +110,7 @@
   .mapcard.city svg text{font-size:6.6px}
   .mapcard.zoom svg text{font-size:11px}
   .legend{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:11px;font-weight:600;color:var(--ink-3)}
-  .legend .ramp{flex:1;height:8px;border-radius:100px;background:linear-gradient(90deg,#f7eee9,#8f2c22)}
+  .legend .ramp{flex:1;height:8px;border-radius:100px;background:linear-gradient(90deg,#e9f2f6,#005474)}
   .commlist{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
   .commchip{font-size:11.5px;font-weight:600;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:5px 11px;cursor:pointer}
   .commchip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
@@ -175,6 +175,35 @@
 
   @media(max-width:1000px){.vgrid{grid-template-columns:repeat(2,1fr)}.splitmap,.drivers-grid{grid-template-columns:1fr}.levers{grid-template-columns:1fr}.sources{columns:1}}
   @media(max-width:560px){.vgrid{grid-template-columns:1fr}.pairrow{grid-template-columns:1fr}}
+
+  /* Section B — context (concise writing + one small graphic) */
+  .context{display:grid;grid-template-columns:1.35fr 1fr;gap:30px;align-items:center}
+  .context-copy p{color:var(--ink-2);font-size:15.5px;line-height:1.65;margin-bottom:13px;max-width:60ch;text-wrap:pretty}
+  .context-copy p:last-child{margin-bottom:0}
+  .context-copy b{color:var(--ink);font-weight:600}
+  .context-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ctile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .ct-lab{font-size:11.5px;font-weight:600;color:var(--ink-3)}
+  .ct-val{font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.1;margin-top:3px;color:var(--ink)}
+  .ct-d{font-size:11.5px;font-weight:600;margin-top:3px}
+  .ctx-note{font-size:11.5px;color:var(--ink-3);margin-top:20px;max-width:88ch;line-height:1.55}
+  @media(max-width:820px){.context{grid-template-columns:1fr;gap:20px}}
+  /* refined lever plans */
+  .lever .lev-top{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+  .lever .tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-ink);background:var(--brand-ghost);padding:4px 10px;border-radius:100px}
+  .lever .lev-lead{font-size:14px;color:var(--ink-2);margin:2px 0 14px;text-wrap:pretty}
+  .lever ol.lev-steps{margin:0 0 15px;padding:0;list-style:none;counter-reset:st}
+  .lever ol.lev-steps li{position:relative;padding-left:28px;margin-bottom:11px;font-size:14px;color:var(--ink-2);line-height:1.5;text-wrap:pretty}
+  .lever ol.lev-steps li:last-child{margin-bottom:0}
+  .lever ol.lev-steps li b{color:var(--ink);font-weight:600}
+  .lever ol.lev-steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:1px;width:19px;height:19px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+  .lever .lev-foot{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:7px}
+  .lever .lev-foot span{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+  .lever .lev-foot b{display:inline-block;color:var(--brand-ink);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;margin-right:7px}
+  .subhead{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:30px 0 14px}
+  .d-neu{color:var(--ink-3)}
+  .learnmore{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-size:14px;font-weight:600;color:var(--brand);text-decoration:none;background:var(--brand-ghost);border:1px solid var(--line-2);border-radius:100px;padding:9px 16px;transition:background .15s,border-color .15s}
+  .learnmore:hover{background:#d4e6ef;border-color:var(--brand-2)}
 </style>
 </head>
 <body class="pre">
@@ -199,7 +228,7 @@
   <div class="wrap">
     <div class="logo">
       <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6 5c2 0 3.2 1.3 4 2.5C10.8 6.3 12 5 14 5c3.5 0 5 4 3.5 7C19 16.5 12 21 12 21z" fill="currentColor"/></svg></span>
-      <span>Chicago Ward Health Dashboard<small>50 wards · each ward’s biggest problems</small></span>
+      <span>Chicago Ward Health<small>50 wards · powered by the Chicago Health Map</small></span>
     </div>
     <div class="selector">
       <label for="wardInput">Ward</label>
@@ -215,33 +244,26 @@
 
 <section class="hero">
   <div class="wrap">
-    <div class="k" id="heroKick">Ward Health Profile</div>
+    <div class="k" id="heroKick">Ward Health Profile · Chicago Health Map</div>
     <h1>Ward <em id="heroWard">26</em> — a health profile</h1>
     <p id="heroLede"></p>
     <div class="wardmeta" id="wardMeta"></div>
+    <a class="learnmore" href="https://chicagohealthmap.com" target="_blank" rel="noopener">Want to dig into the numbers yourself? Explore them on the Chicago Health Map &rarr;</a>
   </div>
 </section>
 
-<!-- ================= SECTION A: 4 VITALS ================= -->
+<!-- ============ SECTION A · HEALTH MAP DATA ============ -->
 <section class="block" id="secA">
   <div class="wrap">
     <div class="sec-head">
-      <div class="k">Section A · The four biggest problems</div>
-      <h2>This ward’s four biggest problems</h2>
-      <p>The four community-health measures where this ward ranks worst among all 50 — automatically chosen per ward. Each shows the rate, the gap versus the citywide rate, the ward’s rank, and its source.</p>
+      <div class="k">Section A · From the Chicago Health Map</div>
+      <h2>Ward <span class="hw">26</span>’s four biggest health problems</h2>
+      <p>The four conditions where this ward ranks worst among all 50, drawn from the Chicago Health Map. Each shows the rate, how far it sits from the citywide rate, and where the ward ranks.</p>
     </div>
     <div class="vgrid" id="vgrid"></div>
-  </div>
-</section>
 
-<!-- ================= SECTION B: SPLIT MAP ================= -->
-<section class="block" id="secB">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="k">Section B · The ward in context</div>
-      <h2>City-wide, then down to the community</h2>
-      <p>Pick a vital: the left map ranks all 50 wards; the right map zooms the selected ward into its constituent community areas. Darker is worse. Click a ward or community to explore.</p>
-    </div>
+    <div class="subhead">Where it lands on the map</div>
+    <p class="sec-head" style="margin-top:-6px;margin-bottom:16px"><span style="color:var(--ink-2);font-size:14.5px">Pick a condition. The left map ranks all 50 wards; the right one zooms this ward into its community areas. Darker means higher. Click any ward or community.</span></p>
     <div class="vital-tabs" id="mapTabs"></div>
     <div class="splitmap">
       <div class="mapcard city">
@@ -258,61 +280,40 @@
   </div>
 </section>
 
-<!-- ================= SECTION C: CAUSAL ================= -->
+<!-- ============ SECTION B · OUTSIDE DATA ============ -->
+<section class="block" id="secB">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="k">Section B · Beyond the Health Map</div>
+      <h2>What sits underneath</h2>
+      <p>Health problems rest on economic ones. These figures come from outside the Health Map — the Chicago Health Atlas and the U.S. Census — and show the conditions the ward’s residents live in.</p>
+    </div>
+    <div class="context">
+      <div class="context-copy" id="ctxCopy"></div>
+      <div class="context-stats" id="ctxStats"></div>
+    </div>
+    <p class="ctx-note"><b>Sources:</b> income, poverty, food insecurity, food access, and insurance from the Chicago Health Atlas and U.S. Census / ACS (community-area level, share-weighted to the ward). <b>Not yet wired:</b> freight-corridor and air-pollution burden (US EPA EJScreen + Chicago Data Portal) — the natural next layer for asthma and cardiovascular risk.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION C · THE PLAN ============ -->
 <section class="block" id="secC">
   <div class="wrap">
     <div class="sec-head">
-      <div class="k">Section C · Why it clusters</div>
-      <h2>The social determinant under the spike</h2>
-      <p>Within this ward, the communities carrying the most disease are the ones carrying the most economic and food-access hardship. The pairing below sorts the ward's communities by the driver most closely tracking its worst vital.</p>
-    </div>
-    <div class="causal-lead" id="causalLead"></div>
-    <div class="pairgrid" id="pairGrid"></div>
-  </div>
-</section>
-
-<!-- ================= SECTION D: DRIVERS ================= -->
-<section class="block" id="secD">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="k">Section D · What's driving it</div>
-      <h2>The structural inputs</h2>
-      <p>Social-determinant profile for the ward (share-weighted across its communities) against the city, and a block-by-block heat grid of every community in the ward.</p>
-    </div>
-    <div class="drivers-grid">
-      <div class="sdoh-bars">
-        <h4>Ward vs. Chicago · social determinants</h4>
-        <div id="sdohBars"></div>
-      </div>
-      <div class="heat">
-        <h4>Community &times; determinant heat grid</h4>
-        <div id="heatWrap"></div>
-      </div>
-    </div>
-    <div class="scaffold">
-      <b>Wire-in slot — environmental burden.</b> Freight-corridor proximity, diesel PM2.5, and industrial-land adjacency are not in the Chicago Health Map or Health Atlas feeds. Connect the <b>Chicago Data Portal</b> (industrial corridors, truck routes) and <b>US EPA EJScreen</b> (traffic proximity, PM2.5, air-toxics respiratory index) here to add a pollution driver per community. <span style="color:var(--ink-3)">See <code>// TODO: EJScreen</code> in the source.</span>
-    </div>
-  </div>
-</section>
-
-<!-- ================= SECTION E: LEVERS ================= -->
-<section class="block" id="secE">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="k">Section E · Three levers</div>
+      <div class="k">Section C · The plan</div>
       <h2 id="leverHead">What this ward office can pull</h2>
-      <p>Chosen to match this ward's most-elevated conditions, each a concrete plan with the peer-reviewed evidence attached.</p>
+      <p>One focused plan for each of the four Chicago Health Map conditions in Section A — what to do, what it costs, and the evidence behind it. (Section B’s economic figures inform the plans but don’t drive which four appear.)</p>
     </div>
     <div class="levers" id="levers"></div>
   </div>
 </section>
 
-<!-- ================= SECTION F: SOURCES ================= -->
+<!-- ============ SOURCES ============ -->
 <footer>
   <div class="wrap">
-    <div class="sec-head"><div class="k">Section F · Sources &amp; notes</div></div>
+    <div class="sec-head"><div class="k">Sources &amp; notes</div></div>
     <ol class="sources" id="sources"></ol>
-    <p class="fnote">Health conditions: <b>Chicago Health Map</b> (chicagohealthmap.com), a project of CAPriCORN, 2024 — prevalence among patients seen at participating Chicago health systems, a clinical population rather than a general-population survey, so rates run higher and are best read as comparisons between geographies. Social determinants and income: <b>Chicago Health Atlas</b> (chicagohealthatlas.org) and the U.S. Census / ACS. Ward and community-area boundaries: the Chicago Health Map and the Chicago Data Portal. Reliability labels are carried from the source. Figures accessed 2026.</p>
+    <p class="fnote">Health conditions come from the <b>Chicago Health Map</b> (chicagohealthmap.com), a project of CAPriCORN — 2026 view of 2024 data, measured among patients seen at participating Chicago health systems. Because that’s a clinical population rather than a household survey, the rates run higher than survey figures and are best read as comparisons between wards. Everything in Section B comes from outside the Health Map: the <b>Chicago Health Atlas</b> and the <b>U.S. Census / ACS</b>. Boundaries: Chicago Health Map and the Chicago Data Portal.</p>
   </div>
 </footer>
 
@@ -320,23 +321,22 @@
 <script>
 (function(){
   var D=window.DASH, NS='http://www.w3.org/2000/svg';
-  var IM=D.indMeta, indKeys=IM.map(function(m){return m.key;});
-  var diseaseKeys=D.diseaseKeys, SM=D.sdohMeta;
+  var IM=D.indMeta, diseaseKeys=D.diseaseKeys, SM=D.sdohMeta;
   var curWard=26, curVital=null, curComm=null;
 
   function im(k){for(var i=0;i<IM.length;i++)if(IM[i].key===k)return IM[i];}
   function sm(k){for(var i=0;i<SM.length;i++)if(SM[i].key===k)return SM[i];}
   function el(id){return document.getElementById(id);}
-  function ramp(t){var a=[247,238,233],b=[142,44,34];t=Math.max(0,Math.min(1,t));
+  function r0(x){return x==null?null:Math.round(x);}
+  // Chicago Health Map choropleth: pale blue -> deep teal-blue
+  function ramp(t){var a=[233,242,246],b=[0,84,116];t=Math.max(0,Math.min(1,t));
     return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';}
-  function pctv(v){return v==null?'n/a':v.toFixed(1)+'%';}
+  function pctv(v){return v==null?'n/a':Math.round(v)+'%';}
   function money(v){return v==null?'n/a':'$'+Math.round(v).toLocaleString();}
   function moneyK(v){return v==null?'n/a':'$'+Math.round(v/1000)+'k';}
-  function fmtSdoh(k,v){return v==null?'n/a':(sm(k).fmt==='money'?money(v):v.toFixed(1)+'%');}
-  var SRC={chm:'Chicago Health Map',atlas:'Chicago Health Atlas'};
 
   var vext={};
-  indKeys.forEach(function(k){
+  diseaseKeys.forEach(function(k){
     var vs=Object.keys(D.wards).map(function(w){return D.wards[w].vitals[k];}).filter(function(x){return x!=null;});
     vext[k]={min:Math.min.apply(null,vs),max:Math.max.apply(null,vs)};
   });
@@ -345,7 +345,7 @@
   function caVal(caId,k){var c=D.caV[String(caId)];return c?c[k]:null;}
   function caS(caId,k){var c=D.caSdoh[String(caId)];return c?c[k]:null;}
   function wardSdoh(w,k){var comms=wardComms(w),num=0,den=0;comms.forEach(function(c){var v=caS(c.caId,k);if(v!=null){num+=c.share*v;den+=c.share;}});return den?num/den:null;}
-  function top4(w){var W=D.wards[String(w)];return indKeys.filter(function(k){return W.rank[k]!=null;}).sort(function(a,b){return W.rank[a]-W.rank[b];}).slice(0,4);}
+  function top4(w){var W=D.wards[String(w)];return diseaseKeys.filter(function(k){return W.rank[k]!=null;}).sort(function(a,b){return W.rank[a]-W.rank[b];}).slice(0,4);}
 
   var sel=el('wardSelect');
   for(var w=1;w<=50;w++){var o=document.createElement('option');o.value=w;o.textContent='Ward '+w;sel.appendChild(o);}
@@ -353,30 +353,33 @@
   function render(){
     var w=curWard, W=D.wards[String(w)], tops=top4(w);
     el('heroWard').textContent=w; el('wardInput').value=w; sel.value=w;
+    Array.prototype.forEach.call(document.querySelectorAll('.hw'),function(x){x.textContent=w;});
     var t0=tops[0], v0=W.vitals[t0], c0=D.city.vitals[t0];
-    el('heroLede').innerHTML='Of the seven community-health indicators tracked here, Ward '+w+'’s single biggest problem is <b>'+im(t0).label.toLowerCase()+'</b> — <b>#'+W.rank[t0]+' of 50</b> ('+pctv(v0)+' vs '+pctv(c0)+' citywide). The four cards below are this ward’s own worst-ranked measures; the sections that follow map, explain, and target them.';
+    el('heroLede').innerHTML='Ward '+w+'’s biggest health problem is <b>'+im(t0).label.toLowerCase()+'</b> — the '+ord(W.rank[t0])+'-worst of Chicago’s 50 wards ('+pctv(v0)+' of patients, against '+pctv(c0)+' citywide). Below are the four conditions this ward struggles with most, where they land on the map, what sits underneath them, and what a ward office can do.';
     el('wardMeta').innerHTML=
       '<span class="pill">≈<b>&nbsp;'+(W.pop?W.pop.toLocaleString():'—')+'</b>&nbsp;patients in the Health Map</span>'+
       '<span class="pill">'+wardComms(w).length+' community areas</span>'+
       '<span class="pill">data reliability: <b>&nbsp;'+(W.rel||'—')+'</b></span>';
     curVital=tops[0]; curComm=wardComms(w).length?wardComms(w)[0].caId:null;
-    buildVitals(tops); buildMap(tops); buildCausal(); buildDrivers(); buildLevers(tops);
+    buildVitals(tops); buildMap(tops); buildContext(tops); buildLevers(tops);
   }
+  function ord(n){var s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
 
   function buildVitals(tops){
     var W=D.wards[String(curWard)], html='';
     tops.forEach(function(k){
       var m=im(k), v=W.vitals[k], city=D.city.vitals[k], e=vext[k];
-      var d=v-city, worse=d>0, sevr=vsev(k,v);
-      var badgebg=sevr>.66?'var(--crit-ghost)':sevr>.33?'#fdf3e3':'var(--brand-ghost)';
+      var d=v-city, dr=Math.round(d), sevr=vsev(k,v);
+      var badgebg=sevr>.66?'var(--crit-ghost)':sevr>.33?'#fdf1e3':'var(--brand-ghost)';
       var badgecl=sevr>.66?'var(--crit)':sevr>.33?'var(--warn)':'var(--brand-ink)';
       var posPct=Math.max(4,Math.min(96,sevr*100)), cityPct=Math.max(0,Math.min(100,vsev(k,city)*100));
+      var dtxt=dr===0?'≈ city rate ('+pctv(city)+')':((dr>0?'+':'−')+Math.abs(dr)+' pts vs city ('+pctv(city)+')');
       html+='<div class="vcard">'
-        +'<div class="vc-top"><h3>'+m.label+'</h3><span class="badge" style="background:'+badgebg+';color:'+badgecl+'">#'+W.rank[k]+' of 50</span></div>'
-        +'<div class="num">'+(v==null?'n/a':v.toFixed(1))+'<small>%</small></div>'
-        +'<div class="delta '+(worse?'d-bad':'d-good')+'">'+(d>=0?'+':'−')+Math.abs(d).toFixed(1)+' pts vs city ('+pctv(city)+')</div>'
+        +'<div class="vc-top"><h3>'+m.label+'</h3><span class="badge" style="background:'+badgebg+';color:'+badgecl+'">'+ord(W.rank[k])+' worst</span></div>'
+        +'<div class="num">'+(v==null?'n/a':Math.round(v))+'<small>%</small></div>'
+        +'<div class="delta '+(dr>0?'d-bad':dr<0?'d-good':'d-neu')+'">'+dtxt+'</div>'
         +'<div class="rangebar"><span class="citytick" style="left:'+cityPct+'%"></span><span class="fillpos" style="left:'+posPct+'%;background:'+ramp(sevr)+'"></span></div>'
-        +'<div class="rlabels"><span>best '+e.min.toFixed(0)+'%</span><span style="color:var(--ink-3)">'+SRC[m.source]+'</span><span>worst '+e.max.toFixed(0)+'%</span></div>'
+        +'<div class="rlabels"><span>best ward '+e.min.toFixed(0)+'%</span><span>worst '+e.max.toFixed(0)+'%</span></div>'
         +'</div>';
     });
     el('vgrid').innerHTML=html;
@@ -393,7 +396,7 @@
     el('cityMap').setAttribute('viewBox','0 0 '+g.W+' '+g.H); ca.innerHTML='';cl.innerHTML='';
     g.wards.forEach(function(a){
       var v=D.wards[String(a.w)].vitals[curVital];
-      var p=document.createElementNS(NS,'path');p.setAttribute('d',a.d);p.setAttribute('fill',v==null?'#e3e6df':ramp(vsev(curVital,v)));
+      var p=document.createElementNS(NS,'path');p.setAttribute('d',a.d);p.setAttribute('fill',v==null?'#e2e9eb':ramp(vsev(curVital,v)));
       if(a.w===curWard)p.setAttribute('class','sel');
       p.style.cursor='pointer';p.onclick=function(){curWard=a.w;render();};ca.appendChild(p);
       var t=document.createElementNS(NS,'text');t.setAttribute('x',a.cx);t.setAttribute('y',a.cy+2);t.setAttribute('text-anchor','middle');t.textContent=a.w;cl.appendChild(t);
@@ -406,7 +409,7 @@
     var lmin=Math.min.apply(null,cvs),lmax=Math.max.apply(null,cvs);
     z.comms.forEach(function(c){
       var v=caVal(c.caId,curVital),s=(v==null?null:(v-lmin)/((lmax-lmin)||1));
-      var p=document.createElementNS(NS,'path');p.setAttribute('d',c.d);p.setAttribute('fill',s==null?'#e3e6df':ramp(s));
+      var p=document.createElementNS(NS,'path');p.setAttribute('d',c.d);p.setAttribute('fill',s==null?'#e2e9eb':ramp(s));
       if(c.caId===curComm)p.setAttribute('class','sel');
       p.style.cursor='pointer';p.onclick=function(){curComm=c.caId;buildMap(tops);};za.appendChild(p);
       var t=document.createElementNS(NS,'text');t.setAttribute('x',c.cx);t.setAttribute('y',c.cy);t.setAttribute('text-anchor','middle');t.textContent=c.name;zl.appendChild(t);
@@ -415,130 +418,108 @@
     el('commList').querySelectorAll('.commchip').forEach(function(ch){ch.onclick=function(){curComm=+ch.dataset.ca;buildMap(tops);};});
   }
 
-  function corr(xs,ys){var n=xs.length;if(n<2)return 0;var mx=0,my=0,i;for(i=0;i<n;i++){mx+=xs[i];my+=ys[i];}mx/=n;my/=n;var num=0,dx=0,dy=0;for(i=0;i<n;i++){num+=(xs[i]-mx)*(ys[i]-my);dx+=(xs[i]-mx)*(xs[i]-mx);dy+=(ys[i]-my)*(ys[i]-my);}return (dx&&dy)?num/Math.sqrt(dx*dy):0;}
-  function buildCausal(){
-    var comms=wardComms(curWard), best=null;
-    diseaseKeys.forEach(function(vk){
-      SM.forEach(function(m){
-        var xs=[],ys=[];
-        comms.forEach(function(c){var x=caS(c.caId,m.key),y=caVal(c.caId,vk);if(x!=null&&y!=null){xs.push(x);ys.push(y);}});
-        if(xs.length<3)return;
-        var r=corr(xs,ys), aligned=(m.worse==='high')?r:-r;
-        if(best===null||aligned>best.aligned)best={vk:vk,m:m,aligned:aligned,n:xs.length};
-      });
-    });
-    var lead=el('causalLead');
-    if(!best){lead.innerHTML='<div class="r">This ward is essentially one community area, so a within-ward causal comparison isn’t meaningful. Use the city map above to see how it ranks against the other 49 wards.</div>';el('pairGrid').innerHTML='';return;}
-    var dm=best.m, worst=best.vk, weak=best.aligned<0.25;
-    lead.innerHTML='<div class="r">In <b>Ward '+curWard+'</b>, the communities with the most <b>'+dm.label.toLowerCase()+'</b> are largely the same ones carrying the most <b>'+im(worst).label.toLowerCase()+'</b>'+(weak?' — though the signal is faint at this scale':'')+'.</div>'
-      +'<div class="chip">'+dm.label+' ↔ '+im(worst).label+' · r = '+best.aligned.toFixed(2)+' across '+best.n+' communities'+(weak?' · weak, small sample':' · directional')+'</div>';
-    var rows=comms.slice().filter(function(c){return caS(c.caId,dm.key)!=null&&caVal(c.caId,worst)!=null;});
-    rows.sort(function(a,b){var av=caS(a.caId,dm.key),bv=caS(b.caId,dm.key);return dm.worse==='high'?bv-av:av-bv;});
-    var dvs=rows.map(function(c){return caS(c.caId,dm.key);}), yvs=rows.map(function(c){return caVal(c.caId,worst);});
-    var dmin=Math.min.apply(null,dvs),dmax=Math.max.apply(null,dvs),ymin=Math.min.apply(null,yvs),ymax=Math.max.apply(null,yvs);
-    el('pairGrid').innerHTML=rows.map(function(c){
-      var dv=caS(c.caId,dm.key),yv=caVal(c.caId,worst);
-      var dw=Math.max(6,((dm.worse==='high'?(dv-dmin):(dmax-dv))/((dmax-dmin)||1))*100);
-      var yw=Math.max(6,((yv-ymin)/((ymax-ymin)||1))*100);
-      return '<div class="pairrow"><div class="cn">'+c.name+'<small>'+c.share+'% of ward</small></div>'
-        +'<div class="minibar"><div class="lab"><span>'+dm.label+'</span><b>'+fmtSdoh(dm.key,dv)+'</b></div><div class="track"><i style="width:'+dw.toFixed(0)+'%;background:var(--warn)"></i></div></div>'
-        +'<div class="minibar"><div class="lab"><span>'+im(worst).label+'</span><b>'+pctv(yv)+'</b></div><div class="track"><i style="width:'+yw.toFixed(0)+'%;background:var(--crit)"></i></div></div>'
-        +'</div>';
+  function buildContext(tops){
+    var w=curWard, pov=wardSdoh(w,'pov'),nhi=wardSdoh(w,'nhi'),fai=wardSdoh(w,'fai'),lfa=wardSdoh(w,'lfa');
+    var top=tops[0], povGap=pov-D.city.sdoh.pov;
+    var comms=wardComms(w).filter(function(c){return caS(c.caId,'pov')!=null;}), spread='';
+    if(comms.length>1){var s=comms.slice().sort(function(a,b){return caS(b.caId,'pov')-caS(a.caId,'pov');});
+      if(s[0].name!==s[s.length-1].name) spread=' And it isn’t spread evenly — <b>'+s[0].name+'</b> carries far more of it than <b>'+s[s.length-1].name+'</b>.';}
+    var p1='About <b>'+r0(pov)+'%</b> of Ward '+w+' lives below twice the poverty line and <b>'+r0(nhi)+'%</b> have no health insurance'
+      +(Math.abs(povGap)>=2?', '+r0(Math.abs(povGap))+' points '+(povGap>0?'above':'below')+' the city':'')
+      +'. When money and coverage are that tight, '+im(top).label.toLowerCase()+' tends to go unmanaged until it becomes an emergency.';
+    var p2='Roughly <b>'+r0(fai)+'%</b> of residents can’t reliably afford food and <b>'+r0(lfa)+'%</b> live far from fresh groceries — pressure that shows up directly in the ward’s weight, blood-sugar, and blood-pressure numbers.'+spread;
+    el('ctxCopy').innerHTML='<p>'+p1+'</p><p>'+p2+'</p>';
+    var tiles=[['fai','Food insecurity'],['pov','Below 200% poverty'],['nhi','No health insurance'],['inc','Median income']];
+    el('ctxStats').innerHTML=tiles.map(function(t){
+      var k=t[0],v=wardSdoh(w,k),city=D.city.sdoh[k],m=sm(k),d=v-city,worse=(m.worse==='high')?d>0:d<0;
+      var val=(m.fmt==='money')?moneyK(v):r0(v)+'%';
+      var dtxt=(m.fmt==='money')?((d>=0?'+':'−')+'$'+Math.abs(Math.round(d/1000))+'k'):((d>=0?'+':'−')+Math.abs(Math.round(d))+' pts');
+      return '<div class="ctile"><div class="ct-lab">'+t[1]+'</div><div class="ct-val">'+val+'</div><div class="ct-d '+(worse?'d-bad':'d-good')+'">'+dtxt+' vs city</div></div>';
     }).join('');
   }
 
-  function buildDrivers(){
-    var html='';
-    SM.forEach(function(m){
-      var v=wardSdoh(curWard,m.key), city=D.city.sdoh[m.key]; if(v==null)return;
-      var vals=Object.keys(D.caSdoh).map(function(id){return D.caSdoh[id][m.key];}).filter(function(x){return x!=null;});
-      var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);
-      var sev=(m.worse==='high')?(v-mn)/((mx-mn)||1):(mx-v)/((mx-mn)||1);
-      var wpct=Math.max(3,Math.min(100,((v-mn)/((mx-mn)||1))*100)), cpct=Math.max(0,Math.min(100,((city-mn)/((mx-mn)||1))*100));
-      var d=v-city, worse=(m.worse==='high')?d>0:d<0;
-      var dtxt=(m.fmt==='money')?((d>=0?'+':'−')+'$'+Math.abs(Math.round(d)).toLocaleString()):((d>=0?'+':'−')+Math.abs(d).toFixed(1)+' pts');
-      html+='<div class="sdrow"><div class="top"><span class="lab">'+m.label+'</span><span class="val">'+fmtSdoh(m.key,v)+'<span class="d '+(worse?'d-bad':'d-good')+'">'+dtxt+'</span></span></div>'
-        +'<div class="bar"><i style="width:'+wpct.toFixed(0)+'%;background:'+ramp(sev)+'"></i><span class="tick" style="left:'+cpct.toFixed(0)+'%"></span></div></div>';
-    });
-    el('sdohBars').innerHTML=html+'<div style="font-size:11px;color:var(--ink-3);margin-top:12px">Ward figure is share-weighted across its community areas. Vertical line = Chicago average.</div>';
-    var comms=wardComms(curWard), cols=SM, extents={};
-    cols.forEach(function(m){var vals=Object.keys(D.caSdoh).map(function(id){return D.caSdoh[id][m.key];}).filter(function(x){return x!=null;});extents[m.key]={mn:Math.min.apply(null,vals),mx:Math.max.apply(null,vals)};});
-    var t='<table class="heatbl"><thead><tr><th>Community</th>'+cols.map(function(m){return '<th>'+m.label.replace('Median household ','').replace('No health ','No ')+'</th>';}).join('')+'</tr></thead><tbody>';
-    comms.forEach(function(c){
-      t+='<tr><td class="name">'+c.name+' <span style="color:var(--ink-3);font-weight:400">'+c.share+'%</span></td>';
-      cols.forEach(function(m){var v=caS(c.caId,m.key),e=extents[m.key];
-        if(v==null){t+='<td style="background:#e3e6df;color:#7c877f">—</td>';return;}
-        var sev=(m.worse==='high')?(v-e.mn)/((e.mx-e.mn)||1):(e.mx-v)/((e.mx-e.mn)||1);
-        t+='<td style="background:'+ramp(sev)+'">'+(m.fmt==='money'?moneyK(v):v.toFixed(0)+'%')+'</td>';});
-      t+='</tr>';});
-    t+='</tbody></table>'; el('heatWrap').innerHTML=t;
-  }
-
   var LEVER={
-    htn:{tag:'Hypertension',h:'Get blood pressure under control at the block level',
-      ul:['Deploy community health workers in a <b>team-based care</b> model — the Community Preventive Services Task Force finds strong evidence it raises BP control and is cost-effective.<sup class="fn"><a href="#s16">16</a></sup>',
-          'Walk-in screening and monthly medication follow-up cut systolic BP ~7 mmHg and lifted control from 17% to 73% in a randomized trial.<sup class="fn"><a href="#s5">5</a></sup>',
-          'Pair with $4 generic antihypertensives so cost is never the barrier.'],
-      why:['Pays for it','Illinois Medicaid reimburses CHW services; the IMPaCT model returned $2.47 per $1 in avoided admissions.<sup class="fn"><a href="#s6">6</a></sup>']},
-    dia:{tag:'Diabetes',h:'Bend the diabetes curve — education plus prevention',
-      ul:['Fund <b>Diabetes Self-Management Education</b>; on its own it lowers A1c by ~0.57%.<sup class="fn"><a href="#s14">14</a></sup>',
-          'Enroll high-risk residents in a <b>National Diabetes Prevention Program</b> lifestyle cohort — it cut new diabetes cases 58% versus usual care.<sup class="fn"><a href="#s15">15</a></sup>',
-          'Add clinic produce prescriptions; a median $63/month benefit improved blood sugar.<sup class="fn"><a href="#s9">9</a></sup>'],
-      why:['Pays for it','DSMES and DPP are covered benefits; each prevented case avoids years of dialysis and cardiac cost.']},
-    obesity:{tag:'Obesity',h:'Reengineer the food environment',
-      ul:['Stand up a <b>Double Up Food Bucks</b> 1:1 SNAP match on produce at markets and enrolled corner stores.<sup class="fn"><a href="#s7">7</a></sup>',
-          'Retrofit corner stores with refrigeration and healthy stocking — food-swamp density predicts obesity better than distance to a grocery.<sup class="fn"><a href="#s8">8</a></sup>',
-          'Route clinic produce prescriptions to shift daily diet.<sup class="fn"><a href="#s9">9</a></sup>'],
-      why:['Pays for it','Federal GusNIP grants match local produce-incentive dollars.']},
-    hyperlip:{tag:'Hyperlipidemia',h:'Team-based cholesterol management',
-      ul:['Put CHWs, pharmacists, and clinicians on one <b>team-based care</b> plan — CPSTF: strong evidence it improves cholesterol control and is cost-effective.<sup class="fn"><a href="#s16">16</a></sup>',
-          '$4 generic statins with CHW adherence follow-up so cost and forgetting stop derailing treatment.<sup class="fn"><a href="#s5">5</a></sup>',
-          'Fold lipid screening into the same community blood-pressure checks.'],
-      why:['Pays for it','Team-based care is cost-effective per CPSTF; statins are pennies a day.']},
-    depression:{tag:'Depression',h:'Collaborative mental-health care where people already are',
-      ul:['Embed behavioral-health staff in primary care, schools, and libraries using the <b>collaborative-care model</b>.<sup class="fn"><a href="#s10">10</a></sup>',
-          'Collaborative care roughly doubles depression treatment response versus usual care and lowers total costs.<sup class="fn"><a href="#s10">10</a></sup>',
-          'Fund warm hand-offs and peer support so a positive screen actually reaches treatment.'],
-      why:['Pays for it','Collaborative care returns net savings over four years through lower total health-care costs.<sup class="fn"><a href="#s10">10</a></sup>']},
-    asthma:{tag:'Asthma',h:'A healthy-homes asthma program',
-      ul:['Fund <b>home-based, multi-trigger remediation</b> (mold, pests, dust) — CPSTF strong evidence; ~21 fewer symptom-days a year and fewer ER visits.<sup class="fn"><a href="#s17">17</a></sup>',
-          'Pair with housing-code enforcement for the building hazards behind chronic attacks.<sup class="fn"><a href="#s13">13</a></sup>',
-          'Target the worst blocks with local air-quality and freight data (see Section D).'],
-      why:['Pays for it','Fewer ER visits and missed school days; braid housing and health dollars.']},
-    fai:{tag:'Food insecurity',h:'Close the food-insecurity gap',
-      ul:['Auto-enroll eligible residents in <b>SNAP and WIC</b> through clinics, schools, and the ward office.',
-          'Stretch every SNAP dollar with a <b>Double Up Food Bucks</b> produce match.<sup class="fn"><a href="#s7">7</a></sup>',
-          'Prescribe food as medicine — produce prescriptions from safety-net clinics.<sup class="fn"><a href="#s9">9</a></sup>'],
-      why:['Pays for it','SNAP is federally funded — every new enrollment is found money for the ward’s economy.']}
+    htn:{tag:'Hypertension',h:'Control blood pressure at the block level',
+      lead:'High blood pressure is cheap to treat and quietly dangerous when it isn’t. Close the gap between diagnosis and daily control.',
+      steps:['<b>Hire community health workers from the ward</b> to run walk-in blood-pressure checks and monthly medication check-ins at libraries, churches, and clinics.',
+             '<b>Put them on a team with clinicians and pharmacists.</b> The Community Preventive Services Task Force finds strong evidence this works and is cost-effective.<sup class="fn"><a href="#s16">16</a></sup>',
+             '<b>Stock $4 generics.</b> First-line drugs cost pennies a day, so cost is never the reason someone stops.'],
+      evidence:'A randomized trial of this model cut systolic pressure about 7 mmHg and lifted control from 17% to 73%.<sup class="fn"><a href="#s5">5</a></sup>',
+      funding:'Illinois Medicaid reimburses CHW services; the model returned $2.47 for every $1 spent.<sup class="fn"><a href="#s6">6</a></sup>'},
+    dia:{tag:'Diabetes',h:'Slow diabetes with education and prevention',
+      lead:'The real cost of diabetes comes later — in kidneys, hearts, and eyes. Spend early on control and prevention.',
+      steps:['<b>Fund diabetes self-management education.</b> Structured coaching lowers average A1c by about half a point on its own.<sup class="fn"><a href="#s14">14</a></sup>',
+             '<b>Enroll at-risk residents in a National DPP lifestyle group.</b> It cut new diabetes cases by 58% versus usual care.<sup class="fn"><a href="#s15">15</a></sup>',
+             '<b>Prescribe produce from the clinic.</b> A modest monthly benefit improved blood sugar across programs nationwide.<sup class="fn"><a href="#s9">9</a></sup>'],
+      evidence:'Education, prevention, and food together move the numbers that matter — A1c, weight, and new cases.',
+      funding:'Both education and the prevention program are covered benefits; every delayed case avoids years of dialysis and cardiac cost.'},
+    obesity:{tag:'Obesity',h:'Make the healthy choice the easy, affordable one',
+      lead:'People eat what’s close and cheap. Change what the ward’s stores and streets put within reach.',
+      steps:['<b>Match SNAP dollars on produce</b> — a Double Up Food Bucks program at markets and enrolled corner stores.<sup class="fn"><a href="#s7">7</a></sup>',
+             '<b>Retrofit corner stores</b> with refrigeration and fresh stock; fast-food density predicts obesity better than distance to a grocery.<sup class="fn"><a href="#s8">8</a></sup>',
+             '<b>Route produce prescriptions</b> from clinics to shift everyday diet.<sup class="fn"><a href="#s9">9</a></sup>'],
+      evidence:'Small per-household costs against the long bill of diabetes, heart disease, and stroke.',
+      funding:'Federal GusNIP grants match local produce-incentive dollars.'},
+    hyperlip:{tag:'Hyperlipidemia',h:'Manage cholesterol as a team, not a lecture',
+      lead:'High cholesterol is silent and very treatable. The barrier is follow-through, not knowledge.',
+      steps:['<b>Use a team-based care model</b> — CHWs, pharmacists, and clinicians on one plan. Strong evidence for improving cholesterol, and cost-effective.<sup class="fn"><a href="#s16">16</a></sup>',
+             '<b>Pair $4 generic statins with adherence follow-up</b> so cost and forgetting stop derailing treatment.<sup class="fn"><a href="#s5">5</a></sup>',
+             '<b>Screen at the same community blood-pressure checks</b> — one visit, both numbers.'],
+      evidence:'Team-based care reliably raises the share of patients who reach their cholesterol goal.<sup class="fn"><a href="#s16">16</a></sup>',
+      funding:'Cost-effective per the Community Preventive Services Task Force; statins are pennies a day.'},
+    depression:{tag:'Depression',h:'Bring mental-health care to where people already are',
+      lead:'Screening only helps if it reaches treatment. Close that gap by putting care in trusted places.',
+      steps:['<b>Embed behavioral-health staff in primary care, schools, and libraries</b> using the collaborative-care model.<sup class="fn"><a href="#s10">10</a></sup>',
+             '<b>Add warm hand-offs and peer support</b> so a positive screen becomes an actual first appointment.',
+             '<b>Track follow-up, not just referrals</b> — the model works because someone stays with the patient.'],
+      evidence:'Collaborative care roughly doubles the share of patients whose depression improves.<sup class="fn"><a href="#s10">10</a></sup>',
+      funding:'It returns net savings over several years through lower total health-care costs.<sup class="fn"><a href="#s10">10</a></sup>'},
+    asthma:{tag:'Asthma',h:'Treat the home, not just the attack',
+      lead:'Most asthma flares start in the building. Fix the triggers and the ER visits fall.',
+      steps:['<b>Fund home-based remediation</b> — mold, pests, and dust — by trained workers. Strong evidence; ~21 fewer symptom-days a year.<sup class="fn"><a href="#s17">17</a></sup>',
+             '<b>Enforce housing code</b> on the chronic building hazards behind repeat attacks.<sup class="fn"><a href="#s13">13</a></sup>',
+             '<b>Target the worst blocks</b> with local air-quality and freight data (see the note below Section B).'],
+      evidence:'Fewer symptom-days, fewer ER visits, and fewer missed school days.<sup class="fn"><a href="#s17">17</a></sup>',
+      funding:'Braid housing and health dollars — the health savings show up as avoided emergencies.'},
+    fai:{tag:'Food insecurity',h:'Close the food gap',
+      lead:'Hunger is upstream of half this list. Get food and benefits to the people who qualify.',
+      steps:['<b>Auto-enroll eligible residents in SNAP and WIC</b> through clinics, schools, and the ward office.',
+             '<b>Stretch every SNAP dollar</b> with a Double Up Food Bucks produce match.<sup class="fn"><a href="#s7">7</a></sup>',
+             '<b>Prescribe food as medicine</b> — produce prescriptions from safety-net clinics.<sup class="fn"><a href="#s9">9</a></sup>'],
+      evidence:'More produce, better food security, and better cardiometabolic markers in program evaluations.<sup class="fn"><a href="#s9">9</a></sup>',
+      funding:'SNAP is federally funded — every enrollment is money into the ward’s economy.'}
   };
   function buildLevers(tops){
     el('leverHead').textContent='A plan for Ward '+curWard+'’s four biggest problems';
     el('levers').innerHTML=tops.map(function(k,i){
       var L=LEVER[k];
-      return '<div class="lever"><span class="lnum">'+(i+1)+'</span><div class="tag">'+L.tag+'</div><h3>'+L.h+'</h3>'
-        +'<ul>'+L.ul.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>'
-        +'<div class="why"><b>'+L.why[0]+'</b>'+L.why[1]+'</div></div>';
+      return '<div class="lever">'
+        +'<div class="lev-top"><span class="lnum">'+(i+1)+'</span><span class="tag">'+L.tag+'</span></div>'
+        +'<h3>'+L.h+'</h3><p class="lev-lead">'+L.lead+'</p>'
+        +'<ol class="lev-steps">'+L.steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'
+        +'<div class="lev-foot"><span><b>Evidence</b> '+L.evidence+'</span><span><b>Funding</b> '+L.funding+'</span></div>'
+        +'</div>';
     }).join('');
   }
 
   el('sources').innerHTML=[
     '<li id="s1"><b>Chicago Health Map</b> (chicagohealthmap.com) — CAPriCORN. Ward- and community-area-level condition prevalence, 2024, among patients seen at participating Chicago health systems. <a href="https://chicagohealthmap.com" target="_blank" rel="noopener">chicagohealthmap.com</a></li>',
-    '<li id="s2"><b>Chicago Health Atlas</b> (chicagohealthatlas.org). Food insecurity (FAI), median household income (INC), poverty (POV), low food access (LFA), no health insurance (NHI), unemployment (UMP), by community area. <a href="https://chicagohealthatlas.org" target="_blank" rel="noopener">chicagohealthatlas.org</a></li>',
-    '<li id="s3"><b>Chicago Data Portal.</b> Ward boundaries (2023–) and community-area boundaries. <a href="https://data.cityofchicago.org" target="_blank" rel="noopener">data.cityofchicago.org</a></li>',
+    '<li id="s2"><b>Chicago Health Atlas</b> (chicagohealthatlas.org). Food insecurity, income, poverty, low food access, uninsurance, and unemployment by community area. <a href="https://chicagohealthatlas.org" target="_blank" rel="noopener">chicagohealthatlas.org</a></li>',
+    '<li id="s3"><b>Chicago Data Portal.</b> Ward (2023–) and community-area boundaries. <a href="https://data.cityofchicago.org" target="_blank" rel="noopener">data.cityofchicago.org</a></li>',
     '<li id="s4"><b>U.S. Census Bureau, American Community Survey</b> 5-year estimates (via Chicago Health Atlas).</li>',
     '<li id="s5"><b>He J, Irazola V, Mills KT, et al.</b> “Community Health Worker–Led Multicomponent Intervention on Blood Pressure Control…” <em>JAMA</em> 318(11), 2017: systolic BP −6.6 mmHg vs usual care; control 17.0%→72.9%. <a href="https://pubmed.ncbi.nlm.nih.gov/28975305/" target="_blank" rel="noopener">pubmed</a></li>',
     '<li id="s6"><b>Kangovi S, et al.</b> “Evidence-Based Community Health Worker Program… Return on Investment.” <em>Health Affairs</em> 39(2), 2020: $2.47 to Medicaid per $1. <a href="https://www.healthaffairs.org/doi/10.1377/hlthaff.2019.00981" target="_blank" rel="noopener">healthaffairs.org</a></li>',
     '<li id="s7"><b>Double Up Food Bucks / Fair Food Network</b> &amp; USDA GusNIP evaluations: SNAP produce incentives raise fruit/vegetable intake and food security. <a href="https://fairfoodnetwork.org" target="_blank" rel="noopener">fairfoodnetwork.org</a></li>',
     '<li id="s8"><b>Cooksey-Stowers K, Schwartz MB, Brownell KD.</b> “Food Swamps Predict Obesity Rates Better Than Food Deserts.” <em>IJERPH</em> 14(11):1366, 2017. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5708005/" target="_blank" rel="noopener">PMC5708005</a></li>',
-    '<li id="s9"><b>Hager K, et al.</b> “Impact of Produce Prescriptions…” <em>Circulation: CQO</em> 16(9), 2023: median $63/mo improved BP, HbA1c, food security. <a href="https://www.ahajournals.org/doi/10.1161/CIRCOUTCOMES.122.009520" target="_blank" rel="noopener">ahajournals.org</a></li>',
-    '<li id="s10"><b>Unützer J, et al.</b> “Collaborative Care Management of Late-Life Depression (IMPACT).” <em>JAMA</em> 288(22), 2002; long-term cost analysis, <em>Am J Manag Care</em> 2008: roughly doubles treatment response and lowers total costs. <a href="https://jamanetwork.com/journals/jama/fullarticle/195599" target="_blank" rel="noopener">jamanetwork.com</a></li>',
+    '<li id="s9"><b>Hager K, et al.</b> “Impact of Produce Prescriptions…” <em>Circulation: CQO</em> 16(9), 2023: median $63/mo improved BP, HbA1c, and food security. <a href="https://www.ahajournals.org/doi/10.1161/CIRCOUTCOMES.122.009520" target="_blank" rel="noopener">ahajournals.org</a></li>',
+    '<li id="s10"><b>Unützer J, et al.</b> “Collaborative Care Management of Late-Life Depression (IMPACT).” <em>JAMA</em> 288(22), 2002; cost analysis <em>Am J Manag Care</em> 2008: roughly doubles treatment response and lowers total costs. <a href="https://jamanetwork.com/journals/jama/fullarticle/195599" target="_blank" rel="noopener">jamanetwork.com</a></li>',
     '<li id="s11"><b>Tenant Right to Counsel</b> — NYC Office of Civil Justice data &amp; evaluations: ~84% of represented tenants stayed housed; 45–78% fewer evictions. <a href="https://www.tandfonline.com/doi/full/10.1080/10511482.2020.1825009" target="_blank" rel="noopener">Housing Policy Debate (2020)</a></li>',
     '<li id="s12"><b>Ali O, Raviola S.</b> “The Effects of Community Land Trusts on Neighborhood Outcomes.” <em>Real Estate Economics</em>, 2025. <a href="https://onlinelibrary.wiley.com/doi/10.1111/1540-6229.12525" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>',
     '<li id="s13"><b>Vásquez-Vera H, et al.</b> “The threat of home eviction and its effects on health…” <em>Soc Sci Med</em> 175, 2017; <b>Sims KD, et al.</b> “Housing instability and cardiometabolic health…” <em>BMC Public Health</em>, 2023. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0277953617300102" target="_blank" rel="noopener">sciencedirect.com</a></li>',
-    '<li id="s14"><b>Chrvala CA, Sherr D, Lipman RD.</b> “Diabetes self-management education for adults with type 2 diabetes: a systematic review of the effect on glycemic control.” <em>Patient Educ Couns</em> 99(6), 2016: mean absolute HbA1c reduction ~0.57% (larger with ≥10 contact hours). <a href="https://www.sciencedirect.com/science/article/pii/S0738399115301166" target="_blank" rel="noopener">sciencedirect.com</a></li>',
-    '<li id="s15"><b>Diabetes Prevention Program Research Group.</b> “Reduction in the Incidence of Type 2 Diabetes with Lifestyle Intervention or Metformin.” <em>NEJM</em> 346:393–403, 2002: lifestyle intervention cut diabetes incidence 58%. Scaled nationally as the CDC National DPP. <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa012512" target="_blank" rel="noopener">nejm.org</a></li>',
-    '<li id="s16"><b>Community Preventive Services Task Force.</b> “Cardiovascular Disease: Team-Based Care to Improve Blood Pressure Control” and “…Interventions Engaging Community Health Workers.” The Community Guide: strong evidence of effectiveness and cost-effectiveness for improving blood pressure and cholesterol. <a href="https://www.thecommunityguide.org/findings/heart-disease-stroke-prevention-interventions-engaging-community-health-workers.html" target="_blank" rel="noopener">thecommunityguide.org</a></li>',
-    '<li id="s17"><b>Community Preventive Services Task Force / Krieger J, et al.</b> “Home-Based Multi-Trigger, Multicomponent Interventions with an Environmental Focus for Reducing Asthma Morbidity.” <em>Am J Prev Med</em> 41(2S1), 2011: recommended; ~21 fewer symptom-days per year and fewer ER visits. <a href="https://www.thecommunityguide.org/findings/asthma-home-based-multi-trigger-multicomponent-environmental-interventions-children-adolescents-asthma.html" target="_blank" rel="noopener">thecommunityguide.org</a></li>'
+    '<li id="s14"><b>Chrvala CA, Sherr D, Lipman RD.</b> “Diabetes self-management education for adults with type 2 diabetes: a systematic review…” <em>Patient Educ Couns</em> 99(6), 2016: mean HbA1c reduction ~0.57%. <a href="https://www.sciencedirect.com/science/article/pii/S0738399115301166" target="_blank" rel="noopener">sciencedirect.com</a></li>',
+    '<li id="s15"><b>Diabetes Prevention Program Research Group.</b> “Reduction in the Incidence of Type 2 Diabetes with Lifestyle Intervention or Metformin.” <em>NEJM</em> 346:393–403, 2002: lifestyle cut incidence 58%. Scaled as the CDC National DPP. <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa012512" target="_blank" rel="noopener">nejm.org</a></li>',
+    '<li id="s16"><b>Community Preventive Services Task Force.</b> “Team-Based Care to Improve Blood Pressure Control” and “Interventions Engaging Community Health Workers.” The Community Guide: strong evidence and cost-effectiveness for blood pressure and cholesterol. <a href="https://www.thecommunityguide.org/findings/heart-disease-stroke-prevention-interventions-engaging-community-health-workers.html" target="_blank" rel="noopener">thecommunityguide.org</a></li>',
+    '<li id="s17"><b>Community Preventive Services Task Force / Krieger J, et al.</b> “Home-Based Multi-Trigger, Multicomponent Interventions for Reducing Asthma Morbidity.” <em>Am J Prev Med</em> 41(2S1), 2011: ~21 fewer symptom-days per year and fewer ER visits. <a href="https://www.thecommunityguide.org/findings/asthma-home-based-multi-trigger-multicomponent-environmental-interventions-children-adolescents-asthma.html" target="_blank" rel="noopener">thecommunityguide.org</a></li>'
   ].join('');
 
   function setWard(n){n=Math.max(1,Math.min(50,parseInt(n)||1));curWard=n;render();}
